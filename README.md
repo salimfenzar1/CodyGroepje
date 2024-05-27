@@ -6,7 +6,7 @@ Welkom bij het Cody-project! Dit initiatief is gericht op het creëren van een o
 
 ## Projectoverzicht
 
-Ons team, bestaande uit vier enthousiaste Mens & Techniek studenten, werkt aan de verdere ontwikkeling van Cody. Cody is gericht op het faciliteren van jonge zorgprofessionals bij het voeren van lastige gesprekken. 
+Ons team, bestaande uit vier enthousiaste Mens & Techniek studenten en 7 ontwikkelaars, werkt aan de verdere ontwikkeling van Cody. Cody is gericht op het faciliteren van jonge zorgprofessionals bij het voeren van lastige gesprekken. 
 
 ## Functies
 

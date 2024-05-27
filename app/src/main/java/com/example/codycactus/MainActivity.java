@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     private SpeechHelper speechHelper;
+    private boolean isSpeaking = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,18 +30,25 @@ public class MainActivity extends AppCompatActivity {
         tijdTikt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test","de tekst naar spraak werkt");
-                speechHelper.speak("Je hebt gedrukt op het spel: De tijd tikt! Succes met spelen!", new SpeechHelper.SpeechCompleteListener() {
-                    @Override
-                    public void onSpeechComplete() {
-                        Log.d("Speech", "Speech synthesis voltooid");
-                    }
+                if (!isSpeaking) {
+                    isSpeaking = true;  // Set the flag to true when starting speech
+                    Log.d("test", "de tekst naar spraak werkt");
+                    speechHelper.speak("Je hebt gedrukt op het spel: De tijd tikt! Succes met spelen!", new SpeechHelper.SpeechCompleteListener() {
+                        @Override
+                        public void onSpeechComplete() {
+                            Log.d("Speech", "Speech synthesis voltooid");
+                            isSpeaking = false;  
+                        }
 
-                    @Override
-                    public void onSpeechFailed() {
-                        Log.e("Speech", "Speech synthesis mislukt");
-                    }
-                });
+                        @Override
+                        public void onSpeechFailed() {
+                            Log.e("Speech", "Speech synthesis mislukt");
+                            isSpeaking = false;
+                        }
+                    });
+                } else {
+                    Log.d("test", "Spraak is al bezig, klik genegeerd");
+                }
             }
         });
     }

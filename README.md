@@ -28,6 +28,13 @@ Het doel van dit project is om:
 
 We nodigen jullie, IT-studenten, uit om een innovatieve app te ontwikkelen die naadloos integreert met Cody's functies. Het is belangrijk dat de app empathisch en verbindend is, naast functioneel.
 
+## Branch Conventies
+
+Voor een efficiënte en veilige samenwerking hanteren we de volgende conventies voor het pushen van code:
+- **Development Branch:** Alle nieuwe functies en wijzigingen moeten eerst naar de `development` branch worden gepusht. Zorg ervoor dat je code goed getest is voordat je een pull request indient.
+- **Main Branch:** De `main` branch bevat de stabiele versie van de code. Pushen naar de `main` branch is alleen toegestaan vanuit de `development` branch na code review en goedkeuring van het team.
+
+
 ## Installatie
 
 Volg deze stappen om de Cody-app te installeren en te starten:
@@ -51,6 +58,7 @@ Klik op "Run" en selecteer je apparaat.
 ## Gebruik
 Zodra de app draait, kunnen zorgprofessionals de verschillende spellen spelen en de interactieve functies van Cody gebruiken om gesprekken te faciliteren en ondersteuning te bieden.
 
+## 
 Met vriendelijke groet,
 
 Het Cody Team

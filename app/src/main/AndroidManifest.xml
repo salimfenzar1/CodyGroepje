@@ -13,7 +13,10 @@
         android:theme="@style/Theme.CodeAcadamyGroepje"
         tools:targetApi="31">
         <activity
-            android:name=".userInterface.WatVindIkErgerActivity"
+            android:name=".userInterface.WvieSubjectsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".userInterface.wvieOnderwerpStellingen"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

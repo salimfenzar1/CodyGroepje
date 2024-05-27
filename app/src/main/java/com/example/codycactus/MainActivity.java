@@ -24,18 +24,13 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
+        ImageButton tijdTikt = findViewById(R.id.tijdTikt);
         speechHelper = new SpeechHelper(this);
-
-
-            ImageButton tijdTikt = findViewById(R.id.tijdTikt);
         tijdTikt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("test","de tekst naar spraak werkt");
                 speechHelper.speak("Je hebt gedrukt op het spel: De tijd tikt! Succes met spelen!", new SpeechHelper.SpeechCompleteListener() {
-
                     @Override
                     public void onSpeechComplete() {
                         Log.d("Speech", "Speech synthesis voltooid");

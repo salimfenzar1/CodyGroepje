@@ -1,4 +1,4 @@
-package com.example.codeacadamygroepje;
+package com.example.codycactus;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private SpeechHelper speechHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,11 +26,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        ImageButton tijdTikt = findViewById(R.id.tijdTikt);
+        speechHelper = new SpeechHelper(this);
+
+
+            ImageButton tijdTikt = findViewById(R.id.tijdTikt);
         tijdTikt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test","De tijd tikt is geklikt");
+                Log.d("test","de tekst naar spraak werkt");
+                speechHelper.speak("De tijd tikt is geklikt", new SpeechHelper.SpeechCompleteListener() {
+
+                    @Override
+                    public void onSpeechComplete() {
+                        Log.d("Speech", "Speech synthesis voltooid");
+                    }
+
+                    @Override
+                    public void onSpeechFailed() {
+                        Log.e("Speech", "Speech synthesis mislukt");
+                    }
+                });
             }
         });
     }

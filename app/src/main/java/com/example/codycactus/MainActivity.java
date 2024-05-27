@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("test","de tekst naar spraak werkt");
-                speechHelper.speak("De tijd tikt is geklikt", new SpeechHelper.SpeechCompleteListener() {
+                speechHelper.speak("Je hebt gedrukt op het spel: De tijd tikt! Succes met spelen!", new SpeechHelper.SpeechCompleteListener() {
 
                     @Override
                     public void onSpeechComplete() {

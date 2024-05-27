@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.codeacadamygroepje"
+    namespace = "com.example.codycactus"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.codeacadamygroepje"
+        applicationId = "com.example.codycactus"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-
+    implementation ("com.microsoft.cognitiveservices.speech:client-sdk:1.37.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

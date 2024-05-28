@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+    android:id="@+id/wvie_subjects"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/green_background">
@@ -20,6 +20,7 @@
         android:textSize="22sp"/>
 
     <ImageView
+        android:id="@+id/image_view_family"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -38,7 +39,8 @@
         android:layout_marginStart="166dp"
         android:layout_marginEnd="166dp"
         android:layout_marginBottom="26dp"
-        android:src="@drawable/pictogram_oortje_removebg_preview"
+        android:background="@null"
+        android:src="@drawable/pictogram_oortje"
         />
 
 </RelativeLayout>

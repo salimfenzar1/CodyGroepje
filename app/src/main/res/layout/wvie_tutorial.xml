@@ -5,13 +5,9 @@
     android:id="@+id/wvie_tutorial"
     tools:context="com.example.watVindIkErger.WvieTutorialActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/green_background">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/green_background" />
 
     <TextView
     android:id="@+id/text_view_tutorial_title"
@@ -22,7 +18,7 @@
     android:layout_marginBottom="636dp"
     android:text="@string/tutorial"
     android:textColor="#5b7683"
-    android:textSize="22sp" />
+    android:textSize="25sp" />
 
     <ImageButton
         android:id="@+id/hearButton"

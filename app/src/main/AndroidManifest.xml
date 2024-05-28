@@ -16,7 +16,10 @@
             android:name="com.example.watVindIkErger.WvieSubjectsActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.watVindIkErger.wvieOnderwerpStellingen"
+            android:name="com.example.watVindIkErger.WvieIntensityActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.watVindIkErger.WvieTutorialActivity"
             android:exported="false" />
         <activity
             android:name="com.example.MainActivity"

@@ -19,7 +19,7 @@
         android:layout_marginBottom="636dp"
         android:text="@string/wvie_get_ready_title"
         android:textColor="#5b7683"
-        android:textSize="22sp" />
+        android:textSize="25sp" />
 
     <ImageButton
         android:id="@+id/nextButton"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wvie_explanation_yellow"
-    tools:context=".userInterface.WvieExplanationYellowActivity"
+    tools:context="com.example.watVindIkErger.WvieExplanationYellowActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/border_background_yellow">

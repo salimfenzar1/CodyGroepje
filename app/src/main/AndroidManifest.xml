@@ -13,13 +13,13 @@
         android:theme="@style/Theme.CodeAcadamyGroepje"
         tools:targetApi="31">
         <activity
-            android:name=".userInterface.WvieSubjectsActivity"
+            android:name="com.example.watVindIkErger.WvieSubjectsActivity"
             android:exported="false" />
         <activity
-            android:name=".userInterface.wvieOnderwerpStellingen"
+            android:name="com.example.watVindIkErger.wvieOnderwerpStellingen"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

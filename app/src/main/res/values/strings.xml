@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">CodeAcadamyGroepje</string>
     <string name="intensity_title">Intensiteit stellingen</string>
     <string name="low_intensity">Laagdrempellig</string>
     <string name="medium_intensity">Matig</string>

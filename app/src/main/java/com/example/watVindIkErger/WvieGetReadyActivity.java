@@ -1,4 +1,4 @@
-package com.example.codeacadamygroepje.userInterface;
+package com.example.watVindIkErger;
 
 import android.os.Bundle;
 
@@ -8,15 +8,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.codeacadamygroepje.R;
+import com.example.codycactus.R;
 
-public class WvieIntensityActivity extends AppCompatActivity {
+public class WvieGetReadyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.wvie_intensity);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.wvie_intensity), (v, insets) -> {
+        setContentView(R.layout.wvie_get_ready);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.wvie_get_ready), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

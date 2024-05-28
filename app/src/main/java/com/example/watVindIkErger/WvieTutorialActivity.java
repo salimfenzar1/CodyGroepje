@@ -1,4 +1,4 @@
-package com.example.codeacadamygroepje.userInterface;
+package com.example.watVindIkErger;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.codeacadamygroepje.R;
+import com.example.codycactus.R;
 
 public class WvieTutorialActivity extends AppCompatActivity {
     @Override

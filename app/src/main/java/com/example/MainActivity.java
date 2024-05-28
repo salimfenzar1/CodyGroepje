@@ -1,4 +1,4 @@
-package com.example.codycactus;
+package com.example;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.codycactus.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
+
             }
         });
         levend.setOnClickListener(new View.OnClickListener() {

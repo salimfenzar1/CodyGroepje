@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/border_background_red"
-    tools:context=".userInterface.WvieStatementRedActivity">
+    tools:context="com.example.watVindIkErger.WvieStatementRedActivity">
 
     <TextView
         android:id="@+id/text_view_statement_title_red"

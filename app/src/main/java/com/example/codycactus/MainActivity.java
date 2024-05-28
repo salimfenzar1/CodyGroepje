@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSpeechComplete() {
                             Log.d("Speech", "Speech synthesis voltooid");
-                            isSpeaking = false;  
+                            isSpeaking = false;
                         }
 
                         @Override

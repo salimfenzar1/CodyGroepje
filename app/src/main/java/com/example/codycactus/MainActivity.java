@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +13,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-
+    private ImageButton tijdTikt;
+    private ImageButton levend;
+    private ImageButton watVind;
     private SpeechHelper speechHelper;
-    private boolean isSpeaking = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,31 +28,59 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        ImageButton tijdTikt = findViewById(R.id.tijdTikt);
-        speechHelper = new SpeechHelper(this);
+        tijdTikt = findViewById(R.id.tijdTikt);
+        levend = findViewById(R.id.levendOrganogram);
+        watVind = findViewById(R.id.watVindIk);
+
+        setButtonsClickable(false);
+
+        speakIntro();
+
         tijdTikt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isSpeaking) {
-                    isSpeaking = true;  // Set the flag to true when starting speech
-                    Log.d("test", "de tekst naar spraak werkt");
-                    speechHelper.speak("Je hebt gedrukt op het spel: De tijd tikt! Succes met spelen!", new SpeechHelper.SpeechCompleteListener() {
-                        @Override
-                        public void onSpeechComplete() {
-                            Log.d("Speech", "Speech synthesis voltooid");
-                            isSpeaking = false;
-                        }
-
-                        @Override
-                        public void onSpeechFailed() {
-                            Log.e("Speech", "Speech synthesis mislukt");
-                            isSpeaking = false;
-                        }
-                    });
-                } else {
-                    Log.d("test", "Spraak is al bezig, klik genegeerd");
-                }
+                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
             }
         });
+        levend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor levend organogram", Toast.LENGTH_SHORT).show();
+            }
+        });
+        watVind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor wat vind ik erger", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void speakIntro() {
+        speechHelper = new SpeechHelper(this);
+        speechHelper.speak("Hallo, ik ben Cody! jullie kunnen samen met mij een spel spelen. Deze spellen zullen het mogelijk maken om moeilijke onderwerpen bespreekbaar te maken. Jullie kunnen kiezen tussen: De tijd tikt ,  levend organogram, en wat vind ik erger! Welk spel willen jullie spelen?", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+                // Maak de knoppen klikbaar nadat de spraak voltooid is
+                setButtonsClickable(true);
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
+                // Maak de knoppen ook klikbaar als de spraak mislukt
+                setButtonsClickable(true);
+            }
+        });
+    }
+
+    private void setButtonsClickable(boolean clickable) {
+        tijdTikt.setClickable(clickable);
+        levend.setClickable(clickable);
+        watVind.setClickable(clickable);
+        tijdTikt.setEnabled(clickable);
+        levend.setEnabled(clickable);
+        watVind.setEnabled(clickable);
     }
 }

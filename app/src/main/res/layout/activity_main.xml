@@ -10,7 +10,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/background" />
+        app:srcCompat="@drawable/backgroundimg" />
+
     <TextView
         android:id="@+id/Kies"
         android:layout_width="wrap_content"
@@ -18,81 +19,86 @@
         android:text="Kies een spel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
-        android:textSize="28sp"
+        android:textSize="25sp"
         android:textColor="@color/textColor"
         />
 
     <ImageButton
         android:id="@+id/tijdTikt"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_below="@+id/Kies"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:backgroundTint="@color/green"
+        android:layout_marginTop="60dp"
+        android:padding="27dp"
         android:background="@drawable/round_button"
-        android:focusable="true"
+        android:backgroundTint="@color/green"
         android:clickable="true"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:focusable="true"
+        android:src="@drawable/tijdtikt"
+        android:scaleType="centerCrop" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Kies"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="100dp"
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/tijdTikt"
         android:text="De tijd tikt!"
         android:focusable="true"
         android:clickable="true"
-        android:textSize="28sp"
+        android:textSize="25sp"
         android:textColor="@color/textColor"
         />
 
     <ImageButton
         android:id="@+id/levendOrganogram"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_below="@+id/tijdTikt"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/round_button"
         android:backgroundTint="@color/blue"
         android:focusable="true"
         android:clickable="true"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:padding="10dp"
+        android:src="@drawable/arrowhead"
+        android:scaleType="centerCrop" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tijdTikt"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="90dp"
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/levendOrganogram"
         android:text="Levend organogram"
         android:textColor="@color/textColor"
-        android:textSize="28sp"
+        android:textSize="25sp"
         />
 
     <ImageButton
         android:id="@+id/watVindIk"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_below="@+id/levendOrganogram"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
+        android:padding="20dp"
         android:background="@drawable/round_button"
         android:backgroundTint="@color/purple"
-        android:focusable="true"
-        android:clickable="true"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/man" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/levendOrganogram"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="75dp"
         android:layout_toEndOf="@+id/watVindIk"
         android:text="Wat vind ik            erger"
         android:textColor="@color/textColor"
-        android:textSize="28sp" />
+        android:textSize="25sp" />
 </RelativeLayout>

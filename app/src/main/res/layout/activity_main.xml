@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,13 +7,98 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/backgroundimg" />
+
+    <TextView
+        android:id="@+id/Kies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kies een spel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:textSize="25sp"
+        android:textColor="@color/textColor"
+        />
+
+    <ImageButton
+        android:id="@+id/tijdTikt"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_below="@+id/Kies"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="60dp"
+        android:padding="27dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="@color/green"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/tijdtikt"
+        android:scaleType="centerCrop" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_below="@+id/Kies"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/tijdTikt"
+        android:text="De tijd tikt!"
+        android:focusable="true"
+        android:clickable="true"
+        android:textSize="25sp"
+        android:textColor="@color/textColor"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/levendOrganogram"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_below="@+id/tijdTikt"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="@color/blue"
+        android:focusable="true"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/arrowhead"
+        android:scaleType="centerCrop" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tijdTikt"
+        android:layout_marginTop="90dp"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/levendOrganogram"
+        android:text="Levend organogram"
+        android:textColor="@color/textColor"
+        android:textSize="25sp"
+        />
+
+    <ImageButton
+        android:id="@+id/watVindIk"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_below="@+id/levendOrganogram"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:padding="20dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="@color/purple"
+        android:scaleType="centerCrop"
+        android:src="@drawable/man" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/levendOrganogram"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="75dp"
+        android:layout_toEndOf="@+id/watVindIk"
+        android:text="Wat vind ik            erger"
+        android:textColor="@color/textColor"
+        android:textSize="25sp" />
+</RelativeLayout>

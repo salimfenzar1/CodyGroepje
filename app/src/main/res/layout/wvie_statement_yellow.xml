@@ -26,10 +26,9 @@
         android:id="@+id/image_view_foto_statement_yellow"
         android:layout_width="313dp"
         android:layout_height="382dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:background="null"
-        android:src="@drawable/foto_default"/>
+        android:layout_centerInParent="true"
+        android:background="#00FFFFFF"
+        android:src="@drawable/foto_default" />
 
     <ImageButton
         android:id="@+id/hearButton"
@@ -38,8 +37,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
-        android:background="null"
+        android:background="#00FFFFFF"
         app:srcCompat="@drawable/pictogram_oortje" />
+
     <ImageButton
         android:id="@+id/nextButton"
         android:layout_width="91dp"
@@ -48,7 +48,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="22dp"
         android:layout_marginBottom="26dp"
-        android:background="null"
+        android:background="#00FFFFFF"
 
         app:srcCompat="@drawable/arrow_icon" />
 

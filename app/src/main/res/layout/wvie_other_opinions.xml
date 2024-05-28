@@ -25,7 +25,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="22dp"
         android:layout_marginBottom="26dp"
-        android:background="null"
+        android:background="#00FFFFFF"
 
         app:srcCompat="@drawable/arrow_icon" />
 
@@ -36,7 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
-        android:background="null"
+        android:background="#00FFFFFF"
         app:srcCompat="@drawable/pictogram_oortje" />
 
     <ImageView

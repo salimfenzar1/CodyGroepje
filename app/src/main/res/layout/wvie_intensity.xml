@@ -10,24 +10,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="85dp"
-        android:layout_marginEnd="85dp"
-        android:layout_marginBottom="653dp"
+        android:layout_marginStart="113dp"
+        android:layout_marginBottom="636dp"
         android:text="@string/intensity_title"
+        android:textColor="#5b7683"
         android:textSize="22sp" />
 
     <TextView
         android:id="@+id/text_view_low_intensity"
-        android:layout_width="wrap_content"
+        android:layout_width="112dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="249dp"
-        android:layout_marginBottom="374dp"
-        android:text="@string/low_intensity" />
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="243dp"
+        android:layout_marginBottom="295dp"
+        android:text="@string/low_intensity"
+        android:textColor="#5b7683" />
 
     <TextView
         android:id="@+id/text_view_medium_intensity"
@@ -35,19 +36,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="187dp"
-        android:layout_marginBottom="374dp"
-        android:text="@string/medium_intensity" />
+        android:layout_marginEnd="182dp"
+        android:layout_marginBottom="295dp"
+        android:text="@string/medium_intensity"
+        android:textColor="#5b7683" />
 
     <TextView
         android:id="@+id/text_view_high_intensity"
-        android:layout_width="wrap_content"
+        android:layout_width="49dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="122dp"
-        android:layout_marginBottom="375dp"
-        android:text="@string/high_intensity" />
+        android:layout_marginEnd="84dp"
+        android:layout_marginBottom="295dp"
+        android:text="@string/high_intensity"
+        android:textColor="#5b7683" />
 
     <ImageView
         android:id="@+id/image_view_ear"
@@ -67,8 +70,8 @@
         android:layout_height="250dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="274dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="203dp"
         app:srcCompat="@drawable/intensity_high" />
 
     <ImageView
@@ -77,8 +80,8 @@
         android:layout_height="250dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="106dp"
-        android:layout_marginBottom="273dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="203dp"
         app:srcCompat="@drawable/intensity_medium" />
 
     <ImageView
@@ -87,8 +90,8 @@
         android:layout_height="250dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="227dp"
-        android:layout_marginBottom="274dp"
+        android:layout_marginEnd="243dp"
+        android:layout_marginBottom="204dp"
         app:srcCompat="@drawable/intensity_low" />
 
 </RelativeLayout>

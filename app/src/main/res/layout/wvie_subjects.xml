@@ -3,7 +3,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/default_cactuses">
+    android:background="@drawable/green_background">
 
     <TextView
         android:id="@+id/text_view_subjects_title"
@@ -17,17 +17,29 @@
         android:layout_marginBottom="653dp"
         android:gravity="center"
         android:text="Onderwerp stellingen"
+        android:textColor="#5b7683"
         android:textSize="22sp"/>
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="42dp"
+        android:layout_marginBottom="-215dp"
+        android:src="@drawable/familie_overleden" />
+
+    <ImageButton
+        android:id="@+id/image_button_ear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="166dp"
         android:layout_marginEnd="166dp"
         android:layout_marginBottom="26dp"
-        android:src="@drawable/ear" />
+        android:src="@drawable/pictogram_oortje_removebg_preview"
+        />
 
 </RelativeLayout>

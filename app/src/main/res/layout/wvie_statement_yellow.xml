@@ -14,7 +14,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="85dp"
         android:layout_marginEnd="85dp"
-        android:layout_marginBottom="653dp"
+        android:layout_marginBottom="636dp"
         android:gravity="center"
         android:text="Stelling geel"
         android:textColor="#5b7683"
@@ -32,29 +32,25 @@
         android:src="@drawable/foto_default"/>
 
     <ImageButton
-        android:id="@+id/image_button_ear_statement_yellow"
+        android:id="@+id/hearButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
         android:background="null"
-        android:src="@drawable/pictogram_oortje"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        app:srcCompat="@drawable/pictogram_oortje" />
     <ImageButton
-        android:id="@+id/image_button_arrow_statement_yellow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/nextButton"
+        android:layout_width="91dp"
+        android:layout_height="57dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="33dp"
-        android:layout_marginBottom="43dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="26dp"
         android:background="null"
-        android:src="@drawable/pictogram_pijl_2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+
+        app:srcCompat="@drawable/arrow_icon" />
 
 
 </RelativeLayout>

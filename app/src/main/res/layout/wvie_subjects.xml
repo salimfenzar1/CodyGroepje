@@ -20,6 +20,7 @@
         android:textSize="22sp"/>
 
     <ImageView
+        android:id="@+id/image_view_family"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -38,7 +39,11 @@
         android:layout_marginStart="166dp"
         android:layout_marginEnd="166dp"
         android:layout_marginBottom="26dp"
+<<<<<<< Updated upstream
         android:background="null"
+=======
+        android:background="@null"
+>>>>>>> Stashed changes
         android:src="@drawable/pictogram_oortje"
         />
 

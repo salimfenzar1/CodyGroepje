@@ -10,37 +10,12 @@
         android:id="@+id/text_view_intensity_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="113dp"
         android:layout_marginBottom="636dp"
-        android:text="@string/wvie_get_ready_title"
+        android:layout_centerHorizontal="true"
+        android:text="@string/make_choice"
         android:textColor="#5b7683"
         android:textSize="22sp" />
-
-    <ImageButton
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="53dp"
-        android:layout_marginBottom="59dp"
-        android:background="null"
-        app:srcCompat="@drawable/pictogram_pijl_2" />
-
-    <ImageButton
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="180dp"
-        android:layout_marginEnd="180dp"
-        android:layout_marginBottom="44dp"
-        android:background="null"
-        app:srcCompat="@drawable/pictogram_oortje" />
 
     <ImageView
         android:id="@+id/imageView3"

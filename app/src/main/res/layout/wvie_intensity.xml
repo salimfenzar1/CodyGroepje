@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/default_cactuses_png">
+    android:background="@drawable/green_background">
 
     <TextView
         android:id="@+id/text_view_intensity_title"
@@ -50,7 +50,7 @@
         android:text="@string/high_intensity" />
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/image_view_ear"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentStart="true"
@@ -59,5 +59,36 @@
         android:layout_marginStart="166dp"
         android:layout_marginEnd="166dp"
         android:layout_marginBottom="26dp"
-        app:srcCompat="@drawable/hearing_icon" />
+        app:srcCompat="@drawable/pictogram_oortje" />
+
+    <ImageView
+        android:id="@+id/image_view_high_intensity"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="274dp"
+        app:srcCompat="@drawable/intensity_high" />
+
+    <ImageView
+        android:id="@+id/image_view_medium_intensity"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="106dp"
+        android:layout_marginBottom="273dp"
+        app:srcCompat="@drawable/intensity_medium" />
+
+    <ImageView
+        android:id="@+id/image_view_low_intensity"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="227dp"
+        android:layout_marginBottom="274dp"
+        app:srcCompat="@drawable/intensity_low" />
+
 </RelativeLayout>

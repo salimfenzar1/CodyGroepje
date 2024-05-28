@@ -62,7 +62,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
-        android:background="null"
+        android:background="#00FFFFFF"
         app:srcCompat="@drawable/pictogram_oortje" />
     <ImageView
         android:id="@+id/image_view_high_intensity"

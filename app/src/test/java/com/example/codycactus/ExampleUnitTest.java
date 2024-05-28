@@ -1,4 +1,4 @@
-package com.example.codeacadamygroepje;
+package com.example.codycactus;
 
 import org.junit.Test;
 

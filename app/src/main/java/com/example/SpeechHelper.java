@@ -20,7 +20,7 @@ public class SpeechHelper {
     public SpeechHelper(Context context) {
         this.context = context;
         SpeechConfig config = SpeechConfig.fromSubscription(API_KEY, REGION);
-        config.setSpeechSynthesisVoiceName("nl-NL-MaartenNeural");
+        config.setSpeechSynthesisVoiceName("en-US-AndrewMultilingualNeural");
         this.synthesizer = new SpeechSynthesizer(config);
     }
 

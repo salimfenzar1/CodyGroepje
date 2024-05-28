@@ -53,18 +53,14 @@
         android:textColor="#5b7683" />
 
     <ImageButton
-        android:id="@+id/imageView2"
+        android:id="@+id/hearButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="180dp"
-        android:layout_marginEnd="180dp"
-        android:layout_marginBottom="44dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp"
         android:background="null"
         app:srcCompat="@drawable/pictogram_oortje" />
-
     <ImageView
         android:id="@+id/image_view_high_intensity"
         android:layout_width="250dp"

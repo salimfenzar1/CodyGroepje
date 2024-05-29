@@ -48,7 +48,7 @@ public class WvieGameEndActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op replay geklikt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
                 startActivity(intent);
             }
         });

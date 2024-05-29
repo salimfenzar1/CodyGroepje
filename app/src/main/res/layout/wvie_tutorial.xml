@@ -15,10 +15,10 @@
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
     android:layout_alignParentBottom="true"
-    android:layout_marginBottom="636dp"
+    android:layout_marginBottom="@dimen/bottomMargin"
     android:text="@string/tutorial"
     android:textColor="#5b7683"
-    android:textSize="25sp" />
+    android:textSize="@dimen/game_title_text_size" />
 
     <ImageButton
         android:id="@+id/hearButton"

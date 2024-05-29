@@ -13,11 +13,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/bottomMargin"
         android:gravity="center"
         android:text="Onderwerp stellingen"
         android:textColor="@color/textColor"
-        android:textSize="25sp"/>
+        android:textSize="@dimen/game_title_text_size"/>
 
     <ImageView
         android:id="@+id/image_view_family"

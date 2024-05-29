@@ -30,6 +30,8 @@ public class WvieGetReadyActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        new Handler().postDelayed(this::speakText, 2000);
+
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +40,21 @@ public class WvieGetReadyActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);
                 startActivity(intent);
+            }
+        });
+
+    }
+    public void speakText() {
+        speechHelper = new SpeechHelper(this);
+        speechHelper.speak("Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
             }
         });
     }

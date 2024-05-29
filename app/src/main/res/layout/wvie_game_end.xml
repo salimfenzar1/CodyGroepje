@@ -5,13 +5,8 @@
     android:id="@+id/wvie_game_end"
     tools:context="com.example.watVindIkErger.WvieGameEndActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/green_background" />
+    android:layout_height="match_parent"
+    android:background="@drawable/green_background">
 
     <TextView
     android:id="@+id/text_view_tutorial_title"
@@ -24,6 +19,7 @@
     android:textColor="#5b7683"
     android:textSize="@dimen/game_title_text_size" />
 
+
     <View
         android:id="@+id/whiteView"
         android:layout_width="200dp"
@@ -31,6 +27,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:background="#FFFFFF" />
+
 
     <ImageButton
         android:id="@+id/hearButton"
@@ -70,9 +67,7 @@
         android:layout_alignStart="@id/againButton"
         android:layout_alignEnd="@id/againButton"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-
-        />
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

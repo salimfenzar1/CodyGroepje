@@ -17,6 +17,7 @@ import com.example.codycactus.R;
 
 public class WvieGameEndActivity extends AppCompatActivity {
     private ImageButton home;
+    private ImageButton replay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +28,8 @@ public class WvieGameEndActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // If home button is clicked
         home = findViewById(R.id.homeButton);
 
         home.setOnClickListener(new View.OnClickListener() {
@@ -34,6 +37,18 @@ public class WvieGameEndActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op home geklikt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // If replay button is clicked
+        replay = findViewById(R.id.againButton);
+
+        replay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "je hebt op replay geklikt", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
                 startActivity(intent);
             }
         });

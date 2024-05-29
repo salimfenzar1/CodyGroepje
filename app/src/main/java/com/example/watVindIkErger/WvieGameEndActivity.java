@@ -62,11 +62,11 @@ public class WvieGameEndActivity extends AppCompatActivity {
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                speakText();
             }
         });
 
         new Handler().postDelayed(this::speakText, 2000);
-
     }
     public void speakText() {
         speechHelper = new SpeechHelper(this);

@@ -30,7 +30,6 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
         });
         new Handler().postDelayed(this::speakText, 2000);
         new Handler().postDelayed(() -> {
-            // random boolean will be generated
             Random random = new Random();
             // starting activity based on what boolean is generated
             Intent intent;

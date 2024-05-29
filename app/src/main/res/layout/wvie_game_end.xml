@@ -5,24 +5,8 @@
     android:id="@+id/wvie_game_end"
     tools:context="com.example.watVindIkErger.WvieGameEndActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/green_background" />
-
-    <TextView
-    android:id="@+id/text_view_tutorial_title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:layout_alignParentBottom="true"
-    android:layout_marginBottom="636dp"
-    android:text="@string/game_end"
-    android:textColor="#5b7683"
-    android:textSize="22sp" />
+    android:layout_height="match_parent"
+    android:background="@drawable/green_background">
 
     <View
         android:id="@+id/whiteView"
@@ -31,6 +15,17 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:background="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/text_view_tutorial_title"
+        android:layout_width="143dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="635dp"
+        android:text="@string/game_end"
+        android:textColor="#5b7683"
+        android:textSize="22sp" />
 
     <ImageButton
         android:id="@+id/hearButton"
@@ -70,9 +65,7 @@
         android:layout_alignStart="@id/againButton"
         android:layout_alignEnd="@id/againButton"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-
-        />
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

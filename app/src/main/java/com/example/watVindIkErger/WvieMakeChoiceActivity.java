@@ -2,6 +2,7 @@ package com.example.watVindIkErger;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,13 +26,11 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             return insets;
         });
 
-        // random number will be generated
+        // random boolean will be generated
         Random random = new Random();
-        int randomNumber = random.nextInt(2) + 1;
-
-        // starting activity based on what number is generated
+        // starting activity based on what boolean is generated
         Intent intent;
-        if (randomNumber == 1) {
+        if (random.nextBoolean()) {
             intent = new Intent(this, WvieChoiceRedActivity.class);
         } else {
             intent = new Intent(this, WvieChoiceYellowActivity.class);

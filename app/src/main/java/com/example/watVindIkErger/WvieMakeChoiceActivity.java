@@ -1,5 +1,6 @@
 package com.example.watVindIkErger;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,6 +10,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.codycactus.R;
+
+import java.util.Random;
 
 public class WvieMakeChoiceActivity extends AppCompatActivity {
     @Override
@@ -21,5 +24,18 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // random number will be generated
+        Random random = new Random();
+        int randomNumber = random.nextInt(2) + 1;
+
+        // starting activity based on what number is generated
+        Intent intent;
+        if (randomNumber == 1) {
+            intent = new Intent(this, WvieChoiceRedActivity.class);
+        } else {
+            intent = new Intent(this, WvieChoiceYellowActivity.class);
+        }
+        startActivity(intent);
     }
 }

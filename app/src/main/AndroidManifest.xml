@@ -28,6 +28,12 @@
             android:name="com.example.watVindIkErger.WvieChoiceYellowActivity"
             android:exported="false" />
         <activity
+            android:name="com.example.watVindIkErger.WvieStatementRedActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.watVindIkErger.WvieStatementYellowActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.MainActivity"
             android:exported="true">
             <intent-filter>

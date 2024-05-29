@@ -22,6 +22,9 @@
             android:name="com.example.watVindIkErger.WvieTutorialActivity"
             android:exported="false" />
         <activity
+            android:name="com.example.watVindIkErger.WvieGetReadyActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.MainActivity"
             android:exported="true">
             <intent-filter>

@@ -45,6 +45,8 @@
         <activity
             android:name="com.example.watVindIkErger.WvieMakeChoiceActivity"
             android:exported="false"/>
+        <activity android:name="com.example.watVindIkErger.WvieOtherOpinionsActivity"
+            android:exported="false"/>
         <activity
             android:name="com.example.MainActivity"
             android:exported="true">

@@ -52,7 +52,7 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
     }
     public void speakText(){
         speechHelper = new SpeechHelper(this);
-        String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger?" : "Waarom vindt je de gele stelling erger?";
+        String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger?" : "Waarom vindt je de rode stelling erger?";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {

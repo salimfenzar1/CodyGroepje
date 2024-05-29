@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,8 +18,8 @@ import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
 public class WvieSubjectsActivity extends AppCompatActivity {
-
     private SpeechHelper speechHelper;
+    private ImageButton hearButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,14 @@ public class WvieSubjectsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        hearButton = findViewById(R.id.hearButton);
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakText();
+            }
+        });
+
         new Handler().postDelayed(this::speakText, 2000);
 
     }

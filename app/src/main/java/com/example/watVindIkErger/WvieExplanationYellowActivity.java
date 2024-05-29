@@ -20,6 +20,7 @@ import com.example.codycactus.R;
 public class WvieExplanationYellowActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton next;
+    private ImageButton hearButton;
     private boolean selectedYes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,6 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
 //                Toast.makeText(this, "Received value: No", Toast.LENGTH_SHORT).show();
 //            }
         }
-        new Handler().postDelayed(this::speakText, 2000);
 
         next = findViewById(R.id.nextButton);
         next.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +54,16 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        hearButton = findViewById(R.id.hearButton);
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakText();
+            }
+        });
+
+        new Handler().postDelayed(this::speakText, 2000);
     }
     public void speakText(){
         speechHelper = new SpeechHelper(this);

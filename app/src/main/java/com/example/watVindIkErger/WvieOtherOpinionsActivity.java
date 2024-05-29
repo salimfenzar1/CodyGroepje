@@ -20,6 +20,7 @@ import com.example.codycactus.R;
 public class WvieOtherOpinionsActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton next;
+    private ImageButton hearButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,14 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieGameEndActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        hearButton = findViewById(R.id.hearButton);
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakText();
             }
         });
         new Handler().postDelayed(this::speakText, 2000);

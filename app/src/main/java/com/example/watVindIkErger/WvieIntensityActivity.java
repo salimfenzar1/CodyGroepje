@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.example.codycactus.R;
 public class WvieIntensityActivity extends AppCompatActivity {
     private ImageView medium;
     private SpeechHelper speechHelper;
+    private ImageButton hearButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,15 @@ public class WvieIntensityActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        hearButton = findViewById(R.id.hearButton);
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakText();
+            }
+        });
+
         new Handler().postDelayed(this::speakText, 2000);
     }
 

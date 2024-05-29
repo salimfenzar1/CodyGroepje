@@ -20,6 +20,7 @@ import com.example.codycactus.R;
 public class WvieStatementRedActivity extends AppCompatActivity {
     private ImageButton next;
     private SpeechHelper speechHelper;
+    private ImageButton hearButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,6 @@ public class WvieStatementRedActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        new Handler().postDelayed(this::speakText, 2000);
 
         next = findViewById(R.id.nextButton);
 
@@ -43,6 +43,16 @@ public class WvieStatementRedActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        hearButton = findViewById(R.id.hearButton);
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakText();
+            }
+        });
+
+        new Handler().postDelayed(this::speakText, 2000);
     }
     public void speakText() {
         speechHelper = new SpeechHelper(this);

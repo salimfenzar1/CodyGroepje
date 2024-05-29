@@ -21,6 +21,7 @@ import com.example.codycactus.R;
 public class WvieExplanationRedActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton next;
+    private ImageButton hearButton;
     private boolean selectedYes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,6 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
             selectedYes = intent.getBooleanExtra("selectedYes", false);
 
         }
-        new Handler().postDelayed(this::speakText, 2000);
 
         next = findViewById(R.id.nextButton);
         next.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +49,16 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        hearButton = findViewById(R.id.hearButton);
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakText();
+            }
+        });
+
+        new Handler().postDelayed(this::speakText, 2000);
+
     }
     public void speakText(){
         speechHelper = new SpeechHelper(this);

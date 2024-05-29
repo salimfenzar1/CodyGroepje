@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,7 +18,7 @@ import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
 public class WvieIntensityActivity extends AppCompatActivity {
-    private ImageButton next;
+    private ImageView medium;
     private SpeechHelper speechHelper;
 
     @Override
@@ -31,9 +31,9 @@ public class WvieIntensityActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        next = findViewById(R.id.toNextPage);
+        medium = findViewById(R.id.image_view_medium_intensity);
 
-        next.setOnClickListener(new View.OnClickListener() {
+        medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();

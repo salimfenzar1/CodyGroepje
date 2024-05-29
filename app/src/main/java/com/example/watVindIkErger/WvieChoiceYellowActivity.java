@@ -37,6 +37,7 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt ja gekozen", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieChoiceYellowActivity.class);
+                intent.putExtra("selectedYes", true);
                 startActivity(intent);
             }
         });
@@ -45,6 +46,7 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt nee gekozen", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieChoiceRedActivity.class);
+                intent.putExtra("selectedYes", false);
                 startActivity(intent);
             }
         });

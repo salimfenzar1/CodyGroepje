@@ -28,7 +28,7 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        new Handler().postDelayed(this::speakText, 2000);
         new Handler().postDelayed(() -> {
             // random boolean will be generated
             Random random = new Random();
@@ -41,8 +41,8 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             }
             startActivity(intent);
             finish();
-        }, 8000);
-        new Handler().postDelayed(this::speakText, 2000);
+        }, 10000);
+
     }
     public void speakText(){
         speechHelper = new SpeechHelper(this);

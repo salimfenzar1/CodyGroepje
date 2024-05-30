@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -20,6 +21,8 @@ import com.example.codycactus.R;
 public class WvieSubjectsActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton hearButton;
+    private ImageView themeDecease;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,9 @@ public class WvieSubjectsActivity extends AppCompatActivity {
             return insets;
         });
         hearButton = findViewById(R.id.hearButton);
+        themeDecease = findViewById(R.id.image_view_family);
+
+        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +46,15 @@ public class WvieSubjectsActivity extends AppCompatActivity {
 
         new Handler().postDelayed(this::speakText, 2000);
 
+        themeDecease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
     public void speakText() {
         speechHelper = new SpeechHelper(this);
@@ -47,15 +62,19 @@ public class WvieSubjectsActivity extends AppCompatActivity {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor wat vind ik erger", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
-                startActivity(intent);
+                setButtonsClickable(true);
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
             }
         });
+    }
+    private void setButtonsClickable(boolean clickable) {
+        themeDecease.setEnabled(clickable);
+        hearButton.setEnabled(clickable);
+
     }
 }

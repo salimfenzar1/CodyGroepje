@@ -21,13 +21,13 @@
 
     <TextView
         android:id="@+id/text_view_low_intensity"
-        android:layout_width="112dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="29dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="50dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="293dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="283dp"
         android:layout_toStartOf="@+id/text_view_medium_intensity"
         android:text="@string/low_intensity"
         android:textColor="#5b7683" />
@@ -86,13 +86,12 @@
 
     <ImageView
         android:id="@+id/image_view_low_intensity"
-        android:layout_width="67dp"
-        android:layout_height="58dp"
-        android:layout_alignParentStart="true"
+        android:layout_width="64dp"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="75dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginBottom="319dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="318dp"
         android:layout_toStartOf="@+id/image_view_medium_intensity"
         app:srcCompat="@drawable/intensity_low" />
 

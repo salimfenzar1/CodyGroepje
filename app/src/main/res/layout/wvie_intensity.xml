@@ -24,11 +24,11 @@
         android:layout_width="112dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="56dp"
-        android:layout_marginEnd="243dp"
-        android:layout_marginBottom="295dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="293dp"
+        android:layout_toStartOf="@+id/text_view_medium_intensity"
         android:text="@string/low_intensity"
         android:textColor="#5b7683" />
 
@@ -36,10 +36,10 @@
         android:id="@+id/text_view_medium_intensity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="182dp"
-        android:layout_marginBottom="295dp"
+        android:layout_marginEnd="59dp"
+        android:layout_marginBottom="293dp"
+        android:layout_toStartOf="@+id/text_view_high_intensity"
         android:text="@string/medium_intensity"
         android:textColor="#5b7683" />
 
@@ -49,8 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="295dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="293dp"
         android:text="@string/high_intensity"
         android:textColor="#5b7683" />
 
@@ -63,34 +63,37 @@
         android:layout_marginBottom="26dp"
         android:background="#00FFFFFF"
         app:srcCompat="@drawable/pictogram_oortje" />
+
     <ImageView
         android:id="@+id/image_view_high_intensity"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="68dp"
+        android:layout_height="58dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="9dp"
-        android:layout_marginBottom="203dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="319dp"
         app:srcCompat="@drawable/intensity_high" />
 
     <ImageView
         android:id="@+id/image_view_medium_intensity"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="68dp"
+        android:layout_height="57dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="103dp"
-        android:layout_marginBottom="203dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="319dp"
+        android:layout_toStartOf="@+id/image_view_high_intensity"
         app:srcCompat="@drawable/intensity_medium" />
 
     <ImageView
         android:id="@+id/image_view_low_intensity"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="67dp"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="243dp"
-        android:layout_marginBottom="204dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="319dp"
+        android:layout_toStartOf="@+id/image_view_medium_intensity"
         app:srcCompat="@drawable/intensity_low" />
 
     <ImageButton

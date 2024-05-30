@@ -22,6 +22,7 @@ public class WvieSubjectsActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton hearButton;
     private ImageView themeDecease;
+    private ImageView themeSexuality;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class WvieSubjectsActivity extends AppCompatActivity {
         });
         hearButton = findViewById(R.id.hearButton);
         themeDecease = findViewById(R.id.image_view_family);
+        themeSexuality = findViewById(R.id.image_seksualiteit);
 
         setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +49,15 @@ public class WvieSubjectsActivity extends AppCompatActivity {
         new Handler().postDelayed(this::speakText, 2000);
 
         themeDecease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        themeSexuality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();

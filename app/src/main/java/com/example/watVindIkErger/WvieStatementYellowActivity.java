@@ -58,7 +58,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
     }
     public void speakText(){
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("De stelling voor de kleur geel... Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

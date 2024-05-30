@@ -56,15 +56,15 @@ public class WvieChoiceRedActivity extends AppCompatActivity {
             }
         });
         hearButton = findViewById(R.id.hearButton);
+        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
-
         new Handler().postDelayed(this::speakText, 2000);
-
     }
 
     public void speakText() {
@@ -73,13 +73,20 @@ public class WvieChoiceRedActivity extends AppCompatActivity {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
             }
         });
+    }
+    private void setButtonsClickable(boolean clickable) {
+        yesButton.setEnabled(clickable);
+        noButton.setEnabled(clickable);
+        hearButton.setEnabled(clickable);
     }
 
 }

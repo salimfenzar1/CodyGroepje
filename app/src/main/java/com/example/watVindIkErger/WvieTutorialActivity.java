@@ -33,6 +33,7 @@ public class WvieTutorialActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -45,14 +46,17 @@ public class WvieTutorialActivity extends AppCompatActivity {
         });
 
         hearButton = findViewById(R.id.hearButton);
+        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
 
         new Handler().postDelayed(this::speakText, 2000);
+
     }
 
     public void speakText() {
@@ -61,13 +65,20 @@ public class WvieTutorialActivity extends AppCompatActivity {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
             }
         });
+    }
+    private void setButtonsClickable(boolean clickable) {
+        next.setEnabled(clickable);
+        hearButton.setEnabled(clickable);
+
     }
 
 }

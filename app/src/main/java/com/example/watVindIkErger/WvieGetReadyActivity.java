@@ -44,9 +44,11 @@ public class WvieGetReadyActivity extends AppCompatActivity {
         });
 
         hearButton = findViewById(R.id.hearButton);
+        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
@@ -60,12 +62,18 @@ public class WvieGetReadyActivity extends AppCompatActivity {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
             }
         });
+    }
+    private void setButtonsClickable(boolean clickable) {
+        next.setEnabled(clickable);
+        hearButton.setEnabled(clickable);
     }
 }

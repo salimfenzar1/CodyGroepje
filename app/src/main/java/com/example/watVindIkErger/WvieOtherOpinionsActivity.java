@@ -48,7 +48,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setButtonsClickable(false);
-                speakText();
+                speakTextEar();
             }
         });
         new Handler().postDelayed(this::speakText, 2000);
@@ -70,8 +70,25 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void speakTextEar() {
+        speechHelper = new SpeechHelper(this);
+        speechHelper.speak("Wil iemand anders nog iets zeggen?", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
+            }
+        });
+    }
     private void setButtonsClickable(boolean clickable) {
         hearButton.setEnabled(clickable);
-        hearButton.setEnabled(clickable);
+        next.setEnabled(clickable);
     }
 }

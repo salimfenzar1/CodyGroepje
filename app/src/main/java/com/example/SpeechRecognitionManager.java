@@ -92,6 +92,8 @@ public class SpeechRecognitionManager {
 
     public void startListening() {
         if (speechRecognizer != null && !isListening) {
+        if (SpeechRecognizer.isRecognitionAvailable(context)) {
+            Log.d("StartListening Method", "Listening...");
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag("nl-NL"));
@@ -109,6 +111,7 @@ public class SpeechRecognitionManager {
     }
 
     public interface SpeechRecognitionListener {
+
         void onSpeechResult(String result);
     }
 }

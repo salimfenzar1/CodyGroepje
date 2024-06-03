@@ -1,6 +1,8 @@
 package com.example;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,7 +10,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -17,12 +21,17 @@ import com.example.SpeechHelper;
 import com.example.codycactus.R;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
+public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
 
-public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private boolean permissionToRecordAccepted = false;
+    private final String[] permissions = {Manifest.permission.RECORD_AUDIO};
+
     private ImageButton tijdTikt;
     private ImageButton levend;
     private ImageButton watVind;
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,35 +43,28 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         tijdTikt = findViewById(R.id.tijdTikt);
         levend = findViewById(R.id.levendOrganogram);
         watVind = findViewById(R.id.watVindIk);
 
         setButtonsClickable(false);
 
-        speakIntro();
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+    }
 
-        tijdTikt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionToRecordAccepted = requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
-            }
-        });
-        levend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor levend organogram", Toast.LENGTH_SHORT).show();
-            }
-        });
-        watVind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor wat vind ik erger", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
-                startActivity(intent);
-            }
-        });
+        if (permissionToRecordAccepted) {
+            speechRecognitionManager = new SpeechRecognitionManager(this, this);
+            speakIntro();
+        } else {
+            Toast.makeText(this, "Permission to use microphone denied", Toast.LENGTH_SHORT).show();
+            finish(); // Close the app if permission is denied
+        }
     }
 
     public void speakIntro() {
@@ -71,15 +73,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
-                // Maak de knoppen klikbaar nadat de spraak voltooid is
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                // Maak de knoppen ook klikbaar als de spraak mislukt
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -91,5 +93,26 @@ public class MainActivity extends AppCompatActivity {
         tijdTikt.setEnabled(clickable);
         levend.setEnabled(clickable);
         watVind.setEnabled(clickable);
+    }
+
+    @Override
+    public void onSpeechResult(String result) {
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if ("ja".equalsIgnoreCase(result.trim())) {
+            Toast.makeText(this, "ja", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }

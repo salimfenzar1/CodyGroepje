@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void setButtonsClickable(boolean clickable) {
         tijdTikt.setClickable(clickable);
         levend.setClickable(clickable);

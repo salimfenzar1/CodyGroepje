@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+import com.example.watVindIkErger.WvieGetReadyActivity;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
 public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
@@ -47,6 +48,14 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         tijdTikt = findViewById(R.id.tijdTikt);
         levend = findViewById(R.id.levendOrganogram);
         watVind = findViewById(R.id.watVindIk);
+        watVind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Je hebt wat vind ik erger gekozen", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         setButtonsClickable(false);
 
@@ -73,14 +82,16 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
+                setButtonsClickable(true);  // Zet de knoppen klikbaar
+                Log.d("MainActivity", "Buttons should be clickable now.");
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
+                setButtonsClickable(true);  // Zet de knoppen klikbaar zelfs als de spraaksynthese mislukt
+                Log.d("MainActivity", "Buttons should be clickable now even after speech failure.");
                 speechRecognitionManager.startListening();
             }
         });
@@ -93,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         tijdTikt.setEnabled(clickable);
         levend.setEnabled(clickable);
         watVind.setEnabled(clickable);
+        Log.d("MainActivity", "setButtonsClickable: " + clickable);
     }
 
     @Override

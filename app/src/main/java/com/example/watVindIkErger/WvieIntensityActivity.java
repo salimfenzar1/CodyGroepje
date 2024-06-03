@@ -18,12 +18,17 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WvieIntensityActivity extends AppCompatActivity {
     private ImageView low;
     private ImageView medium;
     private ImageView high;
     private SpeechHelper speechHelper;
     private ImageButton hearButton;
+    private ImageButton next;
+    private List<String> selectedIntensities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,8 @@ public class WvieIntensityActivity extends AppCompatActivity {
             return insets;
         });
 
+        selectedIntensities = new ArrayList<>();
+
         low = findViewById(R.id.image_view_low_intensity);
         medium = findViewById(R.id.image_view_medium_intensity);
         high = findViewById(R.id.image_view_high_intensity);
@@ -43,21 +50,21 @@ public class WvieIntensityActivity extends AppCompatActivity {
         low.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onIntensityButtonClick("laagdrempellig");
+                toggleIntensitySelection("laagdrempellig");
             }
         });
 
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onIntensityButtonClick("matig");
+                toggleIntensitySelection("matig");
             }
         });
 
         high.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onIntensityButtonClick("intens");
+                toggleIntensitySelection("intens");
             }
         });
 
@@ -71,13 +78,43 @@ public class WvieIntensityActivity extends AppCompatActivity {
             }
         });
 
+        next = findViewById(R.id.toNextPage);
+        next.setEnabled(false);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!selectedIntensities.isEmpty()) {
+                    startNextActivity();
+                } else {
+                    Toast.makeText(WvieIntensityActivity.this, "Selecteer minimaal één intensiteit", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         new Handler().postDelayed(this::speakText, 2000);
     }
 
-    //Starts next activity and sends intensity level data
-    private void onIntensityButtonClick(String intensity) {
+    // Intensity selection toggle
+    private void toggleIntensitySelection(String intensity) {
+        if (selectedIntensities.contains(intensity)) {
+            selectedIntensities.remove(intensity);
+            Log.d("WvieIntensityActivity", "Removed intensity level: " + intensity + ". Current selection: " + selectedIntensities);
+        } else {
+            selectedIntensities.add(intensity);
+            Log.d("WvieIntensityActivity", "Added intensity level: " + intensity + ". Current selection: " + selectedIntensities);
+        }
+        updateToNextPageButtonState();
+    }
+
+    // Enable next button if at least one intensity is selected
+    private void updateToNextPageButtonState() {
+        next.setEnabled(!selectedIntensities.isEmpty());
+    }
+
+    // Start next activity + send intensity level data
+    private void startNextActivity() {
         Intent intent = new Intent(this, WvieTutorialActivity.class);
-        intent.putExtra("INTENSITY_LEVEL", intensity);
+        intent.putStringArrayListExtra("SELECTED_INTENSITIES", new ArrayList<>(selectedIntensities));
         startActivity(intent);
     }
 

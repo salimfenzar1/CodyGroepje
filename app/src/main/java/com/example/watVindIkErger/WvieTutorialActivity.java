@@ -34,10 +34,6 @@ public class WvieTutorialActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Receive intensity data from intent
-        String intensity = getIntent().getStringExtra("INTENSITY_LEVEL");
-        Toast.makeText(this, "Gekozen intensiteit: " + intensity, Toast.LENGTH_LONG).show();
-
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {

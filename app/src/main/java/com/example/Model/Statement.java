@@ -6,13 +6,9 @@ import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 
 @Entity(
-        tableName = "statement",
-        foreignKeys = @ForeignKey(
-                entity = Intensity.class,
-                parentColumns = "intensityId",
-                childColumns = "intensityId",
-                onDelete = ForeignKey.CASCADE
-        )
+        tableName = "statement"
+
+
 )
 public class Statement {
     @PrimaryKey(autoGenerate = true)
@@ -30,6 +26,6 @@ public class Statement {
     @ColumnInfo(name = "gameName")
     public String gameName;
 
-    @ColumnInfo(name = "intensityId")
-    public int intensityId; // This is the foreign key column
+    @ColumnInfo(name = "intensityLevel")
+    public int intensityLevel; // This is the foreign key column
 }

@@ -40,12 +40,24 @@ public class WvieIntensityActivity extends AppCompatActivity {
         medium = findViewById(R.id.image_view_medium_intensity);
         high = findViewById(R.id.image_view_high_intensity);
 
+        low.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onIntensityButtonClick("laagdrempellig");
+            }
+        });
+
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieTutorialActivity.class);
-                startActivity(intent);
+                onIntensityButtonClick("Matig");
+            }
+        });
+
+        high.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onIntensityButtonClick("hoog");
             }
         });
 
@@ -60,6 +72,13 @@ public class WvieIntensityActivity extends AppCompatActivity {
         });
 
         new Handler().postDelayed(this::speakText, 2000);
+    }
+
+    private void onIntensityButtonClick(String intensity) {
+        Toast.makeText(this, "Je hebt voor " + intensity + " intensiteit gekozen", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, WvieTutorialActivity.class);
+        intent.putExtra("INTENSITY_LEVEL", intensity);
+        startActivity(intent);
     }
 
     public void speakText() {
@@ -77,10 +96,11 @@ public class WvieIntensityActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setButtonsClickable(boolean clickable) {
+        low.setEnabled(clickable);
         medium.setEnabled(clickable);
+        high.setEnabled(clickable);
         hearButton.setEnabled(clickable);
-
     }
-
 }

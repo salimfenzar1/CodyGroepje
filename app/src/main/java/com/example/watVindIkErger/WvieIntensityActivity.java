@@ -19,7 +19,9 @@ import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
 public class WvieIntensityActivity extends AppCompatActivity {
+    private ImageView low;
     private ImageView medium;
+    private ImageView high;
     private SpeechHelper speechHelper;
     private ImageButton hearButton;
 
@@ -33,7 +35,10 @@ public class WvieIntensityActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        low = findViewById(R.id.image_view_low_intensity);
         medium = findViewById(R.id.image_view_medium_intensity);
+        high = findViewById(R.id.image_view_high_intensity);
 
         medium.setOnClickListener(new View.OnClickListener() {
             @Override

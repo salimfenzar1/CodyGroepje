@@ -1,15 +1,20 @@
 package com.example.Model;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-import com.example.Model.Intensity;
+import androidx.room.ColumnInfo;
 
-@Entity(tableName = "statement")
+@Entity(
+        tableName = "statement",
+        foreignKeys = @ForeignKey(
+                entity = Intensity.class,
+                parentColumns = "intensityId",
+                childColumns = "intensityId",
+                onDelete = ForeignKey.CASCADE
+        )
+)
 public class Statement {
-
-    @ColumnInfo(name = "statementId")
     @PrimaryKey(autoGenerate = true)
     public int statementId;
 
@@ -26,8 +31,5 @@ public class Statement {
     public String gameName;
 
     @ColumnInfo(name = "intensityId")
-    @ForeignKey(entity = Intensity.class, parentColumns = "Id", childColumns = "intensityId")
-    public int intensityId;
-
-
+    public int intensityId; // This is the foreign key column
 }

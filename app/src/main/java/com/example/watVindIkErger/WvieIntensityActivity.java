@@ -76,7 +76,6 @@ public class WvieIntensityActivity extends AppCompatActivity {
 
     //Starts next activity and sends intensity level data
     private void onIntensityButtonClick(String intensity) {
-        Toast.makeText(this, "Je hebt voor " + intensity + " intensiteit gekozen", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WvieTutorialActivity.class);
         intent.putExtra("INTENSITY_LEVEL", intensity);
         startActivity(intent);

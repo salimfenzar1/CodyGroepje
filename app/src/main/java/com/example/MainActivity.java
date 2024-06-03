@@ -110,8 +110,9 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if ("ja".equalsIgnoreCase(result.trim())) {
-              Toast.makeText(this, "ja", Toast.LENGTH_SHORT).show();
+        if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
+            Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+            startActivity(intent);
       }
     }
 

@@ -112,7 +112,6 @@ public class SpeechRecognitionManager {
     }
 
     public interface SpeechRecognitionListener {
-
         void onSpeechResult(String result);
     }
 }

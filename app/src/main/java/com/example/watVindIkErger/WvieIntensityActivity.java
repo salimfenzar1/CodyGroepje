@@ -50,14 +50,14 @@ public class WvieIntensityActivity extends AppCompatActivity {
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onIntensityButtonClick("Matig");
+                onIntensityButtonClick("matig");
             }
         });
 
         high.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onIntensityButtonClick("hoog");
+                onIntensityButtonClick("intens");
             }
         });
 
@@ -74,6 +74,7 @@ public class WvieIntensityActivity extends AppCompatActivity {
         new Handler().postDelayed(this::speakText, 2000);
     }
 
+    //Starts next activity and sends intensity level data
     private void onIntensityButtonClick(String intensity) {
         Toast.makeText(this, "Je hebt voor " + intensity + " intensiteit gekozen", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WvieTutorialActivity.class);

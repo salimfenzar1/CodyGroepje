@@ -34,6 +34,9 @@ public class WvieTutorialActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Receive intensity data from intent
+        String intensity = getIntent().getStringExtra("INTENSITY_LEVEL");
+
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {

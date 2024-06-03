@@ -5,12 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.example.MainActivity"
+    android:background="@drawable/backgroundimg">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/backgroundimg" />
 
     <TextView
         android:id="@+id/Kies"
@@ -19,7 +16,7 @@
         android:text="Kies een spel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
-        android:textSize="25sp"
+        android:textSize="@dimen/game_title_text_size"
         android:textColor="@color/textColor"
         />
 

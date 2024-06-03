@@ -1,5 +1,6 @@
-package com.example.codycactus;
+package com.example;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.SpeechHelper;
+import com.example.codycactus.R;
+import com.example.watVindIkErger.WvieSubjectsActivity;
+
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton tijdTikt;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
+
             }
         });
         levend.setOnClickListener(new View.OnClickListener() {
@@ -52,13 +59,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt gekozen voor wat vind ik erger", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+                startActivity(intent);
             }
         });
     }
 
     public void speakIntro() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Hallo, ik ben Cody! jullie kunnen samen met mij een spel spelen. Deze spellen zullen het mogelijk maken om moeilijke onderwerpen bespreekbaar te maken. Jullie kunnen kiezen tussen: De tijd tikt ,  levend organogram, en wat vind ik erger! Welk spel willen jullie spelen?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Hoi, ik ben Cody! jullie kunnen samen met mij een spel spelen. Deze spellen zullen het mogelijk maken om moeilijke onderwerpen bespreekbaar te maken. Jullie kunnen kiezen tussen: De Tijd Tikt ,  levend organogram, en wat vind ik erger! Welk spel willen jullie spelen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

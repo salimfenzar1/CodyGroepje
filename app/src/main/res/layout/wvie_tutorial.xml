@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wvie_tutorial"
+    tools:context="com.example.watVindIkErger.WvieTutorialActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/green_background">
+
+
+    <TextView
+    android:id="@+id/text_view_tutorial_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="@dimen/bottomMargin"
+    android:text="@string/tutorial"
+    android:textColor="#5b7683"
+    android:textSize="@dimen/game_title_text_size" />
+
+    <ImageButton
+        android:id="@+id/hearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/pictogram_oortje" />
+
+    <ImageButton
+        android:id="@+id/nextButton"
+        android:layout_width="91dp"
+        android:layout_height="57dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="26dp"
+        android:background="#00FFFFFF"
+
+        app:srcCompat="@drawable/arrow_icon" />
+
+    <ImageView
+        android:id="@+id/wvieTutorialImage"
+        android:layout_width="319dp"
+        android:layout_height="270dp"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/wvie_tutorial_image" />
+
+</RelativeLayout>

@@ -1,9 +1,8 @@
-package com.example.codycactus;
+package com.example;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
@@ -20,12 +19,16 @@ public class SpeechHelper {
     public SpeechHelper(Context context) {
         this.context = context;
         SpeechConfig config = SpeechConfig.fromSubscription(API_KEY, REGION);
-        config.setSpeechSynthesisVoiceName("nl-NL-MaartenNeural");
+        config.setSpeechSynthesisVoiceName("en-US-AndrewMultilingualNeural");
         this.synthesizer = new SpeechSynthesizer(config);
     }
 
     public void speak(String text, SpeechCompleteListener listener) {
-        new SynthesisTask(listener).execute(text);
+        String ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>" +
+                "<voice name='en-US-AndrewMultilingualNeural'>" +
+                "<prosody rate='+5%'>" + text + "</prosody>" +
+                "</voice></speak>";
+        new SynthesisTask(listener).execute(ssml);
     }
 
     private class SynthesisTask extends AsyncTask<String, Void, SpeechSynthesisResult> {
@@ -38,7 +41,7 @@ public class SpeechHelper {
         @Override
         protected SpeechSynthesisResult doInBackground(String... texts) {
             try {
-                return synthesizer.SpeakText(texts[0]);
+                return synthesizer.SpeakSsml(texts[0]); // Gebruik SpeakSsml in plaats van SpeakText
             } catch (Exception e) {
                 Log.e("TTS", "Error in speech synthesis: " + e.getMessage());
                 return null;

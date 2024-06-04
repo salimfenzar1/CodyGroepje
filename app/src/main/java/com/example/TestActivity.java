@@ -65,7 +65,7 @@ public class TestActivity extends AppCompatActivity {
         // Create and add ImageView
         ImageView imageView = new ImageView(this);
         int imageResource = Integer.parseInt(statement.imageUrl);
-        Bitmap bitmap = decodeSampledBitmapFromResource(getResources(), imageResource, 250, 250);
+        Bitmap bitmap = decodeSampledBitmapFromResource(getResources(), imageResource, 280, 280);
         imageView.setImageBitmap(bitmap);
 
         // Set layout parameters to scale the image appropriately

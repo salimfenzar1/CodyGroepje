@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,12 +13,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.AnswerConverter;
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
-public class WvieTutorialActivity extends AppCompatActivity {
+public class WvieTutorialActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
 
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
 
@@ -33,15 +35,13 @@ public class WvieTutorialActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
-                startActivity(intent);
+                goNextActivity();
             }
         });
 
@@ -50,7 +50,6 @@ public class WvieTutorialActivity extends AppCompatActivity {
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setButtonsClickable(false);
                 speakText();
             }
         });
@@ -60,18 +59,38 @@ public class WvieTutorialActivity extends AppCompatActivity {
     }
 
     public void speakText() {
+        setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Welkom bij het spel: Wat vind ik erger! Ik licht kort toe wat we gaan doen. Ik lees dadelijk twee stellingen voor, deze zijn gekoppeld aan een kleur. Mijn linker kant is geel en mijn  rechter kant is rood. Vervolgens kiezen jullie welke van de twee stellingen je erger vindt en ga je aan deze kant van mij staan. Daarna zullen we discussiëren over waarom je deze stelling erger vindt... Is alles duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
+            }
+        });
+    }
+
+    public void performOutro() {
+        speechHelper = new SpeechHelper(this);
+        speechHelper.speak("Veel plezier met het spelen van wat vind ik erger!", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+                goNextActivity();
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
+                goNextActivity();
             }
         });
     }
@@ -81,4 +100,19 @@ public class WvieTutorialActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onSpeechResult(String result) {
+        switch (AnswerConverter.determineAnswer(result)) {
+            case YES: performOutro(); break;
+            default: speechRecognitionManager.stopListening(); speakText(); break; // NO and MAYBE
+            case UNKNOWN: break; // TODO: Implement UNKNOWN
+        }
+    }
+
+    private void goNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+        Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
+        startActivity(intent);
+    }
 }

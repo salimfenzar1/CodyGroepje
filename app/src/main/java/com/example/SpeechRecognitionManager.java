@@ -72,7 +72,6 @@ public class SpeechRecognitionManager {
                     if (matches != null && !matches.isEmpty()) {
                         listener.onSpeechResult(matches.get(0));
                     }
-                    startListening(); // Restart listening after receiving results
                 }
 
                 @Override
@@ -102,6 +101,12 @@ public class SpeechRecognitionManager {
                 speechRecognizer.startListening(intent);
                 isListening = true;
             }
+        }
+    }
+    public void stopListening() {
+        if (speechRecognizer != null && isListening) {
+            speechRecognizer.stopListening();
+            isListening = false;
         }
     }
 

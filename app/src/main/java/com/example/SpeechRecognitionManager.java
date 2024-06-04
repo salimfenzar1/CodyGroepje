@@ -13,8 +13,8 @@ import java.util.Locale;
 
 public class SpeechRecognitionManager {
     private SpeechRecognizer speechRecognizer;
-    private Context context;
-    private SpeechRecognitionListener listener;
+    private final Context context;
+    private final SpeechRecognitionListener listener;
     private boolean isListening = false;
 
     public SpeechRecognitionManager(Context context, SpeechRecognitionListener listener) {

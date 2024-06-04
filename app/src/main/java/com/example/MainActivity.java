@@ -111,9 +111,12 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
         if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
             Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
             startActivity(intent);
-      }
+        }
+        speechRecognitionManager.startListening(); // Restart listening after receiving results
     }
 
     @Override

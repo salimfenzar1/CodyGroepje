@@ -16,11 +16,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
-public class WvieIntensityActivity extends AppCompatActivity {
+public class WvieIntensityActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private ImageView medium;
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton hearButton;
 
     @Override
@@ -33,6 +35,9 @@ public class WvieIntensityActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
         medium = findViewById(R.id.image_view_medium_intensity);
 
         medium.setOnClickListener(new View.OnClickListener() {
@@ -59,16 +64,18 @@ public class WvieIntensityActivity extends AppCompatActivity {
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak(" In welke mate van intensiteit willen jullie de stellingen ? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan!", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen ? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+//                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+//                speechRecognitionManager.startListening();
             }
         });
     }
@@ -78,4 +85,9 @@ public class WvieIntensityActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onSpeechResult(String result) {
+        // TODO: Implement later
+        speechRecognitionManager.startListening(); // Restart listening after receiving results
+    }
 }

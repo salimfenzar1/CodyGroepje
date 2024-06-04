@@ -28,7 +28,7 @@ public class DatabaseInitializer {
                 Statement statement1 = new Statement();
                 statement1.description = "Een cliënt kijkt regelmatig naar pornografische beelden";
                 statement1.category = "Seksualiteit op de werkvloer";
-                statement1.imageUrl = String.valueOf(R.drawable.wvie_betrapt_client_op_seksuele_handelingen); // Geen afbeelding gegeven
+                statement1.imageUrl = String.valueOf(R.drawable.wvie_betrapt_client_op_seksuele_handelingen);
                 statement1.intensityLevel = 1;
                 statement1.isActive = true;
                 statementDAO.insert(statement1);
@@ -68,7 +68,7 @@ public class DatabaseInitializer {
                 Statement statement6 = new Statement();
                 statement6.description = "Een zorgmedewerker betrapt twee collega's op intiem contact.";
                 statement6.category = "Seksualiteit op de werkvloer";
-                statement6.imageUrl = String.valueOf(R.drawable.wvie_betrapt_collegas_intiem_contact); // Geen afbeelding gegeven
+                statement6.imageUrl = String.valueOf(R.drawable.wvie_betrapt_collegas_intiem_contact);
                 statement6.intensityLevel = 2;
                 statement6.isActive = true;
                 statementDAO.insert(statement6);

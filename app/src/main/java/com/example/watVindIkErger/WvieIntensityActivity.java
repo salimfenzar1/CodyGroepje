@@ -1,5 +1,6 @@
 package com.example.watVindIkErger;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,10 @@ public class WvieIntensityActivity extends AppCompatActivity {
     private ImageButton hearButton;
     private ImageButton next;
     private List<String> selectedIntensities;
+    private boolean isInitialLowImage = true;
+    private boolean isInitialMediumImage = true;
+    private boolean isInitialHighImage = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +53,19 @@ public class WvieIntensityActivity extends AppCompatActivity {
         high = findViewById(R.id.image_view_high_intensity);
 
         low.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
                 toggleIntensitySelection("laagdrempellig");
+                if (isInitialLowImage) {
+                    // Wijzig naar de tweede afbeelding
+                    low.setImageResource(R.drawable.intensity_medium);
+                    isInitialLowImage = false;
+                } else {
+                    // Wijzig terug naar de initiële afbeelding
+                    low.setImageResource(R.drawable.intensity_low);
+                    isInitialLowImage = true;
+                }
             }
         });
 
@@ -58,6 +73,15 @@ public class WvieIntensityActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toggleIntensitySelection("matig");
+                if (isInitialMediumImage) {
+                    // Wijzig naar de tweede afbeelding
+                    medium.setImageResource(R.drawable.intensity_high);
+                    isInitialMediumImage = false;
+                } else {
+                    // Wijzig terug naar de initiële afbeelding
+                    medium.setImageResource(R.drawable.intensity_medium);
+                    isInitialMediumImage = true;
+                }
             }
         });
 
@@ -65,6 +89,15 @@ public class WvieIntensityActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toggleIntensitySelection("intens");
+                if (isInitialHighImage) {
+                    // Wijzig naar de tweede afbeelding
+                    high.setImageResource(R.drawable.intensity_low);
+                    isInitialHighImage = false;
+                } else {
+                    // Wijzig terug naar de initiële afbeelding
+                    high.setImageResource(R.drawable.intensity_high);
+                    isInitialHighImage = true;
+                }
             }
         });
 

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,12 +15,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.AnswerConverter;
 import com.example.MainActivity;
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
-public class WvieGameEndActivity extends AppCompatActivity {
+public class WvieGameEndActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton home;
     private ImageButton replay;
     private ImageButton hearButton;
@@ -34,15 +38,15 @@ public class WvieGameEndActivity extends AppCompatActivity {
             return insets;
         });
 
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
         // If home button is clicked
         home = findViewById(R.id.homeButton);
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op home geklikt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                goHome();
             }
         });
 
@@ -52,9 +56,7 @@ public class WvieGameEndActivity extends AppCompatActivity {
         replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op replay geklikt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
-                startActivity(intent);
+                replayGame();
             }
         });
 
@@ -70,20 +72,53 @@ public class WvieGameEndActivity extends AppCompatActivity {
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
+
+    private void goHome() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void replayGame() {
+        Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
+        startActivity(intent);
+    }
+
     public void speakText() {
+        setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie nog een ronde spelen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
+            }
+        });
+    }
 
+    public void speakTextPlayAgain() {
+        setButtonsClickable(false);
+        speechHelper = new SpeechHelper(this);
+        speechHelper.speak("Oke, we gaan nog een    ronde spelen! Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
+                replayGame();
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
+                replayGame();
             }
         });
     }
@@ -92,5 +127,14 @@ public class WvieGameEndActivity extends AppCompatActivity {
         home.setEnabled(clickable);
         replay.setEnabled(clickable);
         hearButton.setEnabled(clickable);
+    }
+
+    @Override
+    public void onSpeechResult(String result) {
+        switch (AnswerConverter.determineAnswer(result)) {
+            case YES: speakTextPlayAgain(); break;
+            case NO: goHome(); break;
+            default: speechRecognitionManager.startListening(); break;
+        }
     }
 }

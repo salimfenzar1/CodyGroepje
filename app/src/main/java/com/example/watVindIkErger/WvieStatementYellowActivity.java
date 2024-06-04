@@ -38,9 +38,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
-                startActivity(intent);
+                goNextActivity();
             }
         });
 
@@ -55,19 +53,28 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
+
+    private void goNextActivity() {
+        Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
+        startActivity(intent);
+    }
+
     public void speakText(){
         speechHelper = new SpeechHelper(this);
+        WvieStatementYellowActivity currentActivity = this;
         speechHelper.speak("De stelling voor de kleur geel... Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                new Handler().postDelayed(currentActivity::goNextActivity, 5000);
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                new Handler().postDelayed(currentActivity::goNextActivity, 5000);
             }
         });
     }private void setButtonsClickable(boolean clickable) {

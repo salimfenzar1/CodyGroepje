@@ -87,20 +87,17 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
 
     @Override
     public void onSpeechResult(String result) {
-        Log.i("WvieIntensityActivity", "Recognized speech: " + result);
-        String trimmedResult = result.trim();
-        switch(trimmedResult.toLowerCase()) {
-            case "laagdrempellig":
-                // Result if user says "Laagdrempellig"
-                break;
-            case "middelmatig":
-                // Result if user says "Middelmatig"
-                break;
-            case "intens":
-                // Result if user says "Intens"
-                break;
-            default:
-                // unexpected input
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if ("Laagdrempellig".equalsIgnoreCase(result.trim())) {
+            // Result if user says "Laagdrempellig"
+            Log.d("WvieIntensityActivity", "Gekozen intensiteit: Laagdrempellig");
+        } else if ("Middelmatig".equalsIgnoreCase(result.trim())) {
+            // Result if user says "Middelmatig"
+            Log.d("WvieIntensityActivity", "Gekozen intensiteit: Middelmatig");
+        } else if ("Intens".equalsIgnoreCase(result.trim())) {
+
+        } else if ("Laagdrempellig en Middelmatig".equalsIgnoreCase(result.trim())) {
+
         }
     }
 }

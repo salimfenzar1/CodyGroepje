@@ -15,25 +15,25 @@ public interface StatementDAO {
     @Insert
     public void insert(Statement statement);
 
-    @Query("SELECT description FROM statement")
+    @Query("SELECT * FROM statement")
     LiveData<List<Statement>> getAllStatements();
 
-    @Query("SELECT description FROM statement WHERE intensityLevel = 2")
+    @Query("SELECT * FROM statement WHERE intensityLevel = 2")
     LiveData<List<Statement>> getMatigStatements();
 
-    @Query("SELECT description FROM statement WHERE intensityLevel = 1")
+    @Query("SELECT * FROM statement WHERE intensityLevel = 1")
     LiveData<List<Statement>> getLaagdrempeligStatements();
 
-    @Query("SELECT description FROM statement WHERE intensityLevel =3")
+    @Query("SELECT * FROM statement WHERE intensityLevel =3")
     LiveData<List<Statement>> getIntensStatements();
 
-    @Query("SELECT description FROM statement WHERE intensityLevel IN (1, 2)")
+    @Query("SELECT * FROM statement WHERE intensityLevel IN (1, 2)")
     LiveData<List<Statement>> getMatigAndLaagdrempeligStatements();
 
-    @Query("SELECT description FROM statement WHERE intensityLevel IN (2, 3)")
+    @Query("SELECT * FROM statement WHERE intensityLevel IN (2, 3)")
     LiveData<List<Statement>> getMatigAndIntensStatements();
 
-    @Query("SELECT description FROM statement WHERE intensityLevel IN (1, 3)")
+    @Query("SELECT * FROM statement WHERE intensityLevel IN (1, 3)")
     LiveData<List<Statement>> getLaagdrempeligAndIntensStatements();
 
 

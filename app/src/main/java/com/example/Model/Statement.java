@@ -23,8 +23,7 @@ public class Statement {
     @ColumnInfo(name = "imageUrl")
     public String imageUrl;
 
-    @ColumnInfo(name = "gameName")
-    public String gameName;
+
 
     @ColumnInfo(name = "intensityLevel")
     public int intensityLevel; // This is the foreign key column

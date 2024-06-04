@@ -46,7 +46,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         });
 
         hearButton = findViewById(R.id.hearButton);
-        setButtonsClickable(false);
+
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +54,8 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
             }
         });
 
+
+        setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
 
     }

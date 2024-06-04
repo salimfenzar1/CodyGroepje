@@ -48,14 +48,13 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
         });
 
         hearButton = findViewById(R.id.hearButton);
-        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setButtonsClickable(false);
                 speakTextPart2();
             }
         });
+        setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
 
@@ -65,25 +64,25 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     }
 
     public void speakText() {
+        setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Wat vinden de andere hiervan?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
                 speakTextPart2();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
                 speakTextPart2();
             }
         });
     }
 
     public void speakTextPart2() {
+        setButtonsClickable(false);
         speechRecognitionManager.stopListening();
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Wil iemand anders nog iets zeggen?", new SpeechHelper.SpeechCompleteListener() {
@@ -109,6 +108,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
 
 
     public void speakTextAskRemainingOpinions() {
+        setButtonsClickable(false);
         speechRecognitionManager.stopListening();
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Heeft iedereen kunnen zeggen wat ze willen?", new SpeechHelper.SpeechCompleteListener() {

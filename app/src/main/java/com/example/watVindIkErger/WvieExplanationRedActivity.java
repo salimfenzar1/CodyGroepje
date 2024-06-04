@@ -50,7 +50,6 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
             }
         });
         hearButton = findViewById(R.id.hearButton);
-        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +57,7 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
                 speakText();
             }
         });
-
+        setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
 
     }

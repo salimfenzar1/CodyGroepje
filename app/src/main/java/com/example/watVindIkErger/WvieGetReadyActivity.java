@@ -51,7 +51,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
                 speakText();
             }
         });
-
+        setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 5000);
 
     }

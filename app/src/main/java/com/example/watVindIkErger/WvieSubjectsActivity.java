@@ -38,15 +38,12 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         hearButton = findViewById(R.id.hearButton);
         themeDecease = findViewById(R.id.image_view_family);
         themeSexuality = findViewById(R.id.image_seksualiteit);
-        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 speakText();
             }
         });
-
-        new Handler().postDelayed(this::speakText, 2000);
 
         themeDecease.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +62,8 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 startActivity(intent);
             }
         });
-
+        setButtonsClickable(false);
+        new Handler().postDelayed(this::speakText, 2000);
     }
     public void speakText() {
         speechHelper = new SpeechHelper(this);

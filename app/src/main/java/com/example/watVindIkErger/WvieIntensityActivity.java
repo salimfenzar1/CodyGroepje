@@ -59,7 +59,7 @@ public class WvieIntensityActivity extends AppCompatActivity {
                 toggleIntensitySelection("laagdrempellig");
                 if (isInitialLowImage) {
                     // Wijzig naar de tweede afbeelding
-                    low.setImageResource(R.drawable.intensity_medium);
+                    low.setImageResource(R.drawable.intensity_low_selected);
                     isInitialLowImage = false;
                 } else {
                     // Wijzig terug naar de initiële afbeelding
@@ -75,7 +75,7 @@ public class WvieIntensityActivity extends AppCompatActivity {
                 toggleIntensitySelection("matig");
                 if (isInitialMediumImage) {
                     // Wijzig naar de tweede afbeelding
-                    medium.setImageResource(R.drawable.intensity_high);
+                    medium.setImageResource(R.drawable.intensity_medium_selected);
                     isInitialMediumImage = false;
                 } else {
                     // Wijzig terug naar de initiële afbeelding
@@ -91,7 +91,7 @@ public class WvieIntensityActivity extends AppCompatActivity {
                 toggleIntensitySelection("intens");
                 if (isInitialHighImage) {
                     // Wijzig naar de tweede afbeelding
-                    high.setImageResource(R.drawable.intensity_low);
+                    high.setImageResource(R.drawable.intensity_high_selected);
                     isInitialHighImage = false;
                 } else {
                     // Wijzig terug naar de initiële afbeelding

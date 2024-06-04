@@ -12,24 +12,17 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
-
 import com.example.codycactus.R;
-import android.Manifest;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class WvieIntensityActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
-    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private boolean permissionToRecordAccepted = false;
-    private final String[] permissions = {Manifest.permission.RECORD_AUDIO};
-
+public class WvieIntensityActivity extends AppCompatActivity {
     private ImageView low;
     private ImageView medium;
     private ImageView high;
@@ -40,8 +33,6 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     private boolean isInitialLowImage = true;
     private boolean isInitialMediumImage = true;
     private boolean isInitialHighImage = true;
-    private SpeechRecognitionManager speechRecognitionManager;
-
 
 
     @Override
@@ -56,8 +47,6 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         });
 
         selectedIntensities = new ArrayList<>();
-
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
         low = findViewById(R.id.image_view_low_intensity);
         medium = findViewById(R.id.image_view_medium_intensity);
@@ -174,38 +163,8 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speechRecognitionManager.startListening();
             }
         });
-    }
-
-    @Override
-    public void onSpeechResult(String result) {
-        Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if ("Laagdrempellig".equalsIgnoreCase(result.trim())) {
-           // Result if user says "Laagdrempellig"
-            Log.d("WvieIntensityActivity", "Gekozen intensiteit: Laagdrempellig");
-        } else if ("Middelmatig".equalsIgnoreCase(result.trim())) {
-            // Result if user says "Middelmatig"
-            Log.d("WvieIntensityActivity", "Gekozen intensiteit: Middelmatig");
-        } else if ("Intens".equalsIgnoreCase(result.trim())) {
-
-        } else if ("Laagdrempellig en Middelmatig".equalsIgnoreCase(result.trim())) {
-
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (speechRecognitionManager != null) {
-            speechRecognitionManager.destroy();
-        }
-        super.onDestroy();
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
     }
 
     private void setButtonsClickable(boolean clickable) {

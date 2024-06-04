@@ -41,7 +41,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goNextActivity();
+                performOutro();
             }
         });
 

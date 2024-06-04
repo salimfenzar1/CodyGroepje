@@ -23,8 +23,11 @@ public class Statement {
     @ColumnInfo(name = "imageUrl")
     public String imageUrl;
 
+    @ColumnInfo(name = "isActive")
+    public boolean isActive;
+
 
 
     @ColumnInfo(name = "intensityLevel")
-    public int intensityLevel; // This is the foreign key column
+    public int intensityLevel;
 }

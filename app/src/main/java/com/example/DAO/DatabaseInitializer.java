@@ -29,6 +29,7 @@ public class DatabaseInitializer {
                 statement1.category = "Seksualiteit op de werkvloer";
                 statement1.imageUrl = ""; // Geen afbeelding gegeven
                 statement1.intensityLevel = 1;
+                statement1.isActive = true;
                 statementDAO.insert(statement1);
 
                 Statement statement2 = new Statement();
@@ -36,6 +37,7 @@ public class DatabaseInitializer {
                 statement2.category = "Seksualiteit op de werkvloer";
                 statement2.imageUrl = ""; // Geen afbeelding gegeven
                 statement2.intensityLevel = 2;
+                statement2.isActive = true;
                 statementDAO.insert(statement2);
 
                 Statement statement3 = new Statement();
@@ -43,6 +45,7 @@ public class DatabaseInitializer {
                 statement3.category = "Seksualiteit op de werkvloer";
                 statement3.imageUrl = ""; // Geen afbeelding gegeven
                 statement3.intensityLevel = 3;
+                statement3.isActive = true;
                 statementDAO.insert(statement3);
 
                 Statement statement4 = new Statement();
@@ -50,6 +53,7 @@ public class DatabaseInitializer {
                 statement4.category = "Seksualiteit op de werkvloer";
                 statement4.imageUrl = ""; // Geen afbeelding gegeven
                 statement4.intensityLevel = 2;
+                statement4.isActive = true;
                 statementDAO.insert(statement4);
 
                 Statement statement5 = new Statement();
@@ -57,6 +61,7 @@ public class DatabaseInitializer {
                 statement5.category = "Seksualiteit op de werkvloer";
                 statement5.imageUrl = ""; // Geen afbeelding gegeven
                 statement5.intensityLevel = 3;
+                statement5.isActive = true;
                 statementDAO.insert(statement5);
 
                 Statement statement6 = new Statement();
@@ -64,6 +69,7 @@ public class DatabaseInitializer {
                 statement6.category = "Seksualiteit op de werkvloer";
                 statement6.imageUrl = ""; // Geen afbeelding gegeven
                 statement6.intensityLevel = 2;
+                statement6.isActive = true;
                 statementDAO.insert(statement6);
 
                 Statement statement7 = new Statement();
@@ -71,6 +77,7 @@ public class DatabaseInitializer {
                 statement7.category = "Seksualiteit op de werkvloer";
                 statement7.imageUrl = ""; // Geen afbeelding gegeven
                 statement7.intensityLevel = 3;
+                statement7.isActive = true;
                 statementDAO.insert(statement7);
 
                 Statement statement8 = new Statement();
@@ -78,6 +85,7 @@ public class DatabaseInitializer {
                 statement8.category = "Seksualiteit op de werkvloer";
                 statement8.imageUrl = ""; // Geen afbeelding gegeven
                 statement8.intensityLevel = 2;
+                statement8.isActive = true;
                 statementDAO.insert(statement8);
 
                 Statement statement9 = new Statement();
@@ -85,6 +93,7 @@ public class DatabaseInitializer {
                 statement9.category = "Seksualiteit op de werkvloer";
                 statement9.imageUrl = ""; // Geen afbeelding gegeven
                 statement9.intensityLevel = 2;
+                statement9.isActive = true;
                 statementDAO.insert(statement9);
 
                 Statement statement10 = new Statement();
@@ -92,6 +101,7 @@ public class DatabaseInitializer {
                 statement10.category = "Seksualiteit op de werkvloer";
                 statement10.imageUrl = ""; // Geen afbeelding gegeven
                 statement10.intensityLevel = 3;
+                statement10.isActive = true;
                 statementDAO.insert(statement10);
 
                 // Overlijden
@@ -100,6 +110,7 @@ public class DatabaseInitializer {
                 statement11.category = "Overlijden";
                 statement11.imageUrl = ""; // Geen afbeelding gegeven
                 statement11.intensityLevel = 3;
+                statement11.isActive = true;
                 statementDAO.insert(statement11);
 
                 Statement statement12 = new Statement();
@@ -107,6 +118,7 @@ public class DatabaseInitializer {
                 statement12.category = "Overlijden";
                 statement12.imageUrl = ""; // Geen afbeelding gegeven
                 statement12.intensityLevel = 1;
+                statement12.isActive = true;
                 statementDAO.insert(statement12);
 
                 Statement statement13 = new Statement();
@@ -114,6 +126,7 @@ public class DatabaseInitializer {
                 statement13.category = "Overlijden";
                 statement13.imageUrl = ""; // Geen afbeelding gegeven
                 statement13.intensityLevel = 3;
+                statement13.isActive = true;
                 statementDAO.insert(statement13);
 
                 Statement statement14 = new Statement();
@@ -121,6 +134,7 @@ public class DatabaseInitializer {
                 statement14.category = "Overlijden";
                 statement14.imageUrl = ""; // Geen afbeelding gegeven
                 statement14.intensityLevel = 1;
+                statement14.isActive = true;
                 statementDAO.insert(statement14);
 
                 Statement statement15 = new Statement();
@@ -128,6 +142,7 @@ public class DatabaseInitializer {
                 statement15.category = "Overlijden";
                 statement15.imageUrl = ""; // Geen afbeelding gegeven
                 statement15.intensityLevel = 2;
+                statement15.isActive = true;
                 statementDAO.insert(statement15);
 
                 Statement statement16 = new Statement();
@@ -135,6 +150,7 @@ public class DatabaseInitializer {
                 statement16.category = "Overlijden";
                 statement16.imageUrl = ""; // Geen afbeelding gegeven
                 statement16.intensityLevel = 1;
+                statement16.isActive = true;
                 statementDAO.insert(statement16);
 
                 Statement statement17 = new Statement();
@@ -142,6 +158,7 @@ public class DatabaseInitializer {
                 statement17.category = "Overlijden";
                 statement17.imageUrl = ""; // Geen afbeelding gegeven
                 statement17.intensityLevel = 3;
+                statement17.isActive = true;
                 statementDAO.insert(statement17);
 
                 Statement statement18 = new Statement();
@@ -149,6 +166,7 @@ public class DatabaseInitializer {
                 statement18.category = "Overlijden";
                 statement18.imageUrl = ""; // Geen afbeelding gegeven
                 statement18.intensityLevel = 2;
+                statement18.isActive = true;
                 statementDAO.insert(statement18);
 
                 Statement statement19 = new Statement();
@@ -156,6 +174,7 @@ public class DatabaseInitializer {
                 statement19.category = "Overlijden";
                 statement19.imageUrl = ""; // Geen afbeelding gegeven
                 statement19.intensityLevel = 2;
+                statement19.isActive = true;
                 statementDAO.insert(statement19);
 
                 // casussen werk-prive balans
@@ -164,6 +183,7 @@ public class DatabaseInitializer {
                 statement20.category = "Werk-prive balans";
                 statement20.imageUrl = ""; // Geen afbeelding gegeven
                 statement20.intensityLevel = 1;
+                statement20.isActive = true;
                 statementDAO.insert(statement20);
 
                 Statement statement21 = new Statement();
@@ -171,6 +191,7 @@ public class DatabaseInitializer {
                 statement21.category = "Werk-prive balans";
                 statement21.imageUrl = ""; // Geen afbeelding gegeven
                 statement21.intensityLevel = 1;
+                statement21.isActive = true;
                 statementDAO.insert(statement21);
 
                 Statement statement22 = new Statement();
@@ -178,6 +199,7 @@ public class DatabaseInitializer {
                 statement22.category = "Werk-prive balans";
                 statement22.imageUrl = ""; // Geen afbeelding gegeven
                 statement22.intensityLevel = 3;
+                statement1.isActive = true;
                 statementDAO.insert(statement22);
 
                 Statement statement23 = new Statement();
@@ -185,6 +207,7 @@ public class DatabaseInitializer {
                 statement23.category = "Werk-prive balans";
                 statement23.imageUrl = ""; // Geen afbeelding gegeven
                 statement23.intensityLevel = 1;
+                statement23.isActive = true;
                 statementDAO.insert(statement23);
 
                 Statement statement24 = new Statement();
@@ -192,6 +215,7 @@ public class DatabaseInitializer {
                 statement24.category = "Werk-prive balans";
                 statement24.imageUrl = ""; // Geen afbeelding gegeven
                 statement24.intensityLevel = 2;
+                statement24.isActive = true;
                 statementDAO.insert(statement24);
 
                 Statement statement25 = new Statement();
@@ -199,6 +223,7 @@ public class DatabaseInitializer {
                 statement25.category = "Werk-prive balans";
                 statement25.imageUrl = ""; // Geen afbeelding gegeven
                 statement25.intensityLevel = 3;
+                statement25.isActive = true;
                 statementDAO.insert(statement25);
 
                 Statement statement26 = new Statement();
@@ -206,6 +231,7 @@ public class DatabaseInitializer {
                 statement26.category = "Werk-prive balans";
                 statement26.imageUrl = ""; // Geen afbeelding gegeven
                 statement26.intensityLevel = 3;
+                statement26.isActive = true;
                 statementDAO.insert(statement26);
 
                 Statement statement27 = new Statement();
@@ -213,6 +239,7 @@ public class DatabaseInitializer {
                 statement27.category = "Werk-prive balans";
                 statement27.imageUrl = ""; // Geen afbeelding gegeven
                 statement27.intensityLevel = 2;
+                statement27.isActive = true;
                 statementDAO.insert(statement27);
 
                 // Mark the database as populated

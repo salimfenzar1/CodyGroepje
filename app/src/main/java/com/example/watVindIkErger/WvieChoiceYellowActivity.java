@@ -14,12 +14,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.AnswerConverter;
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
 
-public class WvieChoiceYellowActivity extends AppCompatActivity {
+public class WvieChoiceYellowActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton yesButton;
     private ImageButton noButton;
     private ImageButton hearButton;
@@ -33,25 +36,22 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
         yesButton = findViewById(R.id.yesButton);
         noButton = findViewById(R.id.noButton);
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt ja gekozen", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
-                intent.putExtra("selectedYes", true);
-                startActivity(intent);
+                goYellowActivity();
             }
         });
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt nee gekozen", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
-                intent.putExtra("selectedYes", false);
-                startActivity(intent);
+                goRedActivity();
             }
         });
         hearButton = findViewById(R.id.hearButton);
@@ -74,12 +74,14 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -88,4 +90,25 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
         noButton.setEnabled(clickable);
         hearButton.setEnabled(clickable);
     }
+
+    @Override
+    public void onSpeechResult(String result) {
+        switch (AnswerConverter.determineAnswer(result)) {
+            case YES: goYellowActivity(); break;
+            case NO: goRedActivity(); break;
+            default: speechRecognitionManager.startListening(); break;
+        }
+    }
+    private void goYellowActivity() {
+        Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
+        intent.putExtra("selectedYes", true);
+        startActivity(intent);
+    }
+
+    private void goRedActivity() {
+        Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
+        intent.putExtra("selectedYes", false);
+        startActivity(intent);
+    }
+
 }

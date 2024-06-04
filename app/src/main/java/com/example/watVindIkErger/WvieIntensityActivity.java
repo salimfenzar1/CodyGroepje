@@ -1,5 +1,6 @@
 package com.example.watVindIkErger;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,19 +12,37 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
+
 import com.example.codycactus.R;
+import android.Manifest;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WvieIntensityActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private boolean permissionToRecordAccepted = false;
+    private final String[] permissions = {Manifest.permission.RECORD_AUDIO};
+
+    private ImageView low;
     private ImageView medium;
+    private ImageView high;
     private SpeechHelper speechHelper;
-    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton hearButton;
+    private ImageButton next;
+    private List<String> selectedIntensities;
+    private boolean isInitialLowImage = true;
+    private boolean isInitialMediumImage = true;
+    private boolean isInitialHighImage = true;
+    private SpeechRecognitionManager speechRecognitionManager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +55,60 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             return insets;
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+        selectedIntensities = new ArrayList<>();
 
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+
+        low = findViewById(R.id.image_view_low_intensity);
         medium = findViewById(R.id.image_view_medium_intensity);
+        high = findViewById(R.id.image_view_high_intensity);
+
+        low.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                toggleIntensitySelection("laagdrempellig");
+                if (isInitialLowImage) {
+                    // Wijzig naar de tweede afbeelding
+                    low.setImageResource(R.drawable.intensity_low_selected);
+                    isInitialLowImage = false;
+                } else {
+                    // Wijzig terug naar de initiële afbeelding
+                    low.setImageResource(R.drawable.intensity_low);
+                    isInitialLowImage = true;
+                }
+            }
+        });
 
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieTutorialActivity.class);
-                startActivity(intent);
+                toggleIntensitySelection("matig");
+                if (isInitialMediumImage) {
+                    // Wijzig naar de tweede afbeelding
+                    medium.setImageResource(R.drawable.intensity_medium_selected);
+                    isInitialMediumImage = false;
+                } else {
+                    // Wijzig terug naar de initiële afbeelding
+                    medium.setImageResource(R.drawable.intensity_medium);
+                    isInitialMediumImage = true;
+                }
+            }
+        });
+
+        high.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleIntensitySelection("intens");
+                if (isInitialHighImage) {
+                    // Wijzig naar de tweede afbeelding
+                    high.setImageResource(R.drawable.intensity_high_selected);
+                    isInitialHighImage = false;
+                } else {
+                    // Wijzig terug naar de initiële afbeelding
+                    high.setImageResource(R.drawable.intensity_high);
+                    isInitialHighImage = true;
+                }
             }
         });
 
@@ -59,37 +122,68 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             }
         });
 
+        next = findViewById(R.id.toNextPage);
+        next.setEnabled(false);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!selectedIntensities.isEmpty()) {
+                    startNextActivity();
+                } else {
+                    Toast.makeText(WvieIntensityActivity.this, "Selecteer minimaal één intensiteit", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         new Handler().postDelayed(this::speakText, 2000);
+    }
+
+    // Intensity selection toggle
+    private void toggleIntensitySelection(String intensity) {
+        if (selectedIntensities.contains(intensity)) {
+            selectedIntensities.remove(intensity);
+            Log.d("WvieIntensityActivity", "Removed intensity level: " + intensity + ". Current selection: " + selectedIntensities);
+        } else {
+            selectedIntensities.add(intensity);
+            Log.d("WvieIntensityActivity", "Added intensity level: " + intensity + ". Current selection: " + selectedIntensities);
+        }
+        updateToNextPageButtonState();
+    }
+
+    // Enable next button if at least one intensity is selected
+    private void updateToNextPageButtonState() {
+        next.setEnabled(!selectedIntensities.isEmpty());
+    }
+
+    // Start next activity + send intensity level data
+    private void startNextActivity() {
+        Intent intent = new Intent(this, WvieTutorialActivity.class);
+        intent.putStringArrayListExtra("SELECTED_INTENSITIES", new ArrayList<>(selectedIntensities));
+        startActivity(intent);
     }
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen ? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan!", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak(" In welke mate van intensiteit willen jullie de stellingen ? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-//                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-//                speechRecognitionManager.startListening();
+                speechRecognitionManager.startListening();
             }
         });
-    }
-    private void setButtonsClickable(boolean clickable) {
-        medium.setEnabled(clickable);
-        hearButton.setEnabled(clickable);
-
     }
 
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
         if ("Laagdrempellig".equalsIgnoreCase(result.trim())) {
-            // Result if user says "Laagdrempellig"
+           // Result if user says "Laagdrempellig"
             Log.d("WvieIntensityActivity", "Gekozen intensiteit: Laagdrempellig");
         } else if ("Middelmatig".equalsIgnoreCase(result.trim())) {
             // Result if user says "Middelmatig"
@@ -99,5 +193,25 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         } else if ("Laagdrempellig en Middelmatig".equalsIgnoreCase(result.trim())) {
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
+
+    private void setButtonsClickable(boolean clickable) {
+        low.setEnabled(clickable);
+        medium.setEnabled(clickable);
+        high.setEnabled(clickable);
+        hearButton.setEnabled(clickable);
     }
 }

@@ -15,6 +15,8 @@ public class SpeechRecognitionManager {
     private SpeechRecognizer speechRecognizer;
     private final Context context;
     private final SpeechRecognitionListener listener;
+    private Context context;
+    private SpeechRecognitionListener listener;
     private boolean isListening = false;
 
     public SpeechRecognitionManager(Context context, SpeechRecognitionListener listener) {
@@ -72,6 +74,7 @@ public class SpeechRecognitionManager {
                     if (matches != null && !matches.isEmpty()) {
                         listener.onSpeechResult(matches.get(0));
                     }
+                    startListening(); // Restart listening after receiving results
                 }
 
                 @Override
@@ -109,6 +112,7 @@ public class SpeechRecognitionManager {
             isListening = false;
         }
     }
+
 
     public void destroy() {
         if (speechRecognizer != null) {

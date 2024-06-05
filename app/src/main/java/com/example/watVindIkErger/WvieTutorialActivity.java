@@ -19,11 +19,15 @@ import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
 public class WvieTutorialActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
+import java.util.ArrayList;
+
+public class WvieTutorialActivity extends AppCompatActivity {
 
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
+    private ArrayList<String> selectedIntensities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,17 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
             return insets;
         });
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
+        Intent intent = getIntent();
+        selectedIntensities = intent.getStringArrayListExtra("SELECTED_INTENSITIES");
+
+        // Checking if intensity level is received
+        if (selectedIntensities != null) {
+            Log.d("WvieTutorialActivity", "Selected intensities: " + selectedIntensities.toString());
+        } else {
+            Log.d("WvieTutorialActivity", "No selected intensities received.");
+        }
+
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {

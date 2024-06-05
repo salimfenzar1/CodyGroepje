@@ -57,4 +57,7 @@ dependencies {
     testImplementation ("androidx.test.ext:junit:1.1.3")
     testImplementation ("androidx.test:runner:1.4.0")
     testImplementation ("androidx.test:rules:1.4.0")
+
+    // Robolectric (to run tests on Android without emulator)
+    testImplementation ("org.robolectric:robolectric:4.7.3")
 }

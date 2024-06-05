@@ -50,7 +50,7 @@
         <activity android:name="com.example.watVindIkErger.WvieGameEndActivity"
             android:exported="false"/>
         <activity
-            android:name="com.example.TestActivity"
+            android:name="com.example.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

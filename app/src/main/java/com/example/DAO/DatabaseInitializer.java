@@ -33,21 +33,21 @@ public class DatabaseInitializer {
                 statement1.isActive = true;
                 statementDAO.insert(statement1);
 
-//                Statement statement2 = new Statement();
-//                statement2.description = "Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt.";
-//                statement2.category = "Seksualiteit op de werkvloer";
-//                statement2.imageUrl = ""; // Geen afbeelding gegeven
-//                statement2.intensityLevel = 2;
-//                statement2.isActive = true;
-//                statementDAO.insert(statement2);
+                Statement statement2 = new Statement();
+                statement2.description = "Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt.";
+                statement2.category = "Seksualiteit op de werkvloer";
+                statement2.imageUrl = ""; // Geen afbeelding gegeven
+                statement2.intensityLevel = 2;
+                statement2.isActive = true;
+                statementDAO.insert(statement2);
 //
-//                Statement statement3 = new Statement();
-//                statement3.description = "Je betrapt een bezoeker op het ongepaste gedrag van zelfbevrediging in de kamer van een van de bewoners.";
-//                statement3.category = "Seksualiteit op de werkvloer";
-//                statement3.imageUrl = ""; // Geen afbeelding gegeven
-//                statement3.intensityLevel = 3;
-//                statement3.isActive = true;
-//                statementDAO.insert(statement3);
+                Statement statement3 = new Statement();
+                statement3.description = "Je betrapt een bezoeker op het ongepaste gedrag van zelfbevrediging in de kamer van een van de bewoners.";
+                statement3.category = "Seksualiteit op de werkvloer";
+                statement3.imageUrl = String.valueOf(R.drawable.zelfbevredigend_client);
+                statement3.intensityLevel = 3;
+                statement3.isActive = true;
+                statementDAO.insert(statement3);
 //
                 Statement statement4 = new Statement();
                 statement4.description = "Je betrapt twee cliënten op het uitvoeren van seksuele handelingen.";
@@ -57,13 +57,13 @@ public class DatabaseInitializer {
                 statement4.isActive = true;
                 statementDAO.insert(statement4);
 //
-//                Statement statement5 = new Statement();
-//                statement5.description = "Een cliënt die aan ernstige dementie lijdt raakt zoek en wordt uiteindelijk gevonden op de kamer van een andere cliënt. Na onderzoek werd vastgesteld dat mevrouw slachtoffer is geweest en seksueel misbuikt.";
-//                statement5.category = "Seksualiteit op de werkvloer";
-//                statement5.imageUrl = ""; // Geen afbeelding gegeven
-//                statement5.intensityLevel = 3;
-//                statement5.isActive = true;
-//                statementDAO.insert(statement5);
+                Statement statement5 = new Statement();
+                statement5.description = "Een cliënt die aan ernstige dementie lijdt raakt zoek en wordt uiteindelijk gevonden op de kamer van een andere cliënt. Na onderzoek werd vastgesteld dat mevrouw slachtoffer is geweest en seksueel misbuikt.";
+                statement5.category = "Seksualiteit op de werkvloer";
+                statement5.imageUrl = String.valueOf(R.drawable.seksueel_misbruik_client_op_client);
+                statement5.intensityLevel = 3;
+                statement5.isActive = true;
+                statementDAO.insert(statement5);
 
                 Statement statement6 = new Statement();
                 statement6.description = "Een zorgmedewerker betrapt twee collega's op intiem contact.";
@@ -73,13 +73,13 @@ public class DatabaseInitializer {
                 statement6.isActive = true;
                 statementDAO.insert(statement6);
 
-//                Statement statement7 = new Statement();
-//                statement7.description = "Tijdens een reflectiegesprek met de leidinggevende worden zeer persoonlijke vragen gesteld. Aan het einde van het gesprek stelt hij/zij de afspraak voor die gericht lijkt te zijn op seksueel contact.";
-//                statement7.category = "Seksualiteit op de werkvloer";
-//                statement7.imageUrl = ""; // Geen afbeelding gegeven
-//                statement7.intensityLevel = 3;
-//                statement7.isActive = true;
-//                statementDAO.insert(statement7);
+                Statement statement7 = new Statement();
+                statement7.description = "Tijdens een reflectiegesprek met de leidinggevende worden zeer persoonlijke vragen gesteld. Aan het einde van het gesprek stelt hij/zij de afspraak voor die gericht lijkt te zijn op seksueel contact.";
+                statement7.category = "Seksualiteit op de werkvloer";
+                statement7.imageUrl = String.valueOf(R.drawable.reflecitegesprek_leidinggevende);
+                statement7.intensityLevel = 3;
+                statement7.isActive = true;
+                statementDAO.insert(statement7);
 //
                 Statement statement8 = new Statement();
                 statement8.description = "Een cliënt maakt ongepaste opmerkingen over het uiterlijk van een zorgmedewerker.";
@@ -97,13 +97,13 @@ public class DatabaseInitializer {
                 statement9.isActive = true;
                 statementDAO.insert(statement9);
 //
-//                Statement statement10 = new Statement();
-//                statement10.description = "De afgelopen weken heb je herhaaldelijk geconstateerd dat een cliënt seksueel getinte foto's maakt, van zichzelf en jouw collega's.";
-//                statement10.category = "Seksualiteit op de werkvloer";
-//                statement10.imageUrl = ""; // Geen afbeelding gegeven
-//                statement10.intensityLevel = 3;
-//                statement10.isActive = true;
-//                statementDAO.insert(statement10);
+                Statement statement10 = new Statement();
+                statement10.description = "De afgelopen weken heb je herhaaldelijk geconstateerd dat een cliënt seksueel getinte foto's maakt, van zichzelf en jouw collega's.";
+                statement10.category = "Seksualiteit op de werkvloer";
+                statement10.imageUrl = String.valueOf(R.drawable.client_maakt_fotos);
+                statement10.intensityLevel = 3;
+                statement10.isActive = true;
+                statementDAO.insert(statement10);
 //
                 // Overlijden
                 Statement statement11 = new Statement();
@@ -146,13 +146,13 @@ public class DatabaseInitializer {
                 statement15.isActive = true;
                 statementDAO.insert(statement15);
 //
-//                Statement statement16 = new Statement();
-//                statement16.description = "Het delen van ervaringen is volgens onderzoek essentieel voor een gezonde verwerking van gebeurtenissen. Ik kan mijn ervaringen goed delen met de mensen om me heen.";
-//                statement16.category = "Overlijden";
-//                statement16.imageUrl = ""; // Geen afbeelding gegeven
-//                statement16.intensityLevel = 1;
-//                statement16.isActive = true;
-//                statementDAO.insert(statement16);
+                Statement statement16 = new Statement();
+                statement16.description = "Het delen van ervaringen is volgens onderzoek essentieel voor een gezonde verwerking van gebeurtenissen. Ik kan mijn ervaringen goed delen met de mensen om me heen.";
+                statement16.category = "Overlijden";
+                statement16.imageUrl = String.valueOf(R.drawable.delen_van_ervaring);
+                statement16.intensityLevel = 1;
+                statement16.isActive = true;
+                statementDAO.insert(statement16);
 //
                 Statement statement17 = new Statement();
                 statement17.description = "Wanneer een cliënt een dierbare verliest vind ik het lastig om hen hiermee te begeleiden.";
@@ -162,13 +162,13 @@ public class DatabaseInitializer {
                 statement17.isActive = true;
                 statementDAO.insert(statement17);
 //
-//                Statement statement18 = new Statement();
-//                statement18.description = "Wanneer ik met collega's praat over het overlijden van een cliënt merk ik dat zij de dood als een onvermijdelijk onderdeel van het leven zien en hier minder moeite mee hebben. Ik voel me daardoor soms niet begrepen of gehoord in mijn eigen gevoelens.";
-//                statement18.category = "Overlijden";
-//                statement18.imageUrl = ""; // Geen afbeelding gegeven
-//                statement18.intensityLevel = 2;
-//                statement18.isActive = true;
-//                statementDAO.insert(statement18);
+                Statement statement18 = new Statement();
+                statement18.description = "Wanneer ik met collega's praat over het overlijden van een cliënt merk ik dat zij de dood als een onvermijdelijk onderdeel van het leven zien en hier minder moeite mee hebben. Ik voel me daardoor soms niet begrepen of gehoord in mijn eigen gevoelens.";
+                statement18.category = "Overlijden";
+                statement18.imageUrl = ""; // Geen afbeelding gegeven
+                statement18.intensityLevel = 2;
+                statement18.isActive = true;
+                statementDAO.insert(statement18);
 //
                 Statement statement19 = new Statement();
                 statement19.description = "Ik ben wel eens geschrokken omdat er niet met mij was gecommuniceerd over het overlijden van een cliënt.";

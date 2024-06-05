@@ -28,7 +28,7 @@
         android:layout_height="382dp"
         android:layout_centerInParent="true"
         android:background="#00FFFFFF"
-        android:src="@drawable/foto_default" />
+        />
 
     <ImageButton
         android:id="@+id/hearButton"

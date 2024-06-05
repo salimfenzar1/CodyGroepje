@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,15 +15,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
-
 
 public class WvieChoiceRedActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton yesButton;
     private ImageButton noButton;
     private ImageButton hearButton;
+    private ImageView statementImageView;
+    private Statement redStatement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,15 @@ public class WvieChoiceRedActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        redStatement = intent.getParcelableExtra("statement");
+
+        statementImageView = findViewById(R.id.image_view_foto_red_choice);
+        if (redStatement != null) {
+            int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+            statementImageView.setImageResource(resId);
+        }
 
         yesButton = findViewById(R.id.yesButton);
         noButton = findViewById(R.id.noButton);
@@ -83,10 +96,10 @@ public class WvieChoiceRedActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setButtonsClickable(boolean clickable) {
         yesButton.setEnabled(clickable);
         noButton.setEnabled(clickable);
         hearButton.setEnabled(clickable);
     }
-
 }

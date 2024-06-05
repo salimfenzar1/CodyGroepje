@@ -11,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
@@ -18,6 +19,9 @@ import java.util.Random;
 
 public class WvieMakeChoiceActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
+    private Statement redStatement;
+    private Statement yellowStatement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,24 +32,30 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        redStatement = intent.getParcelableExtra("red_statement");
+        yellowStatement = intent.getParcelableExtra("yellow_statement");
+
         new Handler().postDelayed(this::speakText, 2000);
         new Handler().postDelayed(() -> {
             Random random = new Random();
-            // starting activity based on what boolean is generated
-            Intent intent;
+            Intent nextIntent;
             if (random.nextBoolean()) {
-                intent = new Intent(this, WvieChoiceRedActivity.class);
+                nextIntent = new Intent(this, WvieChoiceRedActivity.class);
+                nextIntent.putExtra("statement", redStatement);
             } else {
-                intent = new Intent(this, WvieChoiceYellowActivity.class);
+                nextIntent = new Intent(this, WvieChoiceYellowActivity.class);
+                nextIntent.putExtra("statement", yellowStatement);
             }
-            startActivity(intent);
+            startActivity(nextIntent);
             finish();
         }, 10000);
-
     }
-    public void speakText(){
+
+    public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak(" Kies nu aan welke kant van mij je gaat staan", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Kies nu aan welke kant van mij je gaat staan", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

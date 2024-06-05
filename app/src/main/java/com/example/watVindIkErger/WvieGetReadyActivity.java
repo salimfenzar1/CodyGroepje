@@ -14,13 +14,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+
+import java.util.ArrayList;
 
 public class WvieGetReadyActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton next;
     private ImageButton hearButton;
+    private ArrayList<Statement> filteredStatements;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,9 @@ public class WvieGetReadyActivity extends AppCompatActivity {
             return insets;
         });
 
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +47,7 @@ public class WvieGetReadyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
             }
         });
@@ -54,8 +63,8 @@ public class WvieGetReadyActivity extends AppCompatActivity {
         });
 
         new Handler().postDelayed(this::speakText, 2000);
-
     }
+
     public void speakText() {
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {
@@ -72,6 +81,7 @@ public class WvieGetReadyActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setButtonsClickable(boolean clickable) {
         next.setEnabled(clickable);
         hearButton.setEnabled(clickable);

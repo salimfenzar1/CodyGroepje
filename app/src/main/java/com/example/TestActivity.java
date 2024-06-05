@@ -1,4 +1,4 @@
-package com.example; // Replace with your actual package name
+package com.example;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -7,19 +7,21 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.DAO.DatabaseInitializer;
-import com.example.DAO.StatementDAO;
-import com.example.DAO.StatementRoom;
+import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
 import com.example.codycactus.R;
+
 import java.util.List;
 
 public class TestActivity extends AppCompatActivity {
 
-    private StatementDAO statementDAO;
+    private StatementViewModel statementViewModel;
     private LinearLayout statementContainer;
 
     @Override
@@ -28,7 +30,9 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.testactivity);
 
         statementContainer = findViewById(R.id.statement_container);
-        statementDAO = StatementRoom.getInstance(this).statementDAO();
+
+        // Initialize ViewModel
+        statementViewModel = new ViewModelProvider(this).get(StatementViewModel.class);
 
         // Populate the database if it isn't already populated
         DatabaseInitializer.populateDatabase(this);
@@ -38,8 +42,7 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void observeStatements() {
-        LiveData<List<Statement>> liveDataStatements = statementDAO.getAllStatements();
-        liveDataStatements.observe(this, new Observer<List<Statement>>() {
+        statementViewModel.getAllStatements().observe(this, new Observer<List<Statement>>() {
             @Override
             public void onChanged(List<Statement> statements) {
                 if (statements != null && !statements.isEmpty()) {

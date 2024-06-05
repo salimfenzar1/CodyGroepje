@@ -60,4 +60,7 @@ dependencies {
 
     // Robolectric (to run tests on Android without emulator)
     testImplementation ("org.robolectric:robolectric:4.7.3")
+
+    // LiveData testing utilities
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
 }

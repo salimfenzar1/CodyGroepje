@@ -17,11 +17,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
+import java.util.ArrayList;
+
 public class WvieTutorialActivity extends AppCompatActivity {
 
     private SpeechHelper speechHelper;
     private ImageButton next;
     private ImageButton hearButton;
+    private ArrayList<String> selectedIntensities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,16 @@ public class WvieTutorialActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        selectedIntensities = intent.getStringArrayListExtra("SELECTED_INTENSITIES");
+
+        // Checking if intensity level is received
+        if (selectedIntensities != null) {
+            Log.d("WvieTutorialActivity", "Selected intensities: " + selectedIntensities.toString());
+        } else {
+            Log.d("WvieTutorialActivity", "No selected intensities received.");
+        }
 
         next = findViewById(R.id.nextButton);
 

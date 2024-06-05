@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -19,6 +18,8 @@ import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class WvieGetReadyActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
@@ -40,26 +41,32 @@ public class WvieGetReadyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
+        // Ensure filteredStatements is not null
+        if (filteredStatements == null) {
+            filteredStatements = new ArrayList<>();
+        }
+
+        // Filter the statements to only include active ones
+        List<Statement> activeStatements = filteredStatements.stream()
+                .filter(Statement::isActive)
+                .collect(Collectors.toList());
+
+        filteredStatements = new ArrayList<>(activeStatements);
+
         next = findViewById(R.id.nextButton);
 
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);
-                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                startActivity(intent);
-            }
+        next.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
+            Intent nextIntent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);
+            nextIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+            startActivity(nextIntent);
         });
 
         hearButton = findViewById(R.id.hearButton);
         setButtonsClickable(false);
-        hearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setButtonsClickable(false);
-                speakText();
-            }
+        hearButton.setOnClickListener(v -> {
+            setButtonsClickable(false);
+            speakText();
         });
 
         new Handler().postDelayed(this::speakText, 2000);

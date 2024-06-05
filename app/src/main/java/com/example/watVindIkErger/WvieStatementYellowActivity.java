@@ -57,7 +57,8 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
         if (filteredStatements != null && !filteredStatements.isEmpty()) {
             Collections.shuffle(filteredStatements);
             yellowStatement = filteredStatements.remove(0);  // Get a random statement and remove it from the list
-            int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+            yellowStatement.isActive = false;  // Mark the statement as inactive
+            int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
             Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, statementImageView.getWidth(), statementImageView.getHeight());
             statementImageView.setImageBitmap(bitmap);
 
@@ -88,6 +89,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
                 intent.putExtra("red_statement", redStatement);
                 intent.putExtra("yellow_statement", yellowStatement);
+                intent.putExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
             }
         });

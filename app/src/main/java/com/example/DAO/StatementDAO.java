@@ -36,6 +36,15 @@ public interface StatementDAO {
     @Query("SELECT * FROM statement WHERE intensityLevel IN (1, 3)")
     LiveData<List<Statement>> getLaagdrempeligAndIntensStatements();
 
+    @Query("SELECT * FROM statement WHERE isActive = 1")
+    LiveData<List<Statement>> getActiveStatements();
+
+    @Query("UPDATE statement SET isActive = :isActive WHERE statementId = :id")
+    void updateStatementStatus(int id, boolean isActive);
+
+    @Query("UPDATE statement SET isActive = :isActive")
+    void updateAllStatementsStatus(boolean isActive);
+
 
 
 }

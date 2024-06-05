@@ -62,4 +62,12 @@ public class StatementViewModel extends AndroidViewModel {
     public void insert(Statement statement) {
         repository.insert(statement);
     }
+
+    public void updateStatementStatus(int id, boolean isActive) {
+        repository.updateStatementStatus(id, isActive);
+    }
+
+    public void updateAllStatementsStatus(boolean isActive) {
+        repository.updateAllStatementsStatus(isActive);
+    }
 }

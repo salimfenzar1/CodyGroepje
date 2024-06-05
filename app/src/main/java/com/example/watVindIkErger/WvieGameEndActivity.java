@@ -15,14 +15,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.MainActivity;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+
+import java.util.ArrayList;
 
 public class WvieGameEndActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton home;
     private ImageButton replay;
     private ImageButton hearButton;
+    private ArrayList<Statement> filteredStatements;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,10 @@ public class WvieGameEndActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Retrieve the filtered statements from the intent
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
         // If home button is clicked
         home = findViewById(R.id.homeButton);
@@ -54,6 +63,7 @@ public class WvieGameEndActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op replay geklikt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
             }
         });
@@ -70,6 +80,7 @@ public class WvieGameEndActivity extends AppCompatActivity {
 
         new Handler().postDelayed(this::speakText, 2000);
     }
+
     public void speakText() {
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie nog een ronde spelen?", new SpeechHelper.SpeechCompleteListener() {
@@ -83,7 +94,6 @@ public class WvieGameEndActivity extends AppCompatActivity {
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-
             }
         });
     }

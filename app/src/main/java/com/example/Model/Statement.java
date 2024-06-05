@@ -31,6 +31,11 @@ public class Statement implements Parcelable {
         // Default constructor
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+
     protected Statement(Parcel in) {
         statementId = in.readInt();
         description = in.readString();

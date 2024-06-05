@@ -15,12 +15,14 @@ import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class WvieMakeChoiceActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private Statement redStatement;
     private Statement yellowStatement;
+    private ArrayList<Statement> filteredStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         redStatement = intent.getParcelableExtra("red_statement");
         yellowStatement = intent.getParcelableExtra("yellow_statement");
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
         new Handler().postDelayed(this::speakText, 2000);
         new Handler().postDelayed(() -> {
@@ -43,11 +46,14 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             Intent nextIntent;
             if (random.nextBoolean()) {
                 nextIntent = new Intent(this, WvieChoiceRedActivity.class);
-                nextIntent.putExtra("statement", redStatement);
+                nextIntent.putExtra("red_statement", redStatement);
+                nextIntent.putExtra("yellow_statement", yellowStatement);
             } else {
                 nextIntent = new Intent(this, WvieChoiceYellowActivity.class);
-                nextIntent.putExtra("statement", yellowStatement);
+                nextIntent.putExtra("yellow_statement", yellowStatement);
+                nextIntent.putExtra("red_statement", redStatement);
             }
+            nextIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
             startActivity(nextIntent);
             finish();
         }, 10000);

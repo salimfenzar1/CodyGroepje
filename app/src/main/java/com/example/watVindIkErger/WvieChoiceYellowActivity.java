@@ -1,6 +1,7 @@
 package com.example.watVindIkErger;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,9 +16,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ImageUtils;
 import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+
+import java.util.ArrayList;
 
 public class WvieChoiceYellowActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
@@ -25,7 +29,9 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
     private ImageButton noButton;
     private ImageButton hearButton;
     private ImageView statementImageView;
+    private ArrayList<Statement> filteredStatements;
     private Statement yellowStatement;
+    private Statement redStatement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,23 +45,28 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        yellowStatement = intent.getParcelableExtra("statement");
-
-        statementImageView = findViewById(R.id.image_view_foto_statement_yellow);
-        if (yellowStatement != null) {
-            int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
-            statementImageView.setImageResource(resId);
-        }
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        yellowStatement = intent.getParcelableExtra("yellow_statement");
+        redStatement = intent.getParcelableExtra("red_statement");
 
         yesButton = findViewById(R.id.yesButton);
         noButton = findViewById(R.id.noButton);
+        statementImageView = findViewById(R.id.image_view_foto_yellow_choice);
+
+        if (yellowStatement != null) {
+            int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
+            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, statementImageView.getWidth(), statementImageView.getHeight());
+            statementImageView.setImageBitmap(bitmap);
+        }
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt ja gekozen", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 intent.putExtra("selectedYes", true);
+                intent.putExtra("yellow_statement", yellowStatement);
                 startActivity(intent);
             }
         });
@@ -64,7 +75,10 @@ public class WvieChoiceYellowActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt nee gekozen", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 intent.putExtra("selectedYes", false);
+                intent.putExtra("red_statement", redStatement);
+
                 startActivity(intent);
             }
         });

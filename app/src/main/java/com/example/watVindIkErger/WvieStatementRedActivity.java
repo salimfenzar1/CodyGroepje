@@ -52,6 +52,7 @@ public class WvieStatementRedActivity extends AppCompatActivity {
         if (filteredStatements != null && !filteredStatements.isEmpty()) {
             Collections.shuffle(filteredStatements);
             redStatement = filteredStatements.remove(0);  // Get a random statement and remove it from the list
+            redStatement.isActive = false;  // Mark the statement as inactive
             Log.d("WvieStatementRedActivity", "Selected red statement: " + redStatement.description);
 
             ViewTreeObserver vto = statementImageView.getViewTreeObserver();

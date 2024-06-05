@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         statementViewModel = new ViewModelProvider(this).get(StatementViewModel.class);
         statementViewModel.getAllStatements().observe(this, statements -> {
             allStatements = new ArrayList<>(statements);
+            // Ensure the resetAllStatements is called only after allStatements is initialized
+            resetAllStatements();
         });
 
         speakIntro();
@@ -80,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void resetAllStatements() {
+        statementViewModel.updateAllStatementsStatus(true);
+//        Toast.makeText(MainActivity.this, "All statements have been reset to active", Toast.LENGTH_SHORT).show();
     }
 
     public void speakIntro() {

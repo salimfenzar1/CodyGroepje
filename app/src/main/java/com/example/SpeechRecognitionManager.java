@@ -15,8 +15,6 @@ public class SpeechRecognitionManager {
     private SpeechRecognizer speechRecognizer;
     private final Context context;
     private final SpeechRecognitionListener listener;
-    private Context context;
-    private SpeechRecognitionListener listener;
     private boolean isListening = false;
 
     public SpeechRecognitionManager(Context context, SpeechRecognitionListener listener) {
@@ -106,13 +104,13 @@ public class SpeechRecognitionManager {
             }
         }
     }
+
     public void stopListening() {
         if (speechRecognizer != null && isListening) {
             speechRecognizer.stopListening();
             isListening = false;
         }
     }
-
 
     public void destroy() {
         if (speechRecognizer != null) {

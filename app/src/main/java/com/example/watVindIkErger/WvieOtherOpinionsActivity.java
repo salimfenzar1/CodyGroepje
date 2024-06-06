@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -111,7 +110,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
         setButtonsClickable(false);
         speechRecognitionManager.stopListening();
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Heeft iedereen kunnen zeggen wat ze willen?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Oke, dan wacht ik nog even, als jullie zeggen: wij willen verder, dan ga ik verder", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
@@ -141,10 +140,11 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
                 default: speakTextPart2(); break;
             }
         } else {
-            switch (AnswerConverter.determineAnswer(result)) {
-                case YES: goNextActivity(); break;
-                case NO: speakTextAskRemainingOpinions(); break;
-                default: speakTextPart2(); break;
+            result = result.trim().toLowerCase();
+            if (result.contains("willen verder") || result.contains("willen door")) {
+                goNextActivity();
+            } else {
+                speechRecognitionManager.startListening();
             }
         }
     }

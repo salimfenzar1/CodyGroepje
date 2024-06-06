@@ -114,4 +114,35 @@ public class RoomDatabaseConnectionUnitTest {
         assertEquals(1, matigStatements.size());
         assertEquals(statement1.description, matigStatements.get(0).description);
     }
+
+    @Test
+    public void testGetIntensStatements() throws Exception {
+        // Insert statements
+        Statement statement1 = new Statement();
+        statement1.description = "Intense Description 1";
+        statement1.category = "Category 1";
+        statement1.imageUrl = "image_url_1";
+        statement1.intensityLevel = 3; // Assuming 3 is considered intense
+        statement1.isActive = true;
+
+        Statement statement2 = new Statement();
+        statement2.description = "Mild Description";
+        statement2.category = "Category 2";
+        statement2.imageUrl = "image_url_2";
+        statement2.intensityLevel = 1; // Assuming 1 is not considered intense
+        statement2.isActive = true;
+
+        statementDAO.insert(statement1);
+        statementDAO.insert(statement2);
+
+        // Fetch intense statements
+        LiveData<List<Statement>> intensStatementsLiveData = statementDAO.getIntensStatements();
+        List<Statement> intensStatements = LiveDataTestUtil.getOrAwaitValue(intensStatementsLiveData);
+
+        // Assert results
+        assertNotNull(intensStatements);
+        assertEquals(1, intensStatements.size());
+        assertEquals("Intense Description 1", intensStatements.get(0).description);
+    }
+
 }

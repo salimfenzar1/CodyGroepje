@@ -8,11 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,7 +20,7 @@ import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
-import android.Manifest;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,6 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.wvie_intensity);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.wvie_intensity), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -66,6 +64,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onClick(View v) {
                 toggleIntensitySelection("laagdrempelig");
                 updateImageView("laagdrempelig");
+                checkAndProceed();
             }
         });
 
@@ -74,6 +73,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onClick(View v) {
                 toggleIntensitySelection("matig");
                 updateImageView("matig");
+                checkAndProceed();
             }
         });
 
@@ -82,6 +82,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onClick(View v) {
                 toggleIntensitySelection("intens");
                 updateImageView("intens");
+                checkAndProceed();
             }
         });
 
@@ -102,7 +103,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onClick(View v) {
                 if (!selectedIntensities.isEmpty()) {
                     filterStatementsByIntensity();
-                    askToProceed();
+                    startNextActivity();
                 } else {
                     Toast.makeText(WvieIntensityActivity.this, "Selecteer minimaal één intensiteit", Toast.LENGTH_SHORT).show();
                 }
@@ -125,7 +126,6 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         updateToNextPageButtonState();
     }
 
-    // Enable next button if at least one intensity is selected
     private void updateToNextPageButtonState() {
         next.setEnabled(!selectedIntensities.isEmpty());
     }
@@ -153,84 +153,21 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                askForConfirmation();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                askForConfirmation();
             }
         });
     }
 
-    private void askForConfirmation() {
-        if (currentIntensityIndex < intensities.length) {
-            String currentIntensity = intensities[currentIntensityIndex];
-            speechHelper.speak("Wil je " + currentIntensity + " selecteren?", new SpeechHelper.SpeechCompleteListener() {
-                @Override
-                public void onSpeechComplete() {
-                    Log.d("WvieIntensityActivity", "Asking for confirmation: " + currentIntensity);
-                    speechRecognitionManager.setConfirmationResultListener(new SpeechRecognitionManager.ConfirmationResultListener() {
-                        @Override
-                        public void onConfirmationResult(String result) {
-                            Log.d("WvieIntensityActivity", "Received confirmation result: " + result);
-                            if (result.equalsIgnoreCase("ja")) {
-                                Log.d("WvieIntensityActivity", "User confirmed selection: " + currentIntensity);
-                                toggleIntensitySelection(currentIntensity);
-                                updateImageView(currentIntensity);
-                            } else {
-                                Log.d("WvieIntensityActivity", "User declined selection: " + currentIntensity);
-                            }
-                            currentIntensityIndex++;
-                            if (currentIntensityIndex < intensities.length) {
-                                askForConfirmation();
-                            } else {
-                                askToProceed();
-                            }
-                            speechRecognitionManager.setConfirmationResultListener(null);
-                        }
-                    });
-                    speechRecognitionManager.startListening();
-                }
-
-                @Override
-                public void onSpeechFailed() {
-                    speechRecognitionManager.startListening();
-                }
-            });
-        } else {
-            askToProceed();
+    private void checkAndProceed() {
+        if (!selectedIntensities.isEmpty()) {
+            filterStatementsByIntensity();
+            startNextActivity();
         }
-    }
-
-    private void askToProceed() {
-        speechHelper.speak("Wil je nu doorgaan?", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("WvieIntensityActivity", "Asking to proceed");
-                speechRecognitionManager.setConfirmationResultListener(new SpeechRecognitionManager.ConfirmationResultListener() {
-                    @Override
-                    public void onConfirmationResult(String result) {
-                        Log.d("WvieIntensityActivity", "Received proceed result: " + result);
-                        if (result.equalsIgnoreCase("ja")) {
-                            startNextActivity();
-                        } else {
-                            currentIntensityIndex = 0;
-                            askForConfirmation();
-                        }
-                        speechRecognitionManager.setConfirmationResultListener(null);
-                    }
-                });
-                speechRecognitionManager.startListening();
-            }
-
-            @Override
-            public void onSpeechFailed() {
-                speechRecognitionManager.startListening();
-            }
-        });
     }
 
     private void updateImageView(String intensity) {

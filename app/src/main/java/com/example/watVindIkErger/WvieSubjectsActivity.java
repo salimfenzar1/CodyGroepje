@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +18,7 @@ import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,19 +33,22 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.wvie_subjects);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.wvie_subjects), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
         hearButton = findViewById(R.id.hearButton);
         themeDecease = findViewById(R.id.image_view_family);
         themeSexuality = findViewById(R.id.image_seksualiteit);
 
         allStatements = getIntent().getParcelableArrayListExtra("statements");
+        if (allStatements == null) {
+            allStatements = new ArrayList<>(); // Initialize to an empty list if null
+        }
 
         setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +61,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         themeDecease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Je hebt op overlijden gedrukt", Toast.LENGTH_SHORT).show();
                 filterAndNavigate("Overlijden");
             }
         });
@@ -66,29 +69,39 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         themeSexuality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Je hebt op seksualiteit op de werkvloer gedrukt", Toast.LENGTH_SHORT).show();
                 filterAndNavigate("Seksualiteit op de werkvloer");
             }
         });
-        setButtonsClickable(false);
+
         new Handler().postDelayed(this::speakText, 2000);
     }
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer , overlijden , of allebei!?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-//                speechRecognitionManager.startListening();
+                // Wait for a short period before starting recognition
+                new Handler().postDelayed(() -> {
+                    if (!speechRecognitionManager.isListening()) {
+                        speechRecognitionManager.startListening();
+                    }
+                }, 1000); // Delay to ensure speech synthesis completes
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-//                speechRecognitionManager.startListening();
+                // Wait for a short period before starting recognition
+                new Handler().postDelayed(() -> {
+                    if (!speechRecognitionManager.isListening()) {
+                        speechRecognitionManager.startListening();
+                    }
+                }, 1000); // Delay to ensure speech synthesis completes
             }
         });
     }
@@ -97,20 +110,34 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         themeDecease.setEnabled(clickable);
         themeSexuality.setEnabled(clickable);
         hearButton.setEnabled(clickable);
-
     }
 
     @Override
     public void onSpeechResult(String result) {
-        // TODO: Implement later
-        speechRecognitionManager.startListening(); // Restart listening after receiving results
+        Log.d("WvieSubjectsActivity", "onSpeechResult: " + result);
+        if (result.equalsIgnoreCase("seksualiteit op de werkvloer")) {
+            filterAndNavigate("Seksualiteit op de werkvloer");
+        } else if (result.equalsIgnoreCase("overlijden")) {
+            filterAndNavigate("Overlijden");
+        } else if (result.equalsIgnoreCase("allebei")) {
+            filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
+        } else {
+            Toast.makeText(this, "Ongeldige invoer, probeer opnieuw.", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> {
+                if (!speechRecognitionManager.isListening()) {
+                    speechRecognitionManager.startListening();
+                }
+            }, 1000); // Restart listening after an invalid input
+        }
     }
 
-    private void filterAndNavigate(String category) {
+    private void filterAndNavigate(String... categories) {
         List<Statement> filteredStatements = new ArrayList<>();
         for (Statement statement : allStatements) {
-            if (statement.category.equals(category)) {
-                filteredStatements.add(statement);
+            for (String category : categories) {
+                if (statement.category.equals(category)) {
+                    filteredStatements.add(statement);
+                }
             }
         }
         Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
@@ -118,4 +145,11 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+    }
 }

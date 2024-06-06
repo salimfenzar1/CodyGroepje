@@ -76,11 +76,16 @@ public class WvieStatementRedActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goNextActivity();
+                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+                intent.putExtra("red_statement", redStatement);
+                startActivity(intent);
             }
         });
 
         hearButton = findViewById(R.id.hearButton);
+        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,33 +93,41 @@ public class WvieStatementRedActivity extends AppCompatActivity {
                 speakText();
             }
         });
-        setButtonsClickable(false);
-        new Handler().postDelayed(this::speakText, 2000);
-    }
 
-    private void goNextActivity() {
-        Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
-        startActivity(intent);
+        new Handler().postDelayed(this::speakText, 2000);
     }
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        WvieStatementRedActivity currentActivity = this;
-        speechHelper.speak("De stelling voor de kleur rood... Een zorgmedewerker betrapt twee collega's op intiem contact", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
-                new Handler().postDelayed(currentActivity::goNextActivity, 5000);
-            }
+        if (redStatement != null) {
+            speechHelper.speak("De stelling voor de kleur rood... " + redStatement.description, new SpeechHelper.SpeechCompleteListener() {
+                @Override
+                public void onSpeechComplete() {
+                    Log.d("Speech", "Speech synthesis voltooid");
+                    setButtonsClickable(true);
+                }
 
-            @Override
-            public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
-                new Handler().postDelayed(currentActivity::goNextActivity, 5000);
-            }
-        });
+                @Override
+                public void onSpeechFailed() {
+                    Log.e("Speech", "Speech synthesis mislukt");
+                    setButtonsClickable(true);
+                }
+            });
+        } else {
+            speechHelper.speak("Geen stelling beschikbaar voor de kleur rood.", new SpeechHelper.SpeechCompleteListener() {
+                @Override
+                public void onSpeechComplete() {
+                    Log.d("Speech", "Speech synthesis voltooid");
+                    setButtonsClickable(true);
+                }
+
+                @Override
+                public void onSpeechFailed() {
+                    Log.e("Speech", "Speech synthesis mislukt");
+                    setButtonsClickable(true);
+                }
+            });
+        }
     }
 
     private void setButtonsClickable(boolean clickable) {

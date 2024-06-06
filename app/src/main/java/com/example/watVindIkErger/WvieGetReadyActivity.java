@@ -74,8 +74,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
             }
         });
         setButtonsClickable(false);
-        new Handler().postDelayed(this::speakText, 5000);
-
+        new Handler().postDelayed(this::speakText, 2000);
     }
 
     public void speakText() {
@@ -183,10 +182,12 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
             }
         }
     }
+
     private void goNextActivity() {
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
     }
 }

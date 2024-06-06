@@ -46,14 +46,8 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
 
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
-        selectedIntensities = intent.getStringArrayListExtra("SELECTED_INTENSITIES");
 
-        // Checking if intensity level is received
-        if (selectedIntensities != null) {
-            Log.d("WvieTutorialActivity", "Selected intensities: " + selectedIntensities.toString());
-        } else {
-            Log.d("WvieTutorialActivity", "No selected intensities received.");
-        }
+
 
         // Checking if filtered statements are received
         if (filteredStatements != null) {
@@ -154,6 +148,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
     }
 

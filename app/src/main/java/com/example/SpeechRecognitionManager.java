@@ -122,6 +122,10 @@ public class SpeechRecognitionManager {
         }
     }
 
+    public boolean isListening() {
+        return isListening;
+    }
+
     public void setConfirmationResultListener(ConfirmationResultListener listener) {
         this.confirmationResultListener = listener;
     }

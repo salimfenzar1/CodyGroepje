@@ -3,6 +3,7 @@ package com.example;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
@@ -17,6 +18,7 @@ public class SpeechRecognitionManager {
     private final SpeechRecognitionListener listener;
     private ConfirmationResultListener confirmationResultListener;
     private boolean isListening = false;
+    private final Handler handler = new Handler();
 
     public SpeechRecognitionManager(Context context, SpeechRecognitionListener listener) {
         this.context = context;
@@ -60,9 +62,10 @@ public class SpeechRecognitionManager {
                     isListening = false;
                     Log.e("SpeechRecognizer", "Error: " + error);
                     if (error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
-                        Log.e("SpeechRecognizer", "Recognizer busy, will retry...");
+                        Log.e("SpeechRecognizer", "Recognizer busy, retrying...");
+                        handler.postDelayed(SpeechRecognitionManager.this::startListening, 1000); // Retry after 1000ms
                     } else {
-                        startListening(); // Restart listening on error
+                        handler.postDelayed(SpeechRecognitionManager.this::startListening, 1000); // Restart listening on error after 1000ms
                     }
                 }
 
@@ -71,11 +74,15 @@ public class SpeechRecognitionManager {
                     isListening = false;
                     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     if (matches != null && !matches.isEmpty()) {
+                        Log.d("SpeechRecognizer", "Recognized speech: " + matches.get(0));
                         if (confirmationResultListener != null) {
                             confirmationResultListener.onConfirmationResult(matches.get(0));
                         } else {
                             listener.onSpeechResult(matches.get(0));
                         }
+                    } else {
+                        Log.d("SpeechRecognizer", "No speech recognized");
+                        handler.postDelayed(SpeechRecognitionManager.this::startListening, 1000); // Retry after 1000ms if no speech recognized
                     }
                 }
 
@@ -95,6 +102,8 @@ public class SpeechRecognitionManager {
     }
 
     public void startListening() {
+        Log.d("StartListening Method", "Attempting to start listening...");
+        stopListening(); // Ensure any previous recognizer is stopped before starting a new one
         if (speechRecognizer != null && !isListening) {
             if (SpeechRecognizer.isRecognitionAvailable(context)) {
                 Log.d("StartListening Method", "Listening...");
@@ -106,19 +115,27 @@ public class SpeechRecognitionManager {
                 speechRecognizer.startListening(intent);
                 isListening = true;
             }
+        } else {
+            Log.d("StartListening Method", "Cannot start listening, recognizer is null or already listening.");
         }
     }
 
     public void stopListening() {
+        Log.d("StopListening Method", "Attempting to stop listening...");
         if (speechRecognizer != null && isListening) {
+            Log.d("StopListening Method", "Stopping listening...");
             speechRecognizer.stopListening();
             isListening = false;
+        } else {
+            Log.d("StopListening Method", "Recognizer is not listening.");
         }
     }
 
     public void destroy() {
+        Log.d("Destroy Method", "Destroying recognizer...");
         if (speechRecognizer != null) {
             speechRecognizer.destroy();
+            speechRecognizer = null;
         }
     }
 

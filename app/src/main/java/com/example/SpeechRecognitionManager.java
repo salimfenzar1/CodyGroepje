@@ -15,6 +15,7 @@ public class SpeechRecognitionManager {
     private SpeechRecognizer speechRecognizer;
     private final Context context;
     private final SpeechRecognitionListener listener;
+    private ConfirmationResultListener confirmationResultListener;
     private boolean isListening = false;
 
     public SpeechRecognitionManager(Context context, SpeechRecognitionListener listener) {
@@ -70,9 +71,12 @@ public class SpeechRecognitionManager {
                     isListening = false;
                     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     if (matches != null && !matches.isEmpty()) {
-                        listener.onSpeechResult(matches.get(0));
+                        if (confirmationResultListener != null) {
+                            confirmationResultListener.onConfirmationResult(matches.get(0));
+                        } else {
+                            listener.onSpeechResult(matches.get(0));
+                        }
                     }
-                    startListening(); // Restart listening after receiving results
                 }
 
                 @Override
@@ -118,7 +122,15 @@ public class SpeechRecognitionManager {
         }
     }
 
+    public void setConfirmationResultListener(ConfirmationResultListener listener) {
+        this.confirmationResultListener = listener;
+    }
+
     public interface SpeechRecognitionListener {
         void onSpeechResult(String result);
+    }
+
+    public interface ConfirmationResultListener {
+        void onConfirmationResult(String result);
     }
 }

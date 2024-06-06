@@ -150,5 +150,24 @@ public class RoomDatabaseConnectionUnitTest {
         assertEquals(1, intensStatements.size());
         assertEquals("Intense Description 1", intensStatements.get(0).description);
     }
+    @Test
+    public void getMatigStatements() throws Exception {
+        Statement statement1 = new Statement();
+        statement1.description = "Test description 1";
+        statement1.intensityLevel = 2;
+        statement1.category = "Matig";
+        statementDAO.insert(statement1);
 
+        Statement statement2 = new Statement();
+        statement2.description = "Test description 2";
+        statement2.intensityLevel = 3;
+        statement2.category = "Intens";
+        statementDAO.insert(statement2);
+
+        LiveData<List<Statement>> matigStatementsLiveData = statementDAO.getMatigStatements();
+        List<Statement> matigStatements = LiveDataTestUtil.getOrAwaitValue(matigStatementsLiveData);
+        assertNotNull(matigStatements); // Ensure the LiveData is not null
+        assertEquals(1, matigStatements.size());
+        assertEquals(statement1.description, matigStatements.get(0).description);
+    }
 }

@@ -16,9 +16,6 @@
       <SelectionState runConfigName="RoomDatabaseConnectionUnitTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testGetLaagdrempeligStatements()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
     </selectionStates>
   </component>
 </project>

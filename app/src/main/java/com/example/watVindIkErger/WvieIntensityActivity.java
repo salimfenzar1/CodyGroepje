@@ -52,6 +52,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
 
         selectedIntensities = new ArrayList<>();
         filteredStatements = getIntent().getParcelableArrayListExtra("statements");
+        Log.d("WvieIntensityActivity", "Filtered statements: " + filteredStatements.size());
 
         low = findViewById(R.id.image_view_low_intensity);
         medium = findViewById(R.id.image_view_medium_intensity);
@@ -146,7 +147,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan!", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan! Als je een combinatie van de intensiteiten wilt kiezen, moet je dit handmatig op het scherm aanklikken.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

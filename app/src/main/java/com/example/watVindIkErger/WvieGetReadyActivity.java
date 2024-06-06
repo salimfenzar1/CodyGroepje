@@ -93,7 +93,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speechRecognitionManager.startListening();
+                speakText();
             }
         });
     }
@@ -116,7 +116,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
                 clarificationAsked = true;
-                speechRecognitionManager.startListening();
+                speakTextAskClarification();
             }
         });
     }
@@ -177,6 +177,8 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
 
 
     private void goNextActivity() {
+        Log.d("WvieGetReadyActivity", "Received filtered statements: " + filteredStatements);
+
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);

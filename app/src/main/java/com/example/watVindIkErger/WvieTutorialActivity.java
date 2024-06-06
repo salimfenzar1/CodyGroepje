@@ -115,7 +115,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                goNextActivity();
+                performOutro();
             }
         });
     }

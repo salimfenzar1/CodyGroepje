@@ -151,12 +151,14 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 }
             }
         }
+
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
-        intent.putParcelableArrayListExtra("statements", new ArrayList<>(filteredStatements));
+        intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);
     }
+
 
     @Override
     protected void onDestroy() {

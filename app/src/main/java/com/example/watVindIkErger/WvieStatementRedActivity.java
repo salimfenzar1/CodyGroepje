@@ -105,7 +105,7 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        Log.d("Stelling voor de kleur rood: ", redStatement.description);
+
         if (redStatement != null) {
             speechHelper.speak("De stelling voor de kleur rood... " + redStatement.description, new SpeechHelper.SpeechCompleteListener() {
                 @Override

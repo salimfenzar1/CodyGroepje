@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             speechRecognitionManager.stopListening();
             speechRecognitionManager.destroy();
             Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
             startActivity(intent);
         } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
             speakReplay();

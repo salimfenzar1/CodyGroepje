@@ -125,7 +125,7 @@ public class RoomDatabaseConnectionUnitTest {
     public void testGetIntensStatements() throws Exception {
         // Insert statements
         Statement statement1 = new Statement();
-        statement1.description = "Intense Description 11";
+        statement1.description = "Intense Description 1";
         statement1.category = "Category 1";
         statement1.imageUrl = "image_url_1";
         statement1.intensityLevel = 3; // Assuming 3 is considered intense
@@ -170,4 +170,84 @@ public class RoomDatabaseConnectionUnitTest {
         assertEquals(1, matigStatements.size());
         assertEquals(statement1.description, matigStatements.get(0).description);
     }
+
+    @Test
+    public void testGetMatigAndIntensStatements() throws Exception {
+        // Insert statements
+        Statement statement1 = new Statement();
+        statement1.description = "Intense Description 1";
+        statement1.category = "Category 1";
+        statement1.imageUrl = "image_url_1";
+        statement1.intensityLevel = 3; // Assuming 3 is considered intense
+        statement1.isActive = true;
+
+        Statement statement2 = new Statement();
+        statement2.description = "Moderate Description";
+        statement2.category = "Category 2";
+        statement2.imageUrl = "image_url_2";
+        statement2.intensityLevel = 2; // Assuming 2 is considered moderate
+        statement2.isActive = true;
+
+        Statement statement3 = new Statement();
+        statement3.description = "Mild Description";
+        statement3.category = "Category 3";
+        statement3.imageUrl = "image_url_3";
+        statement3.intensityLevel = 1; // Assuming 1 is not considered moderate or intense
+        statement3.isActive = true;
+
+        statementDAO.insert(statement1);
+        statementDAO.insert(statement2);
+        statementDAO.insert(statement3);
+
+        // Fetch moderate and intense statements
+        LiveData<List<Statement>> matigAndIntensStatementsLiveData = statementDAO.getMatigAndIntensStatements();
+        List<Statement> matigAndIntensStatements = LiveDataTestUtil.getOrAwaitValue(matigAndIntensStatementsLiveData);
+
+        // Assert results
+        assertNotNull(matigAndIntensStatements);
+        assertEquals(2, matigAndIntensStatements.size());
+        assertEquals("Intense Description 1", matigAndIntensStatements.get(0).description);
+        assertEquals("Moderate Description", matigAndIntensStatements.get(1).description);
+    }
+
+    @Test
+    public void testGetLaagdrempeligAndIntensStatements() throws Exception {
+        // Insert statements
+        Statement statement1 = new Statement();
+        statement1.description = "Intense Description";
+        statement1.category = "Category 1";
+        statement1.imageUrl = "image_url_1";
+        statement1.intensityLevel = 3; // Assuming 3 is considered intense
+        statement1.isActive = true;
+
+        Statement statement2 = new Statement();
+        statement2.description = "Moderate Description";
+        statement2.category = "Category 2";
+        statement2.imageUrl = "image_url_2";
+        statement2.intensityLevel = 2; // Assuming 2 is considered moderate, not included
+        statement2.isActive = true;
+
+        Statement statement3 = new Statement();
+        statement3.description = "Laagdrempelig Description";
+        statement3.category = "Laagdrempelig";
+        statement3.imageUrl = "image_url_3";
+        statement3.intensityLevel = 1; // Assuming 1 is considered laagdrempelig
+        statement3.isActive = true;
+
+        statementDAO.insert(statement1);
+        statementDAO.insert(statement2);
+        statementDAO.insert(statement3);
+
+        // Fetch laagdrempelig and intense statements
+        LiveData<List<Statement>> laagdrempeligAndIntensStatementsLiveData = statementDAO.getLaagdrempeligAndIntensStatements();
+        List<Statement> laagdrempeligAndIntensStatements = LiveDataTestUtil.getOrAwaitValue(laagdrempeligAndIntensStatementsLiveData);
+
+        // Assert results
+        assertNotNull(laagdrempeligAndIntensStatements);
+        assertEquals(2, laagdrempeligAndIntensStatements.size());
+        assertEquals("Intense Description", laagdrempeligAndIntensStatements.get(0).description);
+        assertEquals("Laagdrempelig Description", laagdrempeligAndIntensStatements.get(1).description);
+    }
+
+
 }

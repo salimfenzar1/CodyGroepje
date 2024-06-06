@@ -13,7 +13,7 @@ import java.util.List;
 public interface StatementDAO {
 
     @Insert
-    public void insert(Statement statement);
+    void insert(Statement statement);
 
     @Query("SELECT * FROM statement")
     LiveData<List<Statement>> getAllStatements();

@@ -84,14 +84,11 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                // Wait for a short period before starting recognition
-                new Handler().postDelayed(() -> {
-                    if (!speechRecognitionManager.isListening()) {
-                        speechRecognitionManager.startListening();
-                    }
-                }, 1000); // Delay to ensure speech synthesis completes
+                // Start listening immediately after speech synthesis completes
+                if (!speechRecognitionManager.isListening()) {
+                    speechRecognitionManager.startListening();
+                }
             }
-
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
@@ -100,6 +97,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             }
         });
     }
+
 
     private void speakRetry() {
         speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {

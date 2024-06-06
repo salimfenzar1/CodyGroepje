@@ -90,4 +90,34 @@ public class RoomDatabaseConnectionUnitTest {
         assertNotNull(statements);
         assertTrue("Read operation took too long: " + elapsedTime + " milliseconds", elapsedTime < 1000);
     }
+
+    @Test
+    public void testGetLaagdrempeligStatements() throws Exception {
+        // Insert statements
+        Statement statement1 = new Statement();
+        statement1.description = "Description 1";
+        statement1.category = "Laagdrempelig";
+        statement1.imageUrl = "image_url_1";
+        statement1.intensityLevel = 1;
+        statement1.isActive = true;
+
+        Statement statement2 = new Statement();
+        statement2.description = "Description 2";
+        statement2.category = "Other";
+        statement2.imageUrl = "image_url_2";
+        statement2.intensityLevel = 2;
+        statement2.isActive = true;
+
+        statementDAO.insert(statement1);
+        statementDAO.insert(statement2);
+
+        // Fetch laagdrempelig statements
+        LiveData<List<Statement>> laagdrempeligStatementsLiveData = statementDAO.getLaagdrempeligStatements();
+        List<Statement> laagdrempeligStatements = LiveDataTestUtil.getOrAwaitValue(laagdrempeligStatementsLiveData);
+
+        // Assert results
+        assertNotNull(laagdrempeligStatements);
+        assertEquals(1, laagdrempeligStatements.size());
+        assertEquals("Description 1", laagdrempeligStatements.get(0).description);
+    }
 }

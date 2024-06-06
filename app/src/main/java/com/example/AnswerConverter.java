@@ -6,6 +6,7 @@ public class AnswerConverter {
 
     private static final String[] yesAnswers = {
             "ja",
+            "wel",
             "zeker",
             "absoluut",
             "natuurlijk",

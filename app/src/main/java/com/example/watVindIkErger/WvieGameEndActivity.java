@@ -17,9 +17,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.AnswerConverter;
 import com.example.MainActivity;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import java.util.ArrayList;
 
 public class WvieGameEndActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
@@ -27,6 +29,8 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
     private ImageButton home;
     private ImageButton replay;
     private ImageButton hearButton;
+    private ArrayList<Statement> filteredStatements;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +43,10 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
         });
 
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
+        // Retrieve the filtered statements from the intent
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
         // If home button is clicked
         home = findViewById(R.id.homeButton);

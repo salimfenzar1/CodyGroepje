@@ -12,14 +12,16 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
-
+import android.Manifest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     private boolean isInitialHighImage = true;
     private String[] intensities = {"laagdrempelig", "matig", "intens"};
     private int currentIntensityIndex = 0;
+    private ArrayList<Statement> filteredStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         });
 
         selectedIntensities = new ArrayList<>();
+        filteredStatements = getIntent().getParcelableArrayListExtra("statements");
 
         low = findViewById(R.id.image_view_low_intensity);
         medium = findViewById(R.id.image_view_medium_intensity);
@@ -96,7 +100,12 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askToProceed();
+                if (!selectedIntensities.isEmpty()) {
+                    filterStatementsByIntensity();
+                    askToProceed();
+                } else {
+                    Toast.makeText(WvieIntensityActivity.this, "Selecteer minimaal één intensiteit", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -116,13 +125,24 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         updateToNextPageButtonState();
     }
 
+    // Enable next button if at least one intensity is selected
     private void updateToNextPageButtonState() {
         next.setEnabled(!selectedIntensities.isEmpty());
     }
 
+    private void filterStatementsByIntensity() {
+        ArrayList<Statement> filteredList = new ArrayList<>();
+        for (Statement statement : filteredStatements) {
+            if (selectedIntensities.contains(String.valueOf(statement.intensityLevel))) {
+                filteredList.add(statement);
+            }
+        }
+        filteredStatements = filteredList;
+    }
+
     private void startNextActivity() {
         Intent intent = new Intent(this, WvieTutorialActivity.class);
-        intent.putStringArrayListExtra("SELECTED_INTENSITIES", new ArrayList<>(selectedIntensities));
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
     }
 

@@ -1,11 +1,13 @@
 package com.example.watVindIkErger;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,10 +17,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.AnswerConverter;
+import com.example.ImageUtils;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
+import java.util.ArrayList;
 
 public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
@@ -26,6 +31,11 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
     private ImageButton yesButton;
     private ImageButton noButton;
     private ImageButton hearButton;
+    private ImageView statementImageView;
+    private ArrayList<Statement> filteredStatements;
+    private Statement redStatement;
+    private Statement yellowStatement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +49,20 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
 
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        redStatement = intent.getParcelableExtra("red_statement");
+        yellowStatement = intent.getParcelableExtra("yellow_statement");
+
         yesButton = findViewById(R.id.yesButton);
         noButton = findViewById(R.id.noButton);
+        statementImageView = findViewById(R.id.image_view_foto_red_choice);
+
+        if (redStatement != null) {
+            int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, statementImageView.getWidth(), statementImageView.getHeight());
+            statementImageView.setImageBitmap(bitmap);
+        }
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +80,7 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
@@ -84,6 +107,7 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
             }
         });
     }
+
     private void setButtonsClickable(boolean clickable) {
         yesButton.setEnabled(clickable);
         noButton.setEnabled(clickable);

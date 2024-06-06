@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.AnswerConverter;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
@@ -28,6 +29,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<String> selectedIntensities;
+    private ArrayList<Statement> filteredStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
         selectedIntensities = intent.getStringArrayListExtra("SELECTED_INTENSITIES");
 
         // Checking if intensity level is received
@@ -51,6 +54,15 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         } else {
             Log.d("WvieTutorialActivity", "No selected intensities received.");
         }
+
+        // Checking if filtered statements are received
+        if (filteredStatements != null) {
+            Log.d("WvieTutorialActivity", "Filtered statements count: " + filteredStatements.size());
+        } else {
+            Log.d("WvieTutorialActivity", "No filtered statements received.");
+        }
+
+
 
         next = findViewById(R.id.nextButton);
         hearButton = findViewById(R.id.hearButton);
@@ -71,6 +83,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
 
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
+
     }
 
     public void speakText() {

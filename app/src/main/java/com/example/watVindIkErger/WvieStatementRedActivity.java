@@ -1,11 +1,14 @@
 package com.example.watVindIkErger;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,13 +17,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ImageUtils;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class WvieStatementRedActivity extends AppCompatActivity {
     private ImageButton next;
     private SpeechHelper speechHelper;
     private ImageButton hearButton;
+    private ImageView statementImageView;
+    private ArrayList<Statement> filteredStatements;
+    private Statement redStatement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,33 @@ public class WvieStatementRedActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+
+        statementImageView = findViewById(R.id.image_view_foto_statement_red);
+
+        if (filteredStatements != null && !filteredStatements.isEmpty()) {
+            Collections.shuffle(filteredStatements);
+            redStatement = filteredStatements.remove(0);  // Get a random statement and remove it from the list
+            redStatement.isActive = false;  // Mark the statement as inactive
+            Log.d("WvieStatementRedActivity", "Selected red statement: " + redStatement.description);
+
+            ViewTreeObserver vto = statementImageView.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int width = statementImageView.getWidth();
+                    int height = statementImageView.getHeight();
+                    int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                    statementImageView.setImageBitmap(bitmap);
+                }
+            });
+        } else {
+            Log.d("WvieStatementRedActivity", "No statements available.");
+        }
 
         next = findViewById(R.id.nextButton);
 
@@ -78,6 +116,7 @@ public class WvieStatementRedActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setButtonsClickable(boolean clickable) {
         next.setEnabled(clickable);
         hearButton.setEnabled(clickable);

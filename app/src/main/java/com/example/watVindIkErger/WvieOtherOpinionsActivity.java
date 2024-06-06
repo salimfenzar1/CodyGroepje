@@ -15,9 +15,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.AnswerConverter;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import java.util.ArrayList;
 
 public class WvieOtherOpinionsActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
@@ -25,6 +27,8 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     private boolean someoneWantsToSpeak = false;
     private ImageButton next;
     private ImageButton hearButton;
+    private ArrayList<Statement> filteredStatements;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +42,13 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
 
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
-        next = findViewById(R.id.nextButton);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        }
+
+        next = findViewById(R.id.nextButton);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

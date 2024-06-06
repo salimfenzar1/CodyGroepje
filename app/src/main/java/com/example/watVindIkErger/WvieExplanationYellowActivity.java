@@ -1,11 +1,13 @@
 package com.example.watVindIkErger;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,14 +16,22 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ImageUtils;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+
+import java.util.ArrayList;
 
 public class WvieExplanationYellowActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
     private ImageButton next;
     private ImageButton hearButton;
+    private ImageView image_view_yellow;
     private boolean selectedYes;
+    private ArrayList<Statement> filteredStatements;
+    private Statement yellowStatement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,17 +42,22 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Intent intent = getIntent();
         if (intent != null) {
-            // Get the string with the key "key"
             selectedYes = intent.getBooleanExtra("selectedYes", false);
+            filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        }
+        Intent intent2 = getIntent();
+        if (intent2 != null) {
+            yellowStatement = intent2.getParcelableExtra("yellow_statement");
+        }
 
-//            // Check if the value is "Ja" or "Nee" and do something with it
-//            if (selectedYes) {
-//                Toast.makeText(this, "Received value: Yes", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(this, "Received value: No", Toast.LENGTH_SHORT).show();
-//            }
+        image_view_yellow = findViewById(R.id.image_view_foto_explanation_yellow);
+        if (yellowStatement != null) {
+            int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
+            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, image_view_yellow.getWidth(), image_view_yellow.getHeight());
+            image_view_yellow.setImageBitmap(bitmap);
         }
 
         next = findViewById(R.id.nextButton);
@@ -51,6 +66,7 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
             }
         });
@@ -66,6 +82,7 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
+
     public void speakText(){
         speechHelper = new SpeechHelper(this);
         String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger?" : "Waarom vindt je de gele stelling erger?";
@@ -83,8 +100,9 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setButtonsClickable(boolean clickable) {
-        hearButton.setEnabled(clickable);
+        next.setEnabled(clickable);
         hearButton.setEnabled(clickable);
     }
 }

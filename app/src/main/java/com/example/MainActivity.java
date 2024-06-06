@@ -8,7 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
+import java.util.ArrayList;
+import java.util.List;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +17,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.DAO.DatabaseInitializer;
+import com.example.DAO.StatementViewModel;
+import com.example.Model.Statement;
+import com.example.SpeechHelper;
 import com.example.codycactus.R;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
 public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
+
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private final String[] permissions = {Manifest.permission.RECORD_AUDIO};
@@ -29,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     private ImageButton watVind;
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
+    private StatementViewModel statementViewModel;
+    private List<Statement> allStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +54,40 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         tijdTikt = findViewById(R.id.tijdTikt);
         levend = findViewById(R.id.levendOrganogram);
         watVind = findViewById(R.id.watVindIk);
+
+        setButtonsClickable(false);
+
+        // Initialize the database if not already populated
+        DatabaseInitializer.populateDatabase(this);
+
+        // Initialize ViewModel
+        statementViewModel = new ViewModelProvider(this).get(StatementViewModel.class);
+        statementViewModel.getAllStatements().observe(this, statements -> {
+            allStatements = new ArrayList<>(statements);
+            // Ensure the resetAllStatements is called only after allStatements is initialized
+            resetAllStatements();
+        });
+
+        speakIntro();
+
+        tijdTikt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
+            }
+        });
+        levend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor levend organogram", Toast.LENGTH_SHORT).show();
+            }
+        });
         watVind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Je hebt wat vind ik erger gekozen", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+                intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
                 startActivity(intent);
             }
         });
@@ -70,6 +109,11 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             Toast.makeText(this, "Permission to use microphone denied", Toast.LENGTH_SHORT).show();
             finish(); // Close the app if permission is denied
         }
+    }
+
+    private void resetAllStatements() {
+        statementViewModel.updateAllStatementsStatus(true);
+//        Toast.makeText(MainActivity.this, "All statements have been reset to active", Toast.LENGTH_SHORT).show();
     }
 
     public void speakIntro() {

@@ -1,4 +1,5 @@
 package com.example.watVindIkErger;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
@@ -23,6 +28,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
     private ImageButton hearButton;
     private ImageView themeDecease;
     private ImageView themeSexuality;
+    private List<Statement> allStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,10 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         hearButton = findViewById(R.id.hearButton);
         themeDecease = findViewById(R.id.image_view_family);
         themeSexuality = findViewById(R.id.image_seksualiteit);
+
+        allStatements = getIntent().getParcelableArrayListExtra("statements");
+
+        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,8 +59,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
-                startActivity(intent);
+                filterAndNavigate("Overlijden");
             }
         });
 
@@ -58,13 +67,13 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
-                startActivity(intent);
+                filterAndNavigate("Seksualiteit op de werkvloer");
             }
         });
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
+
     public void speakText() {
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer , overlijden , of allebei!?", new SpeechHelper.SpeechCompleteListener() {
@@ -83,8 +92,10 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             }
         });
     }
+
     private void setButtonsClickable(boolean clickable) {
         themeDecease.setEnabled(clickable);
+        themeSexuality.setEnabled(clickable);
         hearButton.setEnabled(clickable);
 
     }
@@ -94,4 +105,17 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         // TODO: Implement later
         speechRecognitionManager.startListening(); // Restart listening after receiving results
     }
+
+    private void filterAndNavigate(String category) {
+        List<Statement> filteredStatements = new ArrayList<>();
+        for (Statement statement : allStatements) {
+            if (statement.category.equals(category)) {
+                filteredStatements.add(statement);
+            }
+        }
+        Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
+        intent.putParcelableArrayListExtra("statements", new ArrayList<>(filteredStatements));
+        startActivity(intent);
+    }
+
 }

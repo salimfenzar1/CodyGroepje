@@ -10,8 +10,8 @@ import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
 
 public class SpeechHelper {
-    private static final String API_KEY = "50ebcb27116f4c669a3f595d905b4d27";
-    private static final String REGION = "westeurope";
+    private static final String API_KEY = "92fff4f9dab940e9a5e9a9fc9a97e1b0";
+    private static final String REGION = "germanywestcentral";
 
     private SpeechSynthesizer synthesizer;
     private Context context;
@@ -26,7 +26,7 @@ public class SpeechHelper {
     public void speak(String text, SpeechCompleteListener listener) {
         String ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>" +
                 "<voice name='en-US-AndrewMultilingualNeural'>" +
-                "<prosody rate='+50%'>" + text + "</prosody>" +
+                "<prosody rate='+10000%'>" + text + "</prosody>" +
                 "</voice></speak>";
         new SynthesisTask(listener).execute(ssml);
     }

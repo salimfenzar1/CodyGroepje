@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -60,9 +61,20 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
         statementImageView = findViewById(R.id.image_view_foto_yellow_choice);
 
         if (yellowStatement != null) {
-            int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
-            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, statementImageView.getWidth(), statementImageView.getHeight());
-            statementImageView.setImageBitmap(bitmap);
+            Log.d("Image", "Image: " + redStatement.description + "");
+
+            statementImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                    int width = statementImageView.getWidth();
+                    int height = statementImageView.getHeight();
+                    int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
+                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                    statementImageView.setImageBitmap(bitmap);
+                }
+            });
         }
 
         yesButton.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +140,8 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
         Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
         intent.putExtra("selectedYes", true);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        intent.putExtra("yellow_statement", yellowStatement);
+        intent.putExtra("red_statement", redStatement);
         startActivity(intent);
     }
 
@@ -135,6 +149,8 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
         Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
         intent.putExtra("selectedYes", false);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        intent.putExtra("yellow_statement", yellowStatement);
+        intent.putExtra("red_statement", redStatement);
         startActivity(intent);
     }
 

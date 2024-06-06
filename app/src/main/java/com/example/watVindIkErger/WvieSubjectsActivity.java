@@ -96,15 +96,30 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                // Wait for a short period before starting recognition
-                new Handler().postDelayed(() -> {
-                    if (!speechRecognitionManager.isListening()) {
-                        speechRecognitionManager.startListening();
-                    }
-                }, 1000); // Delay to ensure speech synthesis completes
+                speakRetry();
             }
         });
     }
+
+    private void speakRetry() {
+        speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
+                speechRecognitionManager.startListening();
+            }
+
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
+                speakRetry();
+            }
+        });
+    }
+
 
     private void setButtonsClickable(boolean clickable) {
         themeDecease.setEnabled(clickable);
@@ -122,12 +137,8 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         } else if (result.equalsIgnoreCase("allebei")) {
             filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
         } else {
+            speakRetry();
             Toast.makeText(this, "Ongeldige invoer, probeer opnieuw.", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> {
-                if (!speechRecognitionManager.isListening()) {
-                    speechRecognitionManager.startListening();
-                }
-            }, 1000); // Restart listening after an invalid input
         }
     }
 

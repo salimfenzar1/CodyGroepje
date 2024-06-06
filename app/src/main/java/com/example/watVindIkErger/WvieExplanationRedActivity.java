@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -55,10 +56,22 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
 
         image_view_red = findViewById(R.id.image_view_foto_explanation_red);
         if (redStatement != null) {
-            int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
-            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, image_view_red.getWidth(), image_view_red.getHeight());
-            image_view_red.setImageBitmap(bitmap);
+            Log.d("Image", "Image: " + redStatement.description + "");
+
+            image_view_red.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    image_view_red.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                    int width = image_view_red.getWidth();
+                    int height = image_view_red.getHeight();
+                    int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                    image_view_red.setImageBitmap(bitmap);
+                }
+            });
         }
+
 
         next = findViewById(R.id.nextButton);
         next.setOnClickListener(new View.OnClickListener() {

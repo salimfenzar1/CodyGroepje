@@ -151,6 +151,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
 
             @Override
@@ -192,10 +193,23 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
 
     @Override
     public void onSpeechResult(String result) {
-        Intent intent = new Intent(this, WvieTutorialActivity.class);
-        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-        startActivity(intent);
         Log.d("WvieIntensityActivity", "onSpeechResult: " + result);
+        if (result.equalsIgnoreCase("laagdrempelig")){
+            toggleIntensitySelection(1);
+            updateImageView("laagdrempelig");
+            filterStatementsByIntensity();
+            startNextActivity();
+        } else if (result.equalsIgnoreCase("matig")){
+            toggleIntensitySelection(2);
+            updateImageView("matig");
+            filterStatementsByIntensity();
+            startNextActivity();
+        } else if (result.equalsIgnoreCase("intens")){
+            toggleIntensitySelection(3);
+            updateImageView("intens");
+            filterStatementsByIntensity();
+            startNextActivity();
+        }
     }
 
     private void setButtonsClickable(boolean clickable) {

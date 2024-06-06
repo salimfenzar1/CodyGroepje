@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -55,9 +56,20 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
 
         image_view_yellow = findViewById(R.id.image_view_foto_explanation_yellow);
         if (yellowStatement != null) {
-            int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
-            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, image_view_yellow.getWidth(), image_view_yellow.getHeight());
-            image_view_yellow.setImageBitmap(bitmap);
+            Log.d("Image", "Image: " + yellowStatement.description + "");
+
+            image_view_yellow.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    image_view_yellow.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                    int width = image_view_yellow.getWidth();
+                    int height = image_view_yellow.getHeight();
+                    int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
+                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                    image_view_yellow.setImageBitmap(bitmap);
+                }
+            });
         }
 
         next = findViewById(R.id.nextButton);

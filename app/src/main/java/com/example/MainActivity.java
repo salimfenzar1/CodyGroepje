@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         statementViewModel.updateAllStatementsStatus(true);
 //        Toast.makeText(MainActivity.this, "All statements have been reset to active", Toast.LENGTH_SHORT).show();
     }
- 
+
     public void speakIntro() {
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Hoi, ik ben Cody! jullie kunnen samen met mij een spel spelen. Deze spellen zullen het mogelijk maken om moeilijke onderwerpen bespreekbaar te maken. Jullie kunnen kiezen tussen: De Tijd Tikt ,  levend organogram, en wat vind ik erger! Welk spel willen jullie spelen?", new SpeechHelper.SpeechCompleteListener() {
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             speechRecognitionManager.destroy();
             Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
             startActivity(intent);
-        } else if(result.isEmpty()){
+        } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
             speakReplay();
         }
 
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);  // Zet de knoppen klikbaar zelfs als de spraaksynthese mislukt
-                speechRecognitionManager.startListening();
+                speakReplay();
             }
         });
     }

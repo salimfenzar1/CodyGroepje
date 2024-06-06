@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -52,11 +53,6 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
         redStatement = intent.getParcelableExtra("red_statement");
-        if (redStatement != null){
-            Log.d("WvieChoiceRed", "Rode statement is niet nuull");
-        }else {
-            Log.d("WvieChoiceRed", "Rode statement is nuull");
-        }
         yellowStatement = intent.getParcelableExtra("yellow_statement");
 
         yesButton = findViewById(R.id.yesButton);
@@ -64,9 +60,20 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         statementImageView = findViewById(R.id.image_view_foto_red_choice);
 
         if (redStatement != null) {
-            int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
-            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, statementImageView.getWidth(), statementImageView.getHeight());
-            statementImageView.setImageBitmap(bitmap);
+            Log.d("Image", "Image: " + redStatement.description + "");
+
+            statementImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                    int width = statementImageView.getWidth();
+                    int height = statementImageView.getHeight();
+                    int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                    statementImageView.setImageBitmap(bitmap);
+                }
+            });
         }
 
         yesButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +138,8 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
         intent.putExtra("selectedYes", false);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        intent.putExtra("yellow_statement", yellowStatement);
+        intent.putExtra("red_statement", redStatement);
         startActivity(intent);
     }
 
@@ -138,6 +147,8 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
         intent.putExtra("selectedYes", true);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        intent.putExtra("yellow_statement", yellowStatement);
+        intent.putExtra("red_statement", redStatement);
         startActivity(intent);
     }
 

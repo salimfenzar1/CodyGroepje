@@ -42,7 +42,6 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
 
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
-
         Intent intent = getIntent();
         if (intent != null) {
             filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
@@ -60,7 +59,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                speakTextPart2();
+                speakText();
             }
         });
         setButtonsClickable(false);
@@ -76,86 +75,35 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     public void speakText() {
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Wat vinden de andere hiervan?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Wat vinden de andere hiervan? Wanneer iedereen is uitgepraat, zeg dan: Wij willen doorgaan, om door te gaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
-                speakTextPart2();
-            }
-
-            @Override
-            public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                speakTextPart2();
-            }
-        });
-    }
-
-    public void speakTextPart2() {
-        setButtonsClickable(false);
-        speechRecognitionManager.stopListening();
-        speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Wil iemand anders nog iets zeggen?", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
-                speechRecognitionManager.startListening();
+                new Handler().postDelayed(() -> speakText(), 1000);
             }
         });
     }
+
+
     private void setButtonsClickable(boolean clickable) {
         hearButton.setEnabled(clickable);
         next.setEnabled(clickable);
     }
 
 
-    public void speakTextAskRemainingOpinions() {
-        setButtonsClickable(false);
-        speechRecognitionManager.stopListening();
-        speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Heeft iedereen kunnen zeggen wat ze willen?", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
-                speechRecognitionManager.startListening();
-            }
-
-            @Override
-            public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
-                speechRecognitionManager.startListening();
-            }
-        });
-    }
-
-
     @Override
     public void onSpeechResult(String result) {
-        if (!someoneWantsToSpeak) {
-            switch (AnswerConverter.determineAnswer(result)) {
-                case YES:
-                    someoneWantsToSpeak = true;
-                    speakTextAskRemainingOpinions();
-                    break;
-                case NO: goNextActivity(); break;
-                default: speakTextPart2(); break;
-            }
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if (result.equalsIgnoreCase("Wij willen doorgaan")) {
+            goNextActivity();
         } else {
-            switch (AnswerConverter.determineAnswer(result)) {
-                case YES: goNextActivity(); break;
-                case NO: speakTextAskRemainingOpinions(); break;
-                default: speakTextPart2(); break;
-            }
+            speechRecognitionManager.startListening();
         }
     }
 

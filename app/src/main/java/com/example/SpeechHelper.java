@@ -15,7 +15,6 @@ public class SpeechHelper {
 
     private SpeechSynthesizer synthesizer;
     private Context context;
-
     public SpeechHelper(Context context) {
         this.context = context;
         SpeechConfig config = SpeechConfig.fromSubscription(API_KEY, REGION);
@@ -26,7 +25,7 @@ public class SpeechHelper {
     public void speak(String text, SpeechCompleteListener listener) {
         String ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>" +
                 "<voice name='en-US-AndrewMultilingualNeural'>" +
-                "<prosody rate='+5%'>" + text + "</prosody>" +
+                "<prosody rate='+10%'>" + text + "</prosody>" +
                 "</voice></speak>";
         new SynthesisTask(listener).execute(ssml);
     }

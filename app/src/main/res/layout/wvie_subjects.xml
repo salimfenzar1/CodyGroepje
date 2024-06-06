@@ -6,7 +6,7 @@
     tools:context="com.example.watVindIkErger.WvieSubjectsActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/green_background">
+    android:background="@drawable/background_green">
 
     <TextView
         android:id="@+id/text_view_subjects_title"

@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             resetAllStatements();
         });
 
-        speakIntro();
+//        speakIntro();
 
         tijdTikt.setOnClickListener(new View.OnClickListener() {
             @Override

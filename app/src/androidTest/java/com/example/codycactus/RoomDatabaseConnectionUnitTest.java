@@ -249,5 +249,28 @@ public class RoomDatabaseConnectionUnitTest {
         assertEquals("Laagdrempelig Description", laagdrempeligAndIntensStatements.get(1).description);
     }
 
+    @Test
+    public void testGetMatigAndLaagdrempeligStatements() throws Exception {
+        Statement statement1 = new Statement();
+        statement1.description = "Test description 1";
+        statement1.intensityLevel = 2;
+        statement1.category = "Matig";
+        statementDAO.insert(statement1);
+
+        Statement statement2 = new Statement();
+        statement2.description = "Test description 2";
+        statement2.intensityLevel = 1;
+        statement2.category = "Laagdrempelig";
+        statementDAO.insert(statement2);
+
+        LiveData<List<Statement>> combinedStatementsLiveData = statementDAO.getMatigAndLaagdrempeligStatements();
+        List<Statement> combinedStatements = LiveDataTestUtil.getOrAwaitValue(combinedStatementsLiveData);
+
+        assertNotNull(combinedStatements); // Ensure the LiveData is not null
+        assertEquals(2, combinedStatements.size());
+        assertEquals(statement1.description, combinedStatements.get(0).description);
+        assertEquals(statement2.description, combinedStatements.get(1).description);
+    }
+
 
 }

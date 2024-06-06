@@ -63,7 +63,7 @@ public class WvieStatementRedActivity extends AppCompatActivity {
                     int width = statementImageView.getWidth();
                     int height = statementImageView.getHeight();
                     int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
-                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
                     statementImageView.setImageBitmap(bitmap);
                 }
             });

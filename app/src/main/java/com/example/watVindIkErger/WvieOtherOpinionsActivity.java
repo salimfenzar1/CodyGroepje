@@ -69,6 +69,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
 
     private void goNextActivity() {
         Intent intent = new Intent(getApplicationContext(), WvieGameEndActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
     }
 

@@ -61,27 +61,24 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                toggleIntensitySelection(1); // Assuming 0: laagdrempelig
+                toggleIntensitySelection(1);
                 updateImageView("laagdrempelig");
-                checkAndProceed();
             }
         });
 
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleIntensitySelection(2); // Assuming 1: matig
+                toggleIntensitySelection(2);
                 updateImageView("matig");
-                checkAndProceed();
             }
         });
 
         high.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleIntensitySelection(3); // Assuming 2: intens
+                toggleIntensitySelection(3);
                 updateImageView("intens");
-                checkAndProceed();
             }
         });
 
@@ -160,13 +157,6 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
                 setButtonsClickable(true);
             }
         });
-    }
-
-    private void checkAndProceed() {
-        if (!selectedIntensities.isEmpty()) {
-            filterStatementsByIntensity();
-            startNextActivity();
-        }
     }
 
     private void updateImageView(String intensity) {

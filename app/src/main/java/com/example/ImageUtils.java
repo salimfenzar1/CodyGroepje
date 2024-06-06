@@ -6,10 +6,6 @@ import android.graphics.BitmapFactory;
 
 public class ImageUtils {
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
-        // Set default dimensions if they are zero
-        reqWidth = reqWidth == 0 ? 100 : reqWidth;
-        reqHeight = reqHeight == 0 ? 100 : reqHeight;
-
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -30,14 +26,12 @@ public class ImageUtils {
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
+            // Calculate ratios of height and width to requested height and width
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
 
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
+            // Choose the smallest ratio as inSampleSize value
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
 
         return inSampleSize;

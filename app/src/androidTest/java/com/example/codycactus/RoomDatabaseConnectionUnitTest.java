@@ -8,7 +8,6 @@ import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -16,7 +15,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.example.DAO.StatementDAO;
 import com.example.DAO.StatementRoom;
 import com.example.Model.Statement;
-import com.example.DAO.Viewmodel;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +33,6 @@ public class RoomDatabaseConnectionUnitTest {
 
     private StatementRoom database;
     private StatementDAO statementDAO;
-    private Viewmodel viewModel;
 
     @Before
     public void setUp() {
@@ -95,31 +92,40 @@ public class RoomDatabaseConnectionUnitTest {
     }
 
     @Test
-    public void getMatigStatements() throws Exception {
+    public void testGetLaagdrempeligStatements() throws Exception {
+        // Insert statements
         Statement statement1 = new Statement();
-        statement1.description = "Test description 1";
-        statement1.intensityLevel = 2;
-        statement1.category = "Matig";
-        statementDAO.insert(statement1);
+        statement1.description = "Description 1";
+        statement1.category = "Laagdrempelig";
+        statement1.imageUrl = "image_url_1";
+        statement1.intensityLevel = 1;
+        statement1.isActive = true;
 
         Statement statement2 = new Statement();
-        statement2.description = "Test description 2";
-        statement2.intensityLevel = 3;
-        statement2.category = "Intens";
+        statement2.description = "Description 2";
+        statement2.category = "Other";
+        statement2.imageUrl = "image_url_21";
+        statement2.intensityLevel = 2;
+        statement2.isActive = true;
+
+        statementDAO.insert(statement1);
         statementDAO.insert(statement2);
 
-        LiveData<List<Statement>> matigStatementsLiveData = statementDAO.getMatigStatements();
-        List<Statement> matigStatements = LiveDataTestUtil.getOrAwaitValue(matigStatementsLiveData);
-        assertNotNull(matigStatements); // Ensure the LiveData is not null
-        assertEquals(1, matigStatements.size());
-        assertEquals(statement1.description, matigStatements.get(0).description);
+        // Fetch laagdrempelig statements
+        LiveData<List<Statement>> laagdrempeligStatementsLiveData = statementDAO.getLaagdrempeligStatements();
+        List<Statement> laagdrempeligStatements = LiveDataTestUtil.getOrAwaitValue(laagdrempeligStatementsLiveData);
+
+        // Assert results
+        assertNotNull(laagdrempeligStatements);
+        assertEquals(1, laagdrempeligStatements.size());
+        assertEquals("Description 1", laagdrempeligStatements.get(0).description);
     }
 
     @Test
     public void testGetIntensStatements() throws Exception {
         // Insert statements
         Statement statement1 = new Statement();
-        statement1.description = "Intense Description 1";
+        statement1.description = "Intense Description 11";
         statement1.category = "Category 1";
         statement1.imageUrl = "image_url_1";
         statement1.intensityLevel = 3; // Assuming 3 is considered intense

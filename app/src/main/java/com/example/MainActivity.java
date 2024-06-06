@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
+        result = result.toLowerCase().trim();
+        if (result.contains("vind") || result.contains("erger")) {
             speechRecognitionManager.stopListening();
             speechRecognitionManager.destroy();
             Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);

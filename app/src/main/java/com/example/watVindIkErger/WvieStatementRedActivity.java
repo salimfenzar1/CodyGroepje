@@ -49,6 +49,7 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
 
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        Log.d("WvieStatementRedActivity", "Received filtered statements: " + filteredStatements);
 
         statementImageView = findViewById(R.id.image_view_foto_statement_red);
 
@@ -104,6 +105,7 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
+        Log.d("Stelling voor de kleur rood: ", redStatement.description);
         if (redStatement != null) {
             speechHelper.speak("De stelling voor de kleur rood... " + redStatement.description, new SpeechHelper.SpeechCompleteListener() {
                 @Override

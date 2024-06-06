@@ -192,6 +192,9 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
 
     @Override
     public void onSpeechResult(String result) {
+        Intent intent = new Intent(this, WvieTutorialActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        startActivity(intent);
         Log.d("WvieIntensityActivity", "onSpeechResult: " + result);
     }
 

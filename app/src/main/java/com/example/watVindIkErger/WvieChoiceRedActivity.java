@@ -52,6 +52,11 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
         redStatement = intent.getParcelableExtra("red_statement");
+        if (redStatement != null){
+            Log.d("WvieChoiceRed", "Rode statement is niet nuull");
+        }else {
+            Log.d("WvieChoiceRed", "Rode statement is nuull");
+        }
         yellowStatement = intent.getParcelableExtra("yellow_statement");
 
         yesButton = findViewById(R.id.yesButton);

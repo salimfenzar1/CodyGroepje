@@ -33,6 +33,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
     private ArrayList<Statement> filteredStatements;
     private Statement yellowStatement;
     private Statement redStatement;
+    private boolean hasNavigated = false; // To prevent double navigation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goNextActivity();
+                navigateToNextActivity();
             }
         });
 
@@ -98,36 +99,43 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
                 speakText();
             }
         });
+
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
 
-    private void goNextActivity() {
-        Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
-        startActivity(intent);
+    private void navigateToNextActivity() {
+        if (!hasNavigated) { // Ensure the activity transition happens only once
+            hasNavigated = true;
+            Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
+            intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+            intent.putExtra("red_statement", redStatement);
+            intent.putExtra("yellow_statement", yellowStatement);
+            startActivity(intent);
+        }
     }
 
-    public void speakText(){
+    public void speakText() {
         speechHelper = new SpeechHelper(this);
-        WvieStatementYellowActivity currentActivity = this;
         speechHelper.speak("De stelling voor de kleur geel... Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                new Handler().postDelayed(currentActivity::goNextActivity, 5000);
+                new Handler().postDelayed(WvieStatementYellowActivity.this::navigateToNextActivity, 5000);
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                new Handler().postDelayed(currentActivity::goNextActivity, 5000);
+                new Handler().postDelayed(WvieStatementYellowActivity.this::navigateToNextActivity, 5000);
             }
         });
-    }private void setButtonsClickable(boolean clickable) {
+    }
+
+    private void setButtonsClickable(boolean clickable) {
         next.setEnabled(clickable);
         hearButton.setEnabled(clickable);
     }
-
 }

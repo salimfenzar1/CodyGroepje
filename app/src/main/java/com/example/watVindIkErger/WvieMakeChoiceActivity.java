@@ -23,6 +23,7 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
     private Statement redStatement;
     private Statement yellowStatement;
     private ArrayList<Statement> filteredStatements;
+    private boolean hasNavigated = false; // To prevent double navigation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,12 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
         new Handler().postDelayed(this::speakText, 2000);
-        new Handler().postDelayed(() -> {
+        new Handler().postDelayed(this::navigateToNextActivity, 10000);
+    }
+
+    private void navigateToNextActivity() {
+        if (!hasNavigated) { // Ensure the activity transition happens only once
+            hasNavigated = true;
             Random random = new Random();
             Intent nextIntent;
             if (random.nextBoolean()) {
@@ -56,7 +62,7 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             nextIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
             startActivity(nextIntent);
             finish();
-        }, 10000);
+        }
     }
 
     public void speakText() {

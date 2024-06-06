@@ -88,6 +88,7 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
 
     private void replayGame() {
         Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
     }
 

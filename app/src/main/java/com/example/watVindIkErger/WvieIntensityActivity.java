@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,11 +32,11 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton hearButton;
     private ImageButton next;
-    private List<String> selectedIntensities;
+    private List<Integer> selectedIntensities;
     private boolean isInitialLowImage = true;
     private boolean isInitialMediumImage = true;
     private boolean isInitialHighImage = true;
-    private String[] intensities = {"laagdrempelig", "matig", "intens"};
+    private int[] intensities = {1, 2, 3};
     private int currentIntensityIndex = 0;
     private ArrayList<Statement> filteredStatements;
 
@@ -62,7 +61,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                toggleIntensitySelection("laagdrempelig");
+                toggleIntensitySelection(1); // Assuming 0: laagdrempelig
                 updateImageView("laagdrempelig");
                 checkAndProceed();
             }
@@ -71,7 +70,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleIntensitySelection("matig");
+                toggleIntensitySelection(2); // Assuming 1: matig
                 updateImageView("matig");
                 checkAndProceed();
             }
@@ -80,7 +79,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         high.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleIntensitySelection("intens");
+                toggleIntensitySelection(3); // Assuming 2: intens
                 updateImageView("intens");
                 checkAndProceed();
             }
@@ -115,9 +114,9 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         new Handler().postDelayed(this::speakText, 2000);
     }
 
-    private void toggleIntensitySelection(String intensity) {
+    private void toggleIntensitySelection(int intensity) {
         if (selectedIntensities.contains(intensity)) {
-            selectedIntensities.remove(intensity);
+            selectedIntensities.remove((Integer) intensity);
             Log.d("WvieIntensityActivity", "Removed intensity level: " + intensity + ". Current selection: " + selectedIntensities);
         } else {
             selectedIntensities.add(intensity);
@@ -133,7 +132,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     private void filterStatementsByIntensity() {
         ArrayList<Statement> filteredList = new ArrayList<>();
         for (Statement statement : filteredStatements) {
-            if (selectedIntensities.contains(String.valueOf(statement.intensityLevel))) {
+            if (selectedIntensities.contains(statement.intensityLevel)) {
                 filteredList.add(statement);
             }
         }

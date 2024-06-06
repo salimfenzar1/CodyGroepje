@@ -6,28 +6,30 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.DAO.StatementDAO;
 import com.example.DAO.StatementRoom;
 import com.example.Model.Statement;
-import com.example.codycactus.R;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
-@Config(manifest=Config.NONE)
-@RunWith(RobolectricTestRunner.class)
+
+@RunWith(AndroidJUnit4.class)
 public class RoomDatabaseConnectionUnitTest {
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     private StatementRoom database;
     private StatementDAO statementDAO;
@@ -35,8 +37,7 @@ public class RoomDatabaseConnectionUnitTest {
     @Before
     public void setUp() {
         // Get the application context
-        Context context = RuntimeEnvironment.getApplication();
-
+        Context context = ApplicationProvider.getApplicationContext();
         // Create an in-memory version of the database
         database = Room.inMemoryDatabaseBuilder(context, StatementRoom.class)
                 .allowMainThreadQueries()
@@ -45,9 +46,8 @@ public class RoomDatabaseConnectionUnitTest {
         // Get the DAO
         statementDAO = database.statementDAO();
     }
-
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
         // Close the database
         database.close();
     }
@@ -70,21 +70,24 @@ public class RoomDatabaseConnectionUnitTest {
         statement.isActive = true;
         statementDAO.insert(statement);
 
-        LiveData<List<Statement>> statements = statementDAO.getAllStatements();
-        assertEquals(Objects.requireNonNull(statements.getValue()).get(0).category,"een cliënt eet een snicker bar voor een hongerige medewerker om iets uit te zaaien");
-    }
+        LiveData<List<Statement>> statementsLiveData = statementDAO.getAllStatements();
+        List<Statement> statements = LiveDataTestUtil.getOrAwaitValue(statementsLiveData);
+        assertEquals(statements.get(0).description, "een cliënt eet een snicker bar voor een hongerige medewerker om iets uit te zaaien");
+        }
 
     @Test
-    public void testReadPerformance() {
+    public void testReadPerformance() throws Exception{
         long startTime = System.currentTimeMillis();
 
         // Perform read operation
-        List<Statement> statements = statementDAO.getAllStatements().getValue();
+        LiveData<List<Statement>> statementsLiveData = statementDAO.getAllStatements();
+        List<Statement> statements = LiveDataTestUtil.getOrAwaitValue(statementsLiveData);
 
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
 
         // Assert that the read operation completes within an acceptable time
+        assertNotNull(statements);
         assertTrue("Read operation took too long: " + elapsedTime + " milliseconds", elapsedTime < 1000);
     }
 }

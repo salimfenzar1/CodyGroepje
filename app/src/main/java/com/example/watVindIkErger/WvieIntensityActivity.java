@@ -137,6 +137,8 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     }
 
     private void startNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(this, WvieTutorialActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
@@ -205,6 +207,9 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
         super.onDestroy();
         if (speechRecognitionManager != null) {
             speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
         }
     }
 }

@@ -105,4 +105,12 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
         next.setEnabled(clickable);
         hearButton.setEnabled(clickable);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+    }
 }

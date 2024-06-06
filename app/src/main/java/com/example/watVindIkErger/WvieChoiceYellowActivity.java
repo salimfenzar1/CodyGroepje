@@ -138,4 +138,15 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
         startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+    }
+
 }

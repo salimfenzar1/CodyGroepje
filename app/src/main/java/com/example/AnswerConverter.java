@@ -9,11 +9,15 @@ public class AnswerConverter {
 
     private static Answers isYes(String input) {
         switch (input.trim().toLowerCase()) {
-            case "ja": return Answers.YES;
-            case "nee": return Answers.NO;
-            default: return Answers.UNKNOWN;
+            case "ja":
+                return Answers.YES;
+            case "nee":
+                return Answers.NO;
+            default:
+                return Answers.UNKNOWN;
         }
     }
+
     public enum Answers {
         YES,
         NO,

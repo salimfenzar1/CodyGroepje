@@ -79,4 +79,11 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+    }
 }

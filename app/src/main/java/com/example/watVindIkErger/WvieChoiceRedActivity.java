@@ -135,4 +135,15 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+    }
 }

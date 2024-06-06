@@ -146,4 +146,15 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
             default: speechRecognitionManager.startListening(); break;
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+    }
 }
+

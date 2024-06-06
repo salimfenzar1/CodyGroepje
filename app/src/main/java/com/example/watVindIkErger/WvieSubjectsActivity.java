@@ -140,6 +140,8 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 }
             }
         }
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
         intent.putParcelableArrayListExtra("statements", new ArrayList<>(filteredStatements));
         startActivity(intent);
@@ -150,6 +152,9 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         super.onDestroy();
         if (speechRecognitionManager != null) {
             speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
         }
     }
 }

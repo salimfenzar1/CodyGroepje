@@ -158,4 +158,15 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+    }
 }

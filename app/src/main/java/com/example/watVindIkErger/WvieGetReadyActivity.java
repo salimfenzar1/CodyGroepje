@@ -151,37 +151,30 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
     @Override
     public void onSpeechResult(String result) {
         if (!clarificationAsked) {
-            switch (AnswerConverter.determineAnswer(result)) {
-                default:
-                    speechRecognitionManager.stopListening();
-                    new Handler().postDelayed(this::speakText, 5000);
-                    break;
-                case YES:
-                    speechRecognitionManager.stopListening();
-                    speechRecognitionManager.destroy();
-                    goNextActivity();
-                    break;
-                case NO:
-                    speakTextAskClarification();
-                    break;
-
+            if (result.equalsIgnoreCase("ja")) {
+                speechRecognitionManager.stopListening();
+                speechRecognitionManager.destroy();
+                goNextActivity();
+            } else if (result.equalsIgnoreCase("nee")) {
+                speakTextAskClarification();
+            } else {
+                speechRecognitionManager.stopListening();
+                new Handler().postDelayed(this::speakText, 5000);
             }
-        }  else {
-            switch (AnswerConverter.determineAnswer(result)) {
-                case YES:
-                    clarificationAsked = false;
-                    speechRecognitionManager.stopListening();
-                    new Handler().postDelayed(this::speakText, 5000);
-                    break;
-                case NO:
-                    clarificationAsked = false;
-                    speakTextClarification();
-                    break;
-                default:
-                    speakTextAskClarification();
+        } else {
+            if (result.equalsIgnoreCase("ja")) {
+                clarificationAsked = false;
+                speechRecognitionManager.stopListening();
+                new Handler().postDelayed(this::speakText, 5000);
+            } else if (result.equalsIgnoreCase("nee")) {
+                clarificationAsked = false;
+                speakTextClarification();
+            } else {
+                speakTextAskClarification();
             }
         }
     }
+
 
     private void goNextActivity() {
         speechRecognitionManager.stopListening();
@@ -189,5 +182,16 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
         Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
     }
 }

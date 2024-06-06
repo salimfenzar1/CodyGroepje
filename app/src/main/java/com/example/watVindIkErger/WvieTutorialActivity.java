@@ -50,7 +50,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
 
 
         // Checking if filtered statements are received
-        if (filteredStatements != null) {
+        if (filteredStatements.size() < 1) {
             Log.d("WvieTutorialActivity", "Filtered statements count: " + filteredStatements.size());
         } else {
             Log.d("WvieTutorialActivity", "No filtered statements received.");
@@ -128,21 +128,18 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
 
     @Override
     public void onSpeechResult(String result) {
-        switch (AnswerConverter.determineAnswer(result)) {
-            case YES:
-                performOutro();
-                break;
-            case NO:
-            case MAYBE:
-                speakText();
-                break;
-            case UNKNOWN:
-                // Handle the UNKNOWN case if necessary
-                Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
-                speechRecognitionManager.startListening();
-                break;
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if (result.equalsIgnoreCase("ja")) {
+            performOutro();
+        } else if (result.equalsIgnoreCase("nee") || result.equalsIgnoreCase("misschien")) {
+            speakText();
+        } else {
+            // Handle the UNKNOWN case if necessary
+            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
+            speechRecognitionManager.startListening();
         }
     }
+
 
     private void goNextActivity() {
         speechRecognitionManager.stopListening();
@@ -157,6 +154,9 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         super.onDestroy();
         if (speechRecognitionManager != null) {
             speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
         }
     }
 }

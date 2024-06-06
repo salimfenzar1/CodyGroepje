@@ -36,7 +36,7 @@ public class DatabaseInitializer {
                 Statement statement2 = new Statement();
                 statement2.description = "Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt.";
                 statement2.category = "Seksualiteit op de werkvloer";
-                statement2.imageUrl = ""; // Geen afbeelding gegeven
+                statement2.imageUrl = String.valueOf(R.drawable.ongepaste_aanraking_client);
                 statement2.intensityLevel = 2;
                 statement2.isActive = true;
                 statementDAO.insert(statement2);
@@ -165,7 +165,7 @@ public class DatabaseInitializer {
                 Statement statement18 = new Statement();
                 statement18.description = "Wanneer ik met collega's praat over het overlijden van een cliënt merk ik dat zij de dood als een onvermijdelijk onderdeel van het leven zien en hier minder moeite mee hebben. Ik voel me daardoor soms niet begrepen of gehoord in mijn eigen gevoelens.";
                 statement18.category = "Overlijden";
-                statement18.imageUrl = ""; // Geen afbeelding gegeven
+                statement18.imageUrl = String.valueOf(R.drawable.overlijden_client_niet_gehoord);
                 statement18.intensityLevel = 2;
                 statement18.isActive = true;
                 statementDAO.insert(statement18);

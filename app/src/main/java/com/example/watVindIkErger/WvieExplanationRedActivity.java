@@ -15,11 +15,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
 
-public class WvieExplanationRedActivity extends AppCompatActivity {
+public class WvieExplanationRedActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
     private boolean selectedYes;
@@ -33,6 +35,9 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
         Intent intent = getIntent();
         if (intent != null) {
             // Get the string with the key "key"
@@ -44,9 +49,7 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
-                startActivity(intent);
+                goNextActivity();
             }
         });
         hearButton = findViewById(R.id.hearButton);
@@ -63,22 +66,40 @@ public class WvieExplanationRedActivity extends AppCompatActivity {
     }
     public void speakText(){
         speechHelper = new SpeechHelper(this);
-        String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger?" : "Waarom vindt je de rode stelling erger?";
+        String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger? Zeg: Wij willen verder, als jullie verder willen." : "Waarom vindt je de rode stelling erger? Zeg: Wij willen verder, als jullie verder willen.";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
         });
     }
     private void setButtonsClickable(boolean clickable) {
         hearButton.setEnabled(clickable);
         hearButton.setEnabled(clickable);
+    }
+
+    private void goNextActivity() {
+        Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
+        startActivity(intent);
+    }
+    @Override
+    public void onSpeechResult(String result) {
+        result = result.toLowerCase().trim();
+        if (result.contains("wij willen verder") || result.contains("wij willen graag verder")) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+            goNextActivity();
+            return;
+        }
+        speechRecognitionManager.startListening();
     }
 }

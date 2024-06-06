@@ -8,6 +8,7 @@ import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -15,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.example.DAO.StatementDAO;
 import com.example.DAO.StatementRoom;
 import com.example.Model.Statement;
+import com.example.DAO.Viewmodel;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +35,7 @@ public class RoomDatabaseConnectionUnitTest {
 
     private StatementRoom database;
     private StatementDAO statementDAO;
+    private Viewmodel viewModel;
 
     @Before
     public void setUp() {
@@ -89,5 +92,26 @@ public class RoomDatabaseConnectionUnitTest {
         // Assert that the read operation completes within an acceptable time
         assertNotNull(statements);
         assertTrue("Read operation took too long: " + elapsedTime + " milliseconds", elapsedTime < 1000);
+    }
+
+    @Test
+    public void getMatigStatements() throws Exception {
+        Statement statement1 = new Statement();
+        statement1.description = "Test description 1";
+        statement1.intensityLevel = 2;
+        statement1.category = "Matig";
+        statementDAO.insert(statement1);
+
+        Statement statement2 = new Statement();
+        statement2.description = "Test description 2";
+        statement2.intensityLevel = 3;
+        statement2.category = "Intens";
+        statementDAO.insert(statement2);
+
+        LiveData<List<Statement>> matigStatementsLiveData = statementDAO.getMatigStatements();
+        List<Statement> matigStatements = LiveDataTestUtil.getOrAwaitValue(matigStatementsLiveData);
+        assertNotNull(matigStatements); // Ensure the LiveData is not null
+        assertEquals(1, matigStatements.size());
+        assertEquals(statement1.description, matigStatements.get(0).description);
     }
 }

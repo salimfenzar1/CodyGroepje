@@ -105,13 +105,16 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         Log.d("WvieSubjectsActivity", "Recognized speech: " + result);
         result = result.trim().toLowerCase();
 
-        if (result.contains("seksualiteit")) {
-            Log.d("WvieSubjectsActivity", "Navigating to Intensity Activity for Sexuality theme");
+        if (result.contains("seksualiteit") && result.contains("overlijden")) {
+            Log.d("WvieSubjectsActivity", "Navigating to Intensity Activity for both theme");
             navigateToIntensityActivity();
         } else if (result.contains("overlijden")) {
             Log.d("WvieSubjectsActivity", "Navigating to Intensity Activity for Decease theme");
             navigateToIntensityActivity();
-        } else if (result.contains("allebei")) {
+        } else if (result.contains("seksualiteit")) {
+            Log.d("WvieSubjectsActivity", "Navigating to Intensity Activity for Sexuality themes");
+            navigateToIntensityActivity();
+        } else if (result.contains("allebei") || result.contains("beide")) {
             Log.d("WvieSubjectsActivity", "Navigating to Intensity Activity for both themes");
             navigateToIntensityActivity();
         } else {

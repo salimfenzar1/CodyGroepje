@@ -20,13 +20,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.ImageUtils;
 import com.example.Model.Statement;
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class WvieStatementYellowActivity extends AppCompatActivity {
+public class WvieStatementYellowActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
     private ImageView statementImageView;
@@ -34,6 +36,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
     private Statement yellowStatement;
     private Statement redStatement;
     private boolean hasNavigated = false; // To prevent double navigation
+    private boolean askingForClarity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
             }
         });
 
-        setButtonsClickable(false);
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         new Handler().postDelayed(this::speakText, 2000);
     }
 
@@ -117,12 +120,13 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        if (redStatement != null) {
+        if (yellowStatement != null) {
             speechHelper.speak("De stelling voor de kleur geel... " + yellowStatement.description, new SpeechHelper.SpeechCompleteListener() {
                 @Override
                 public void onSpeechComplete() {
                     Log.d("Speech", "Speech synthesis voltooid");
                     setButtonsClickable(true);
+                    askIfClear();
                 }
 
                 @Override
@@ -148,6 +152,41 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
         }
     }
 
+    public void askIfClear() {
+        askingForClarity = true;
+        speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                speechRecognitionManager.startListening();
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                speechRecognitionManager.startListening();
+            }
+        });
+    }
+
+    @Override
+    public void onSpeechResult(String result) {
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+
+        if (askingForClarity) {
+            if (result.equalsIgnoreCase("ja")) {
+                askingForClarity = false;
+                navigateToNextActivity();
+            } else if (result.equalsIgnoreCase("nee")) {
+                askingForClarity = false;
+                speakText();
+            } else {
+                Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
+                speechRecognitionManager.startListening();
+            }
+        } else {
+            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
+            speechRecognitionManager.startListening();
+        }
+    }
 
     private void setButtonsClickable(boolean clickable) {
         next.setEnabled(clickable);
@@ -159,6 +198,9 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
         super.onDestroy();
         if (speechHelper != null) {
             speechHelper.close();
+        }
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
         }
     }
 }

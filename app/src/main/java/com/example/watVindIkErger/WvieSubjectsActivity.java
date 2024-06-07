@@ -79,7 +79,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei? Als je allebei de onderwerpen wilt krijgen, zeg dan 'allebei'.", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

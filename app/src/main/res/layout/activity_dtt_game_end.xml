@@ -16,7 +16,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/bottomMargin"
         android:text="@string/game_end"
-        android:textColor="#5b7683"
+        android:textColor="@color/black"
         android:textSize="@dimen/game_title_text_size" />
 
     <ImageButton

@@ -6,7 +6,7 @@
     tools:context="com.example.deTijdTikt.DttExplanationYellowActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ddt_border_background_yellow">
+    android:background="@drawable/dtt_border_background_yellow">
 
     <TextView
         android:id="@+id/text_view_statement_title_yellow"

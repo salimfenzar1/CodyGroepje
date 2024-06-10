@@ -80,7 +80,6 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 intent.putExtra("red_statement", redStatement);
@@ -165,12 +164,8 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
                 askingForClarity = false;
                 speakText();
             } else {
-                Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
                 speechRecognitionManager.startListening();
             }
-        } else {
-            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
-            speechRecognitionManager.startListening();
         }
     }
 

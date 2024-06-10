@@ -179,11 +179,9 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
                 askingForClarity = false;
                 speakText();
             } else {
-                Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
                 speechRecognitionManager.startListening();
             }
         } else {
-            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
             speechRecognitionManager.startListening();
         }
     }

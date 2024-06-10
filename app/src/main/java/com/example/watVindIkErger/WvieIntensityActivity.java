@@ -101,8 +101,6 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
                 if (!selectedIntensities.isEmpty()) {
                     filterStatementsByIntensity();
                     startNextActivity();
-                } else {
-                    Toast.makeText(WvieIntensityActivity.this, "Selecteer minimaal één intensiteit", Toast.LENGTH_SHORT).show();
                 }
             }
         });

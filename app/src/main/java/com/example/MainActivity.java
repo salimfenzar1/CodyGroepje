@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
             }
         });
         levend.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor levend organogram", Toast.LENGTH_SHORT).show();
             }
         });
         watVind.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
-                Toast.makeText(getApplicationContext(), "Je hebt wat vind ik erger gekozen", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
                 intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
                 startActivity(intent);

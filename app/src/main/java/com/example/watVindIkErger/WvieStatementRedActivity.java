@@ -166,6 +166,8 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
             } else {
                 speechRecognitionManager.startListening();
             }
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
 

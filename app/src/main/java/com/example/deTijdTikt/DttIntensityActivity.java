@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.codycactus.R;
 
+
 public class DttIntensityActivity extends AppCompatActivity {
 
     @Override
@@ -17,7 +18,7 @@ public class DttIntensityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dtt_intensity);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_dtt_intensity), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

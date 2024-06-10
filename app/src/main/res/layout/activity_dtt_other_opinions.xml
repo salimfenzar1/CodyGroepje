@@ -9,7 +9,7 @@
     android:background="@drawable/background_red">
 
     <TextView
-        android:id="@+id/text_view_intensity_title"
+        android:id="@+id/text_view_opinion_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -41,7 +41,7 @@
         app:srcCompat="@drawable/pictogram_oortje" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/image_view_speech_bubble"
         android:layout_width="216dp"
         android:layout_height="215dp"
         android:layout_centerHorizontal="true"

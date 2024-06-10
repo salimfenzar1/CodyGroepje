@@ -9,7 +9,7 @@
     android:background="@drawable/dtt_border_background_yellow">
 
     <TextView
-        android:id="@+id/text_view_statement_title_yellow"
+        android:id="@+id/text_view_toelichting_title_yellow"
         android:layout_width="247dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/image_view_foto_statement_yellow"
+        android:id="@+id/image_view_yellow_ball"
         android:layout_width="313dp"
         android:layout_height="382dp"
         android:layout_centerInParent="true"

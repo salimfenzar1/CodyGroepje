@@ -47,6 +47,6 @@
         android:layout_width="319dp"
         android:layout_height="270dp"
         android:layout_centerInParent="true"
-        app:srcCompat="@drawable/DttPicture" />
+        app:srcCompat="@drawable/dtt_picture" />
 
 </RelativeLayout>

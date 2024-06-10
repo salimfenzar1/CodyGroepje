@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +21,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CodeAcadamyGroepje"
         tools:targetApi="31">
+        <activity
+            android:name="com.example.deTijdTikt.DttGameEndActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttOtherOpinionsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttPasToNextPersonActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttExplanationYellowActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttExplanationRedActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttCaseActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttStartPassingActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttGetReadyActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttTutorialActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.deTijdTikt.DttIntensityActivity"
+            android:exported="false" />
         <activity
             android:name="com.example.watVindIkErger.WvieSubjectsActivity"
             android:exported="false" />
@@ -30,13 +68,13 @@
             android:exported="false" />
         <activity
             android:name="com.example.watVindIkErger.WvieChoiceRedActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name="com.example.watVindIkErger.WvieExplanationRedActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name="com.example.watVindIkErger.WvieExplanationYellowActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name="com.example.watVindIkErger.WvieStatementRedActivity"
             android:exported="false" />
@@ -45,11 +83,13 @@
             android:exported="false" />
         <activity
             android:name="com.example.watVindIkErger.WvieMakeChoiceActivity"
-            android:exported="false"/>
-        <activity android:name="com.example.watVindIkErger.WvieOtherOpinionsActivity"
-            android:exported="false"/>
-        <activity android:name="com.example.watVindIkErger.WvieGameEndActivity"
-            android:exported="false"/>
+            android:exported="false" />
+        <activity
+            android:name="com.example.watVindIkErger.WvieOtherOpinionsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.watVindIkErger.WvieGameEndActivity"
+            android:exported="false" />
         <activity
             android:name="com.example.MainActivity"
             android:exported="true">
@@ -59,12 +99,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
-    <queries>
-        <intent>
-            <action
-                android:name="android.speech.RecognitionService"/>
-        </intent>
-    </queries>
+
 </manifest>

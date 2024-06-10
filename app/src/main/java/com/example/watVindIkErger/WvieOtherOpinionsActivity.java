@@ -79,6 +79,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 

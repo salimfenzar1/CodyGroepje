@@ -2,4 +2,5 @@
 <resources>
     <dimen name="game_title_text_size">32dp</dimen>
     <dimen name="bottomMargin">636dp</dimen>
+    <dimen name="topMargin">50dp</dimen>
 </resources>

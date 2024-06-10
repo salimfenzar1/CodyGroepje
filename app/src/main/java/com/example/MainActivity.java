@@ -24,6 +24,7 @@ import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+import com.example.deTijdTikt.DttIntensityActivity;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
 public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
@@ -74,16 +75,16 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
+                intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+                startActivity(intent);
             }
         });
         levend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
-                speechRecognitionManager.destroy();
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor levend organogram", Toast.LENGTH_SHORT).show();
-            }
+                speechRecognitionManager.destroy();}
         });
         watVind.setOnClickListener(new View.OnClickListener() {
 
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
-                Toast.makeText(getApplicationContext(), "Je hebt wat vind ik erger gekozen", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
                 intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
                 startActivity(intent);
@@ -160,10 +160,17 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
             speechRecognitionManager.stopListening();
             speechRecognitionManager.destroy();
-            Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+            Intent intent = new Intent(MainActivity.this, WvieSubjectsActivity.class);
             intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
             startActivity(intent);
-        } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
+        }
+         else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+            Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+            startActivity(intent);
+        }else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())) {
             speakReplay();
         }
 

@@ -17,7 +17,7 @@
         android:layout_marginBottom="@dimen/bottomMargin"
         android:gravity="center"
         android:text="Toelichting"
-        android:textColor="@color/black"
+        android:textColor="@color/textColor"
         android:textSize="@dimen/game_title_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -22,10 +22,12 @@ import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import com.example.watVindIkErger.WvieChoiceRedActivity;
 import com.example.watVindIkErger.WvieStatementYellowActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class DttCaseActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener  {
 
@@ -37,6 +39,7 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     private ArrayList<Statement> filteredStatements;
     private Statement chosenCase;
     private boolean askingForClarity = false;
+    private boolean isFirst = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,11 +165,19 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
         });
     }
     private void goToNextPage() {
-        Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
-        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-        intent.putExtra("chosenCase", chosenCase);
-        startActivity(intent);
-        finish();
+            Random random = new Random();
+            Intent nextIntent;
+            if (random.nextBoolean()) {
+                nextIntent = new Intent(this, DttExplanationRedActivity.class);
+            } else {
+                nextIntent = new Intent(this, DttExplanationYellowActivity.class);
+            }
+            nextIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+            nextIntent.putExtra("chosenCase", chosenCase);
+            nextIntent.putExtra("isFirst", true);
+            startActivity(nextIntent);
+            finish();
+
     }
 
     private void setButtonsClickable(boolean clickable) {

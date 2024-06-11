@@ -83,10 +83,7 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
-                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                intent.putExtra("chosenCase", chosenCase);
-                startActivity(intent);
+                goToNextPage();
                 finish(); // Close current activity to free up resources
             }
         });

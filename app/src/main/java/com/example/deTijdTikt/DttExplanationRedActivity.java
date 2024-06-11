@@ -69,7 +69,7 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     public void speakText() {
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Kan de persoon met de rode bal de casus toelichten?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Kan de persoon met de rode bal de casus toelichten? Als je klaar bent met praten zeg dan: wij willen doorgaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
@@ -88,7 +88,6 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
         hearButton.setEnabled(clickable);
         next.setEnabled(clickable);
     }
-
 
     @Override
     public void onSpeechResult(String result) {

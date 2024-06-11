@@ -69,7 +69,7 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
     public void speakText() {
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Kan de persoon met de gele bal de casus toelichten?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Kan de persoon met de gele bal de casus toelichten? Als je klaar bent met praten zeg dan: wij willen doorgaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

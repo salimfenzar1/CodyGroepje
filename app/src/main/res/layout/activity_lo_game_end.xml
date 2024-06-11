@@ -1,10 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/lo_game_end"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.levendOrganogram.LoGameEndActivity">
+    tools:context="com.example.levendOrganogram.LoGameEndActivity"
+    android:background="@drawable/background_blue">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/text_view_end_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/bottomMargin"
+        android:text="@string/game_end"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/game_title_text_size" />
+
+    <ImageButton
+        android:id="@+id/hearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/pictogram_oortje" />
+    <ImageButton
+        android:id="@+id/homeButton"
+        android:layout_width="128dp"
+        android:layout_height="104dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="50dp"
+        android:background="@drawable/blue_button_bg" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/home_icon"
+        android:layout_alignStart="@id/homeButton"
+        android:layout_alignEnd="@id/homeButton"
+        android:layout_centerVertical="true" />
+    <ImageButton
+        android:id="@+id/againButton"
+        android:layout_width="128dp"
+        android:layout_height="104dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/blue_button_bg"/>
+    <ImageView
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:src="@drawable/redo_icon"
+        android:layout_alignStart="@id/againButton"
+        android:layout_alignEnd="@id/againButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

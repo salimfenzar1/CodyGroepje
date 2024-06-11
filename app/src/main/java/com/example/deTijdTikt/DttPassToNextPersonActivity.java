@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.codycactus.R;
 
-public class DttPasToNextPersonActivity extends AppCompatActivity {
+public class DttPassToNextPersonActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -28,7 +28,7 @@
             android:name="com.example.deTijdTikt.DttOtherOpinionsActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.deTijdTikt.DttPasToNextPersonActivity"
+            android:name="com.example.deTijdTikt.DttPassToNextPersonActivity"
             android:exported="false" />
         <activity
             android:name="com.example.deTijdTikt.DttExplanationYellowActivity"

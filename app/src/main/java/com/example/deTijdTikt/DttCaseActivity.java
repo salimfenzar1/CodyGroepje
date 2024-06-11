@@ -39,7 +39,6 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     private ArrayList<Statement> filteredStatements;
     private Statement chosenCase;
     private boolean askingForClarity = false;
-    private boolean isFirst = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

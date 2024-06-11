@@ -1,10 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/activity_lo_intensity"
+    tools:context="com.example.levendOrganogram.LoIntensityActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.levendOrganogram.LoIntensityActivity">
+    android:background="@drawable/background_blue">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/text_view_intensity_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/bottomMargin"
+        android:text="@string/intensity_title"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/game_title_text_size" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/image_view_low_intensity"
+                android:layout_width="67dp"
+                android:layout_height="58dp"
+                app:srcCompat="@drawable/intensity_low" />
+
+            <TextView
+                android:id="@+id/text_view_low_intensity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/low_intensity"
+                android:textColor="#5b7683"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="29dp">
+
+            <ImageView
+                android:id="@+id/image_view_medium_intensity"
+                android:layout_width="68dp"
+                android:layout_height="57dp"
+                app:srcCompat="@drawable/intensity_medium" />
+
+            <TextView
+                android:id="@+id/text_view_medium_intensity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:text="@string/medium_intensity"
+                android:textColor="#5b7683" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="29dp">
+
+            <ImageView
+                android:id="@+id/image_view_high_intensity"
+                android:layout_width="68dp"
+                android:layout_height="58dp"
+                app:srcCompat="@drawable/intensity_high" />
+
+            <TextView
+                android:id="@+id/text_view_high_intensity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/high_intensity"
+                android:textColor="#5b7683"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/hearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/pictogram_oortje" />
+
+    <ImageButton
+        android:id="@+id/toNextPage"
+        android:layout_width="91dp"
+        android:layout_height="57dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="26dp"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/arrow_icon" />
+
+</RelativeLayout>

@@ -22,6 +22,36 @@
         android:theme="@style/Theme.CodeAcadamyGroepje"
         tools:targetApi="31">
         <activity
+            android:name="com.example.levendOrganogram.LoGameEndActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoOtherOpinionsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoExplanationActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoChoicesActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoChooseDistanceActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoStatementActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoGetReadyActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoTutorialActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoIntensityActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.levendOrganogram.LoSubjectsActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.deTijdTikt.DttGameEndActivity"
             android:exported="false" />
         <activity

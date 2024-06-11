@@ -51,7 +51,9 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
 
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
-        Log.d("WvieStatementRedActivity", "Received filtered statements: " + filteredStatements);
+        Log.d("DttCaseActivity", "Received filtered statements: " + filteredStatements);
+
+        statementImageView = findViewById(R.id.image_view_foto_case);
 
         statementImageView = findViewById(R.id.image_view_foto_case);
 
@@ -59,7 +61,7 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
             Collections.shuffle(filteredStatements);
             chosenCase = filteredStatements.remove(0);  // Get a random statement and remove it from the list
             chosenCase.isActive = false;  // Mark the statement as inactive
-            Log.d("WvieStatementRedActivity", "Selected red statement: " + chosenCase.imageUrl + chosenCase.description);
+            Log.d("DttCaseActivity", "Selected statement: " + chosenCase.imageUrl + chosenCase.description);
 
             ViewTreeObserver vto = statementImageView.getViewTreeObserver();
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -68,15 +70,12 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
                     statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     int width = statementImageView.getWidth();
                     int height = statementImageView.getHeight();
-                    int resId = getResources().getIdentifier(chosenCase.imageUrl, "drawable", getPackageName());
-                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
-                    statementImageView.setImageBitmap(bitmap);
+                    loadImage(chosenCase.imageUrl, width, height);
                 }
             });
         } else {
-            Log.d("WvieStatementRedActivity", "No statements available.");
+            Log.d("DttCaseActivity", "No statements available.");
         }
-
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +101,16 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
 
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
         new Handler().postDelayed(this::speakText, 2000);
+    }
+
+    private void loadImage(String imageUrl, int width, int height) {
+        int resId = getResources().getIdentifier(imageUrl, "drawable", getPackageName());
+        if (resId != 0) {
+            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+            statementImageView.setImageBitmap(bitmap);
+        } else {
+            Log.e("DttCaseActivity", "Image resource not found for: " + imageUrl);
+        }
     }
     public void speakText() {
         speechHelper = new SpeechHelper(this);

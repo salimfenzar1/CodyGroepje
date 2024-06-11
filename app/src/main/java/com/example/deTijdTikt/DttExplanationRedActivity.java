@@ -28,6 +28,7 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
     private boolean isFirst = false;
+    private boolean hasPassedToNextPerson = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,7 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
         });
 
         isFirst = getIntent().getBooleanExtra("isFirst", false);
+        hasPassedToNextPerson = getIntent().getBooleanExtra("hasPassedToNextPerson", false);
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         Intent intent = getIntent();
@@ -115,11 +117,19 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
         if (isFirst) {
             Intent intent = new Intent(this, DttExplanationYellowActivity.class);
             intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
+            intent.putExtra("hasPassedToNextPerson", hasPassedToNextPerson);
             startActivity(intent);
         } else {
-            Intent intent = new Intent(this, DttPassToNextPersonActivity.class);
-            intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
-            startActivity(intent);
+
+            if (hasPassedToNextPerson) {
+                Intent intent = new Intent(this, DttOtherOpinionsActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, DttPassToNextPersonActivity.class);
+                intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
+                startActivity(intent);
+            }
         }
     }
 }

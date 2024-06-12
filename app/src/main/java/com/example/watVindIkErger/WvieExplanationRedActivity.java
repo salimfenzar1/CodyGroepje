@@ -94,7 +94,6 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
 
         // Initialize SpeechRecognitionManager
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
-        startListening();
     }
 
     private void startListening() {
@@ -103,7 +102,7 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger?" : "Waarom vindt je de rode stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om  door te gaan";
+        String textToSpeak = "Waarom vindt je de rode stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om  door te gaan";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
@@ -125,7 +124,7 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (listeningForContinuation && result.equalsIgnoreCase("Wij willen doorgaan")) {
+        if (result.equalsIgnoreCase("Wij willen doorgaan")) {
             navigateToNextActivity();
         } else {
             startListening();
@@ -133,6 +132,8 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
     }
 
     private void navigateToNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

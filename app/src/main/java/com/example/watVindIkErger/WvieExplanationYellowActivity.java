@@ -103,7 +103,7 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
-        String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger?" : "Waarom vindt je de gele stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om door te gaan";
+        String textToSpeak = "Waarom vindt je de gele stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om door te gaan";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
@@ -133,6 +133,8 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
     }
 
     private void navigateToNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

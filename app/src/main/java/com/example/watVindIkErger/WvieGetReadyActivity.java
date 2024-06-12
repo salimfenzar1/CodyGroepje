@@ -178,7 +178,6 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
 
     private void goNextActivity() {
         Log.d("WvieGetReadyActivity", "Received filtered statements: " + filteredStatements);
-
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);

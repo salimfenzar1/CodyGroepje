@@ -58,28 +58,45 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
 
         statementImageView = findViewById(R.id.image_view_foto_statement_yellow);
 
-        if (filteredStatements != null && !filteredStatements.isEmpty()) {
-            Collections.shuffle(filteredStatements);
-            yellowStatement = filteredStatements.remove(0);  // Get a random statement and remove it from the list
-            yellowStatement.isActive = false;  // Mark the statement as inactive
-            int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
-            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, statementImageView.getWidth(), statementImageView.getHeight());
-            statementImageView.setImageBitmap(bitmap);
-
-            Log.d("WvieStatementYellowActivity", "Selected yellow statement: " + yellowStatement.description);
-
-            ViewTreeObserver vto = statementImageView.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    int width = statementImageView.getWidth();
-                    int height = statementImageView.getHeight();
-                    int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
-                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
-                    statementImageView.setImageBitmap(bitmap);
+        if (filteredStatements != null) {
+            // Check if there are less than 2 active statements
+            long activeCount = filteredStatements.stream().filter(Statement::isActive).count();
+            if (activeCount < 2) {
+                for (Statement statement : filteredStatements) {
+                    statement.setActive(true);
                 }
-            });
+            }
+
+            // Filter active statements
+            ArrayList<Statement> activeStatements = new ArrayList<>();
+            for (Statement statement : filteredStatements) {
+                if (statement.isActive()) {
+                    activeStatements.add(statement);
+                }
+            }
+
+            if (!activeStatements.isEmpty()) {
+                Collections.shuffle(activeStatements);
+                yellowStatement = activeStatements.remove(0);  // Get a random active statement and remove it from the list
+                yellowStatement.setActive(false);  // Mark the statement as inactive
+
+                Log.d("WvieStatementYellowActivity", "Selected yellow statement: " + yellowStatement.description);
+
+                // Load the image only after the layout has been laid out
+                statementImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        int width = statementImageView.getWidth();
+                        int height = statementImageView.getHeight();
+                        int resId = getResources().getIdentifier(yellowStatement.getImageUrl(), "drawable", getPackageName());
+                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
+                        statementImageView.setImageBitmap(bitmap);
+                    }
+                });
+            } else {
+                Log.d("WvieStatementYellowActivity", "No active statements available.");
+            }
         } else {
             Log.d("WvieStatementYellowActivity", "No statements available.");
         }
@@ -108,6 +125,8 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     private void navigateToNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         if (!hasNavigated) { // Ensure the activity transition happens only once
             hasNavigated = true;
             Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);

@@ -115,7 +115,7 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
     public void speakTextPlayAgain() {
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Oke, we gaan nog een    ronde spelen! Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("We gaan nog een keer spelen. Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
@@ -138,14 +138,19 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
         hearButton.setEnabled(clickable);
     }
 
+
     @Override
     public void onSpeechResult(String result) {
-        switch (AnswerConverter.determineAnswer(result)) {
-            case YES: speakTextPlayAgain(); break;
-            case NO: goHome(); break;
-            default: speechRecognitionManager.startListening(); break;
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if (result.equalsIgnoreCase("ja")) {
+            speakTextPlayAgain();
+        } else if (result.equalsIgnoreCase("nee")) {
+            goHome();
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

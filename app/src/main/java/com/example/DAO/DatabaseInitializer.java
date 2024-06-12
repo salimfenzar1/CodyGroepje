@@ -58,7 +58,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement4);
 //
                 Statement statement5 = new Statement();
-                statement5.description = "Een cliënt die aan ernstige dementie lijdt raakt zoek en wordt uiteindelijk gevonden op de kamer van een andere cliënt. Na onderzoek werd vastgesteld dat mevrouw slachtoffer is geweest en seksueel misbuikt.";
+                statement5.description = "Een cliënt die aan ernstige dementie lijdt raakt zoek en wordt uiteindelijk gevonden op de kamer van een andere cliënt. Na onderzoek werd vastgesteld dat mevrouw slachtoffer is geweest en seksueel misbruikt.";
                 statement5.category = "Seksualiteit op de werkvloer";
                 statement5.imageUrl = String.valueOf(R.drawable.seksueel_misbruik_client_op_client);
                 statement5.intensityLevel = 3;

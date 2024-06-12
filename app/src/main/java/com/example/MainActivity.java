@@ -24,6 +24,7 @@ import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+import com.example.levendOrganogram.LoSubjectsActivity;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
 public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
@@ -83,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
                 Toast.makeText(getApplicationContext(), "Je hebt gekozen voor levend organogram", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), LoSubjectsActivity.class);
+                intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+                startActivity(intent);
             }
         });
         watVind.setOnClickListener(new View.OnClickListener() {

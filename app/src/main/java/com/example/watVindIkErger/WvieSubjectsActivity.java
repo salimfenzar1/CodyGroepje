@@ -61,7 +61,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         themeDecease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt op overlijden gedrukt", Toast.LENGTH_SHORT).show();
                 filterAndNavigate("Overlijden");
             }
         });
@@ -69,7 +68,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         themeSexuality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt op seksualiteit op de werkvloer gedrukt", Toast.LENGTH_SHORT).show();
                 filterAndNavigate("Seksualiteit op de werkvloer");
             }
         });
@@ -136,7 +134,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
         } else {
             speakRetry();
-            Toast.makeText(this, "Ongeldige invoer, probeer opnieuw.", Toast.LENGTH_SHORT).show();
         }
     }
 

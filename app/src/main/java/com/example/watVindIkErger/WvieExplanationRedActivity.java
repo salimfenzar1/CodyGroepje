@@ -133,7 +133,6 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
     }
 
     private void navigateToNextActivity() {
-        Toast.makeText(getApplicationContext(), "Navigating to the next activity", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

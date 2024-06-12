@@ -26,6 +26,7 @@ public class SpeechRecognitionManager {
 
     private void initializeSpeechComponents() {
         if (SpeechRecognizer.isRecognitionAvailable(context)) {
+
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
             speechRecognizer.setRecognitionListener(new RecognitionListener() {
                 @Override
@@ -52,12 +53,14 @@ public class SpeechRecognitionManager {
                 @Override
                 public void onEndOfSpeech() {
                     isListening = false;
+                    listeningVisualFeedback();
                     Log.d("SpeechRecognizer", "End of speech");
                 }
 
                 @Override
                 public void onError(int error) {
                     isListening = false;
+                    listeningVisualFeedback();
                     Log.e("SpeechRecognizer", "Error: " + error);
                     if (error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
                         Log.e("SpeechRecognizer", "Recognizer busy, will retry...");
@@ -70,6 +73,7 @@ public class SpeechRecognitionManager {
                 public void onResults(Bundle results) {
                     isListening = false;
                     Log.d("context test", context.getClass().getSimpleName());
+                    listeningVisualFeedback();
                     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     if (matches != null && !matches.isEmpty()) {
                         if (confirmationResultListener != null) {
@@ -106,6 +110,9 @@ public class SpeechRecognitionManager {
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Zeg iets...");
                 speechRecognizer.startListening(intent);
                 isListening = true;
+
+                //Show visual mic on screen
+                listeningVisualFeedback();
             }
         }
     }
@@ -114,12 +121,15 @@ public class SpeechRecognitionManager {
         if (speechRecognizer != null && isListening) {
             speechRecognizer.stopListening();
             isListening = false;
+            listeningVisualFeedback();
         }
     }
 
     public void destroy() {
         if (speechRecognizer != null) {
             speechRecognizer.destroy();
+            isListening = false;
+            listeningVisualFeedback();
         }
     }
 
@@ -129,6 +139,17 @@ public class SpeechRecognitionManager {
 
     public void setConfirmationResultListener(ConfirmationResultListener listener) {
         this.confirmationResultListener = listener;
+    }
+
+    public void listeningVisualFeedback() {
+        GlobalSpeechState app = (GlobalSpeechState) context.getApplicationContext();
+
+        if (isListening) {
+            app.showListeningButton(isListening);
+        } else if (!isListening){
+            app.hideListeningButton();
+        }
+
     }
 
     public interface SpeechRecognitionListener {

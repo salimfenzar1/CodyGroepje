@@ -133,8 +133,6 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         } else if (result.equalsIgnoreCase("nee") || result.equalsIgnoreCase("misschien")) {
             speakText();
         } else {
-            // Handle the UNKNOWN case if necessary
-            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
             speechRecognitionManager.startListening();
         }
     }

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     private SpeechRecognitionManager speechRecognitionManager;
     private StatementViewModel statementViewModel;
     private List<Statement> allStatements;
+    private boolean shouldRetrySpeech = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
+
                 Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
                 intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
                 startActivity(intent);
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();}
+            }
         });
         watVind.setOnClickListener(new View.OnClickListener() {
 
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         speakIntro();
+        Log.d("VoiceFeedback", "Start listening");
     }
 
     @Override
@@ -172,28 +176,31 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             startActivity(intent);
         }else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())) {
             speakReplay();
+            Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+            startActivity(intent);
+        } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
+            speechHelper = new SpeechHelper(this);
+            speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
+                @Override
+                public void onSpeechComplete() {
+                    Log.d("Speech", "Speech synthesis voltooid");
+                    setButtonsClickable(true);  // Zet de knoppen klikbaar
+                    speechRecognitionManager.startListening();
+                    Log.d("speakreplay", "begint met luisteren");
+                }
+
+                @Override
+                public void onSpeechFailed() {
+                    Log.e("Speech", "Speech synthesis mislukt");
+                    setButtonsClickable(true);
+                }
+            });
         }
 
     }
 
-    public void speakReplay() {
-        speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);  // Zet de knoppen klikbaar
-                speechRecognitionManager.startListening();
-            }
 
-            @Override
-            public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);  // Zet de knoppen klikbaar zelfs als de spraaksynthese mislukt
-                speakReplay();
-            }
-        });
-    }
 
     @Override
     protected void onDestroy() {

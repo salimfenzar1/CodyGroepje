@@ -50,7 +50,7 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
 
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
-        Log.d("WvieStatementRedActivity", "Received filtered statements: " + filteredStatements);
+        Log.d("LoStatementActivity", "Received filtered statements: " + filteredStatements);
 
         statementImageView = findViewById(R.id.image_view_foto_case);
 
@@ -58,7 +58,7 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
             Collections.shuffle(filteredStatements);
             statement = filteredStatements.remove(0);  // Get a random statement and remove it from the list
             statement.isActive = false;  // Mark the statement as inactive
-            Log.d("WvieStatementRedActivity", "Selected red statement: " + statement.description);
+            Log.d("LoStatementActivity", "Selected red statement: " + statement.description);
 
             ViewTreeObserver vto = statementImageView.getViewTreeObserver();
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

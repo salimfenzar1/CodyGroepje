@@ -156,7 +156,7 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
 
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
-        Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoIntensityActivity.class);
         intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);
     }

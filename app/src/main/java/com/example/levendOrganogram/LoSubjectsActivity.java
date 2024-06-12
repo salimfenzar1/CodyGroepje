@@ -25,7 +25,7 @@ import com.example.watVindIkErger.WvieIntensityActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoSubjectsActivity extends AppCompatActivity {
+public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener{
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton hearButton;
@@ -44,7 +44,7 @@ public class LoSubjectsActivity extends AppCompatActivity {
             return insets;
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, (SpeechRecognitionManager.SpeechRecognitionListener) this);
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         hearButton = findViewById(R.id.hearButton);
         themeDecease = findViewById(R.id.image_view_family);
         themeSexuality = findViewById(R.id.image_seksualiteit);
@@ -129,7 +129,7 @@ public class LoSubjectsActivity extends AppCompatActivity {
         hearButton.setEnabled(clickable);
     }
 
-
+@Override
     public void onSpeechResult(String result) {
         Log.d("WvieSubjectsActivity", "onSpeechResult: " + result);
         if (result.equalsIgnoreCase("seksualiteit op de werkvloer")) {

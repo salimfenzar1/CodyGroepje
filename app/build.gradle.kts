@@ -43,4 +43,27 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     annotationProcessor(libs.room.compiler)
-}
+
+    // Room components
+    implementation ("androidx.room:room-runtime:2.4.0")
+    annotationProcessor ("androidx.room:room-compiler:2.4.0")
+    testImplementation ("androidx.room:room-testing:2.4.0")
+
+    // JUnit
+    testImplementation ("junit:junit:4.13.2")
+
+    // AndroidX Testing
+    testImplementation ("androidx.test:core:1.4.0")
+    testImplementation ("androidx.test.ext:junit:1.1.3")
+    testImplementation ("androidx.test:runner:1.4.0")
+    testImplementation ("androidx.test:rules:1.4.0")
+
+    // Robolectric (to run tests on Android without emulator)
+    testImplementation ("org.robolectric:robolectric:4.7.3")
+
+    // LiveData testing utilities
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+    // Espresso
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+} 

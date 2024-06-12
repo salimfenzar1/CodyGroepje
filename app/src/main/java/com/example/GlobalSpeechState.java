@@ -4,7 +4,7 @@ import android.app.Application;
 import android.view.View;
 import android.widget.Button;
 
-public class GlobalSpeechState extends Application{
+public abstract class GlobalSpeechState extends Application{
     private Button globalListeningButton;
 
     public void setGlobalListeningButton(Button button) {
@@ -22,4 +22,6 @@ public class GlobalSpeechState extends Application{
             globalListeningButton.setVisibility(View.GONE);
         }
     }
+
+    public abstract void setGlobalListeningButton(GlobalListeningFeedbackButton button);
 }

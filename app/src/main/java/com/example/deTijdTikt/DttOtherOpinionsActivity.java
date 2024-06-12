@@ -67,6 +67,8 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
     }
 
     private void goNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), DttGameEndActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
@@ -79,12 +81,14 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
                 new Handler().postDelayed(() -> speakText(), 1000);
             }
         });

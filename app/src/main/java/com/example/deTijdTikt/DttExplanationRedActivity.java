@@ -75,12 +75,14 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
                 new Handler().postDelayed(() -> speakText(), 1000);
             }
         });
@@ -93,9 +95,8 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
 
     @Override
     public void onSpeechResult(String result) {
-        Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        result = result.trim().toLowerCase();
-        if (result.contains("wij willen doorgaan")) {
+        Log.i("SpeechRecognizer", "Recognized speech: " + result );
+        if (result.contains("Wij willen doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();
@@ -114,13 +115,14 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     }
 
     private void goNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         if (isFirst) {
             Intent intent = new Intent(this, DttExplanationYellowActivity.class);
             intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
             intent.putExtra("hasPassedToNextPerson", hasPassedToNextPerson);
             startActivity(intent);
         } else {
-
             if (hasPassedToNextPerson) {
                 Intent intent = new Intent(this, DttOtherOpinionsActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));

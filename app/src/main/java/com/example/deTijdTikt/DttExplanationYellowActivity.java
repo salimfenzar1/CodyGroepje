@@ -75,12 +75,14 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
                 new Handler().postDelayed(() -> speakText(), 1000);
             }
         });
@@ -115,6 +117,8 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
     }
 
     private void goNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         if (isFirst) {
             Intent intent = new Intent(this, DttExplanationRedActivity.class);
             intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));

@@ -161,18 +161,18 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
         });
     }
     private void goToNextPage() {
-            Random random = new Random();
-            Intent nextIntent;
-            if (random.nextBoolean()) {
-                nextIntent = new Intent(this, DttExplanationRedActivity.class);
-            } else {
-                nextIntent = new Intent(this, DttExplanationYellowActivity.class);
-            }
-            nextIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-            nextIntent.putExtra("chosenCase", chosenCase);
-            nextIntent.putExtra("isFirst", true);
-            startActivity(nextIntent);
-            finish();
+        Random random = new Random();
+        Intent nextIntent;
+        if (random.nextBoolean()) {
+            nextIntent = new Intent(this, DttExplanationRedActivity.class);
+        } else {
+            nextIntent = new Intent(this, DttExplanationYellowActivity.class);
+        }
+        nextIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        nextIntent.putExtra("chosenCase", chosenCase);
+        nextIntent.putExtra("isFirst", true);
+        startActivity(nextIntent);
+        finish();
 
     }
 

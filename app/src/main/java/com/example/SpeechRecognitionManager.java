@@ -69,6 +69,7 @@ public class SpeechRecognitionManager {
                 @Override
                 public void onResults(Bundle results) {
                     isListening = false;
+                    Log.d("context test", context.getClass().getSimpleName());
                     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     if (matches != null && !matches.isEmpty()) {
                         if (confirmationResultListener != null) {

@@ -1,6 +1,11 @@
 package com.example.deTijdTikt;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,9 +13,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
+import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class DttPassToNextPersonActivity extends AppCompatActivity {
+    private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
+
+    private ArrayList<Statement> filteredStatements;
+
+    private ImageButton next;
+    private ImageButton hearButton;
+
     private final String[] optionsPassToNextPerson = {
             "waarvan jij denkt dat hij/zij er totaal anders over denkt",
             "die vandaag al het langst aan het werk is",
@@ -40,5 +59,69 @@ public class DttPassToNextPersonActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        next = findViewById(R.id.nextButton);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goNextActivity();
+            }
+        });
+
+        hearButton = findViewById(R.id.hearButton);
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakText();
+            }
+        });
+
+        speakText();
+
     }
+
+    public void speakText() {
+        speechHelper = new SpeechHelper(this);
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(optionsPassToNextPerson.length);
+        String randomOption = optionsPassToNextPerson[randomIndex];
+        DttPassToNextPersonActivity currentActivity = this;
+        speechHelper.speak("De personen die nu de ballen in hun hand hebben, gooi deze over naar " + randomOption, new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
+                new Handler().postDelayed(currentActivity::goNextActivity, 2000);
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
+            }
+        });
+    }
+
+    private void goNextActivity() {
+        Random random = new Random();
+        Intent intent;
+        if (random.nextBoolean()){
+            intent = new Intent(getApplicationContext(), DttExplanationRedActivity.class);
+        }else{
+            intent = new Intent(getApplicationContext(), DttExplanationYellowActivity.class);
+        }
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        intent.putExtra("hasPassedToNextPerson", true);
+        intent.putExtra("isFirst", true);
+        startActivity(intent);
+    }
+
+    private void setButtonsClickable(boolean clickable) {
+        hearButton.setEnabled(clickable);
+        next.setEnabled(clickable);
+    }
+
 }

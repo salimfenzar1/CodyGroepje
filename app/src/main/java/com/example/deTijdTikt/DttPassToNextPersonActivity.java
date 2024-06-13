@@ -23,12 +23,9 @@ import java.util.Random;
 
 public class DttPassToNextPersonActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
-    private SpeechRecognitionManager speechRecognitionManager;
 
     private ArrayList<Statement> filteredStatements;
 
-    private ImageButton next;
-    private ImageButton hearButton;
 
     private final String[] optionsPassToNextPerson = {
             "waarvan jij denkt dat hij/zij er totaal anders over denkt",
@@ -62,24 +59,8 @@ public class DttPassToNextPersonActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
-        next = findViewById(R.id.nextButton);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goNextActivity();
-            }
-        });
-
-        hearButton = findViewById(R.id.hearButton);
-        hearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                speakText();
-            }
-        });
 
         speakText();
-
     }
 
     public void speakText() {
@@ -93,14 +74,12 @@ public class DttPassToNextPersonActivity extends AppCompatActivity {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
                 new Handler().postDelayed(currentActivity::goNextActivity, 2000);
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
             }
         });
     }
@@ -118,10 +97,4 @@ public class DttPassToNextPersonActivity extends AppCompatActivity {
         intent.putExtra("isFirst", true);
         startActivity(intent);
     }
-
-    private void setButtonsClickable(boolean clickable) {
-        hearButton.setEnabled(clickable);
-        next.setEnabled(clickable);
-    }
-
 }

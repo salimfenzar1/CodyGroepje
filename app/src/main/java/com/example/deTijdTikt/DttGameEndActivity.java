@@ -137,12 +137,16 @@ public class DttGameEndActivity extends AppCompatActivity implements SpeechRecog
         hearButton.setEnabled(clickable);
     }
 
+
     @Override
     public void onSpeechResult(String result) {
-        switch (AnswerConverter.determineAnswer(result)) {
-            case YES: speakTextPlayAgain(); break;
-            case NO: goHome(); break;
-            default: speechRecognitionManager.startListening(); break;
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if (result.equalsIgnoreCase("ja")) {
+            speakTextPlayAgain();
+        } else if (result.equalsIgnoreCase("nee")) {
+            goHome();
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
     @Override

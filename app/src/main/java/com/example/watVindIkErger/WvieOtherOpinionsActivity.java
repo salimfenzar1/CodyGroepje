@@ -14,13 +14,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.AnswerConverter;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import java.util.ArrayList;
 
-public class WvieOtherOpinionsActivity extends AppCompatActivity {
+public class WvieOtherOpinionsActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
+    private boolean someoneWantsToSpeak = false;
     private ImageButton next;
     private ImageButton hearButton;
+    private ArrayList<Statement> filteredStatements;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,64 +39,84 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        next = findViewById(R.id.nextButton);
 
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        }
+
+        next = findViewById(R.id.nextButton);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieGameEndActivity.class);
-                startActivity(intent);
+                goNextActivity();
             }
         });
 
         hearButton = findViewById(R.id.hearButton);
-        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setButtonsClickable(false);
-                speakTextEar();
+                speakText();
             }
         });
+        setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
 
+    private void goNextActivity() {
+        Intent intent = new Intent(getApplicationContext(), WvieGameEndActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        startActivity(intent);
+    }
+
     public void speakText() {
+        setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Wat vinden de andere hiervan?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Wat vinden de andere hiervan? Wanneer iedereen is uitgepraat, zeg dan: Wij willen doorgaan, om door te gaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                new Handler().postDelayed(() -> speakText(), 1000);
             }
         });
     }
 
-    public void speakTextEar() {
-        speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Wil iemand anders nog iets zeggen?", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
-            }
 
-            @Override
-            public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
-            }
-        });
-    }
     private void setButtonsClickable(boolean clickable) {
         hearButton.setEnabled(clickable);
         next.setEnabled(clickable);
+    }
+
+
+    @Override
+    public void onSpeechResult(String result) {
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if (result.equalsIgnoreCase("wij willen doorgaan")) {
+            goNextActivity();
+        } else {
+            speechRecognitionManager.startListening();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
     }
 }

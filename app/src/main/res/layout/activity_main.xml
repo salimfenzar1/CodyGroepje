@@ -6,7 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.MainActivity"
-    android:background="@drawable/backgroundimg">
+    android:background="@drawable/background_blue">
+
+    <!--GLOBAL LISTENING FEEDBACK BUTTON (TOP RIGHT)-->
+    <com.example.GlobalListeningFeedbackButton
+        android:id="@+id/listeningButton"
+        android:layout_width="120px"
+        android:layout_height="120px"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/mic_listening" />
 
 
     <TextView
@@ -93,9 +104,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/levendOrganogram"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="90dp"
         android:layout_toEndOf="@+id/watVindIk"
-        android:text="Wat vind ik            erger"
+        android:text="Wat vind ik erger"
         android:textColor="@color/textColor"
         android:textSize="25sp" />
+
+
 </RelativeLayout>

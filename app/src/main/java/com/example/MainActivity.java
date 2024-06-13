@@ -1,32 +1,51 @@
 package com.example;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.DAO.DatabaseInitializer;
+import com.example.DAO.StatementViewModel;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+import com.example.deTijdTikt.DttIntensityActivity;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
+public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
 
-public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private final String[] permissions = {Manifest.permission.RECORD_AUDIO};
+
     private ImageButton tijdTikt;
     private ImageButton levend;
     private ImageButton watVind;
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
+    private StatementViewModel statementViewModel;
+    private List<Statement> allStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        clearCache();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -34,35 +53,77 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         tijdTikt = findViewById(R.id.tijdTikt);
         levend = findViewById(R.id.levendOrganogram);
         watVind = findViewById(R.id.watVindIk);
 
         setButtonsClickable(false);
 
-        speakIntro();
+        // Initialize the database if not already populated
+        DatabaseInitializer.populateDatabase(this);
+
+        // Initialize ViewModel
+        statementViewModel = new ViewModelProvider(this).get(StatementViewModel.class);
+        statementViewModel.getAllStatements().observe(this, statements -> {
+            allStatements = new ArrayList<>(statements);
+            // Ensure the resetAllStatements is called only after allStatements is initialized
+            resetAllStatements();
+        });
+
 
         tijdTikt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor de tijd tikt", Toast.LENGTH_SHORT).show();
+                speechRecognitionManager.stopListening();
+                speechRecognitionManager.destroy();
 
+                Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
+               intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+                startActivity(intent);
             }
         });
         levend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor levend organogram", Toast.LENGTH_SHORT).show();
+                speechRecognitionManager.stopListening();
+                speechRecognitionManager.destroy();
             }
         });
         watVind.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt gekozen voor wat vind ik erger", Toast.LENGTH_SHORT).show();
+                speechRecognitionManager.stopListening();
+                speechRecognitionManager.destroy();
                 Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+                intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
                 startActivity(intent);
             }
         });
+
+        setButtonsClickable(false);
+
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+        speakIntro();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean permissionToRecordAccepted = requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+        if (permissionToRecordAccepted) {
+            speechRecognitionManager = new SpeechRecognitionManager(this, this);
+        } else {
+            Toast.makeText(this, "Permission to use microphone denied", Toast.LENGTH_SHORT).show();
+            finish(); // Close the app if permission is denied
+        }
+    }
+
+    private void resetAllStatements() {
+        statementViewModel.updateAllStatementsStatus(true);
+//        Toast.makeText(MainActivity.this, "All statements have been reset to active", Toast.LENGTH_SHORT).show();
     }
 
     public void speakIntro() {
@@ -71,15 +132,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
-                // Maak de knoppen klikbaar nadat de spraak voltooid is
-                setButtonsClickable(true);
+                setButtonsClickable(true);  // Zet de knoppen klikbaar
+                Log.d("MainActivity", "Buttons should be clickable now.");
+                speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                // Maak de knoppen ook klikbaar als de spraak mislukt
-                setButtonsClickable(true);
+                setButtonsClickable(true);  // Zet de knoppen klikbaar zelfs als de spraaksynthese mislukt
+                Log.d("MainActivity", "Buttons should be clickable now even after speech failure.");
+                speakIntro();
             }
         });
     }
@@ -91,5 +154,81 @@ public class MainActivity extends AppCompatActivity {
         tijdTikt.setEnabled(clickable);
         levend.setEnabled(clickable);
         watVind.setEnabled(clickable);
+        Log.d("MainActivity", "setButtonsClickable: " + clickable);
+    }
+
+    @Override
+    public void onSpeechResult(String result) {
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+            Intent intent = new Intent(MainActivity.this, WvieSubjectsActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+            startActivity(intent);
+        }
+         else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+            Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+            startActivity(intent);
+        }
+         else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
+            speechHelper = new SpeechHelper(this);
+            speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
+                @Override
+                public void onSpeechComplete() {
+                    Log.d("Speech", "Speech synthesis voltooid");
+                    setButtonsClickable(true);  // Zet de knoppen klikbaar
+                    speechRecognitionManager.startListening();
+                    Log.d("speakreplay", "begint met luisteren");
+                }
+
+                @Override
+                public void onSpeechFailed() {
+                    Log.e("Speech", "Speech synthesis mislukt");
+                    setButtonsClickable(true);
+                }
+            });
+        }
+
+    }
+    @Override
+    protected void onDestroy() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        super.onDestroy();
+    }
+
+    private void clearCache() {
+        try {
+            File cacheDir = getCacheDir();
+            if (cacheDir != null && cacheDir.isDirectory()) {
+                Log.d("goed gedaan", "Cache succesfully removed");
+                deleteDir(cacheDir);
+            }
+        } catch (Exception e) {
+            Log.e("MainActivity", "Error clearing cache: " + e.getMessage());
+        }
+    }
+
+    private boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String child : children) {
+                boolean success = deleteDir(new File(dir, child));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }

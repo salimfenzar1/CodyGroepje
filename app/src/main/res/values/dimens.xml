@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="game_title_text_size">32dp</dimen>
+    <dimen name="game_title_text_size">32sp</dimen>
     <dimen name="bottomMargin">636dp</dimen>
+    <dimen name="topMargin">50dp</dimen>
 </resources>

@@ -1,11 +1,14 @@
 package com.example.watVindIkErger;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,14 +17,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ImageUtils;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
-public class WvieExplanationYellowActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class WvieExplanationYellowActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
+    private ImageView image_view_yellow;
     private boolean selectedYes;
+    private ArrayList<Statement> filteredStatements;
+    private Statement yellowStatement;
+    private boolean listeningForContinuation = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,31 +46,41 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Intent intent = getIntent();
         if (intent != null) {
-            // Get the string with the key "key"
             selectedYes = intent.getBooleanExtra("selectedYes", false);
+            filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+            yellowStatement = intent.getParcelableExtra("yellow_statement");
+        }
 
-//            // Check if the value is "Ja" or "Nee" and do something with it
-//            if (selectedYes) {
-//                Toast.makeText(this, "Received value: Yes", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(this, "Received value: No", Toast.LENGTH_SHORT).show();
-//            }
+        image_view_yellow = findViewById(R.id.image_view_foto_explanation_yellow);
+        if (yellowStatement != null) {
+            Log.d("Image", "Image: " + yellowStatement.description + "");
+
+            image_view_yellow.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    image_view_yellow.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                    int width = image_view_yellow.getWidth();
+                    int height = image_view_yellow.getHeight();
+                    int resId = getResources().getIdentifier(yellowStatement.imageUrl, "drawable", getPackageName());
+                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                    image_view_yellow.setImageBitmap(bitmap);
+                }
+            });
         }
 
         next = findViewById(R.id.nextButton);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
-                startActivity(intent);
+                navigateToNextActivity();
             }
         });
 
         hearButton = findViewById(R.id.hearButton);
-        setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,27 +89,71 @@ public class WvieExplanationYellowActivity extends AppCompatActivity {
             }
         });
 
+        setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
+
+        // Initialize SpeechRecognitionManager
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+        startListening();
     }
-    public void speakText(){
+
+    private void startListening() {
+        speechRecognitionManager.startListening();
+    }
+
+    public void speakText() {
         speechHelper = new SpeechHelper(this);
-        String textToSpeak = selectedYes ? "Waarom vindt je deze stelling erger?" : "Waarom vindt je de gele stelling erger?";
+        String textToSpeak = "Waarom vindt je de gele stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om door te gaan";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                listeningForContinuation = true;
+                startListening();
             }
-
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                listeningForContinuation = true;
+                startListening();
             }
         });
     }
+
+    @Override
+    public void onSpeechResult(String result) {
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+        if (listeningForContinuation && result.equalsIgnoreCase("Wij willen doorgaan")) {
+            navigateToNextActivity();
+        } else {
+            startListening();
+        }
+    }
+
+    private void navigateToNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+        Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+        startActivity(intent);
+        finish(); // Close current activity to free up resources
+    }
+
     private void setButtonsClickable(boolean clickable) {
+        next.setEnabled(clickable);
         hearButton.setEnabled(clickable);
-        hearButton.setEnabled(clickable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
     }
 }

@@ -1,11 +1,14 @@
 package com.example.watVindIkErger;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,13 +17,27 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ImageUtils;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
+import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
-public class WvieStatementYellowActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class WvieStatementYellowActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private SpeechHelper speechHelper;
+    private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
+    private ImageView statementImageView;
+    private ArrayList<Statement> filteredStatements;
+    private Statement yellowStatement;
+    private Statement redStatement;
+    private boolean hasNavigated = false; // To prevent double navigation
+    private boolean askingForClarity = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +49,64 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
             return insets;
         });
 
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+        redStatement = intent.getParcelableExtra("red_statement");
+
+        Log.d("WvieStatementYellowActivity", "Filtered statements: " + filteredStatements);
+        Log.d("WvieStatementYellowActivity", "Red statement: " + redStatement);
+
+        statementImageView = findViewById(R.id.image_view_foto_statement_yellow);
+
+        if (filteredStatements != null) {
+            // Check if there are less than 2 active statements
+            long activeCount = filteredStatements.stream().filter(Statement::isActive).count();
+            if (activeCount < 2) {
+                for (Statement statement : filteredStatements) {
+                    statement.setActive(true);
+                }
+            }
+
+            // Filter active statements
+            ArrayList<Statement> activeStatements = new ArrayList<>();
+            for (Statement statement : filteredStatements) {
+                if (statement.isActive()) {
+                    activeStatements.add(statement);
+                }
+            }
+
+            if (!activeStatements.isEmpty()) {
+                Collections.shuffle(activeStatements);
+                yellowStatement = activeStatements.remove(0);  // Get a random active statement and remove it from the list
+                yellowStatement.setActive(false);  // Mark the statement as inactive
+
+                Log.d("WvieStatementYellowActivity", "Selected yellow statement: " + yellowStatement.description);
+
+                // Load the image only after the layout has been laid out
+                statementImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        int width = statementImageView.getWidth();
+                        int height = statementImageView.getHeight();
+                        int resId = getResources().getIdentifier(yellowStatement.getImageUrl(), "drawable", getPackageName());
+                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
+                        statementImageView.setImageBitmap(bitmap);
+                    }
+                });
+            } else {
+                Log.d("WvieStatementYellowActivity", "No active statements available.");
+            }
+        } else {
+            Log.d("WvieStatementYellowActivity", "No statements available.");
+        }
 
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
-                startActivity(intent);
+                navigateToNextActivity();
             }
         });
 
@@ -54,26 +120,104 @@ public class WvieStatementYellowActivity extends AppCompatActivity {
             }
         });
 
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         new Handler().postDelayed(this::speakText, 2000);
     }
-    public void speakText(){
+
+    private void navigateToNextActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+        if (!hasNavigated) { // Ensure the activity transition happens only once
+            hasNavigated = true;
+            Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
+            intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+            intent.putExtra("red_statement", redStatement);
+            intent.putExtra("yellow_statement", yellowStatement);
+            startActivity(intent);
+        }
+    }
+
+    public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("De stelling voor de kleur geel... Tijdens de zorgverlening aan een van de cliënten wordt je ongepast aangeraakt", new SpeechHelper.SpeechCompleteListener() {
+        if (yellowStatement != null) {
+            speechHelper.speak("De stelling voor de kleur geel... " + yellowStatement.description, new SpeechHelper.SpeechCompleteListener() {
+                @Override
+                public void onSpeechComplete() {
+                    Log.d("Speech", "Speech synthesis voltooid");
+                    setButtonsClickable(true);
+                    askIfClear();
+                }
+
+                @Override
+                public void onSpeechFailed() {
+                    Log.e("Speech", "Speech synthesis mislukt");
+                    setButtonsClickable(true);
+                }
+            });
+        } else {
+            speechHelper.speak("Geen stelling beschikbaar voor de kleur geel.", new SpeechHelper.SpeechCompleteListener() {
+                @Override
+                public void onSpeechComplete() {
+                    Log.d("Speech", "Speech synthesis voltooid");
+                    setButtonsClickable(true);
+                }
+
+                @Override
+                public void onSpeechFailed() {
+                    Log.e("Speech", "Speech synthesis mislukt");
+                    setButtonsClickable(true);
+                }
+            });
+        }
+    }
+
+    public void askIfClear() {
+        askingForClarity = true;
+        speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
+                speechRecognitionManager.startListening();
             }
         });
-    }private void setButtonsClickable(boolean clickable) {
+    }
+
+    @Override
+    public void onSpeechResult(String result) {
+        Log.i("SpeechRecognizer", "Recognized speech: " + result);
+
+        if (askingForClarity) {
+            if (result.equalsIgnoreCase("ja")) {
+                askingForClarity = false;
+                navigateToNextActivity();
+            } else if (result.equalsIgnoreCase("nee")) {
+                askingForClarity = false;
+                speakText();
+            } else {
+                speechRecognitionManager.startListening();
+            }
+        } else {
+            speechRecognitionManager.startListening();
+        }
+    }
+
+    private void setButtonsClickable(boolean clickable) {
         next.setEnabled(clickable);
         hearButton.setEnabled(clickable);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+    }
 }

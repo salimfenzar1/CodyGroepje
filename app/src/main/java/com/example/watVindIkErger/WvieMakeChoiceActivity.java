@@ -11,13 +11,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class WvieMakeChoiceActivity extends AppCompatActivity {
     private SpeechHelper speechHelper;
+    private Statement redStatement;
+    private Statement yellowStatement;
+    private ArrayList<Statement> filteredStatements;
+    private boolean hasNavigated = false; // To prevent double navigation
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,24 +35,39 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        new Handler().postDelayed(this::speakText, 2000);
-        new Handler().postDelayed(() -> {
-            Random random = new Random();
-            // starting activity based on what boolean is generated
-            Intent intent;
-            if (random.nextBoolean()) {
-                intent = new Intent(this, WvieChoiceRedActivity.class);
-            } else {
-                intent = new Intent(this, WvieChoiceYellowActivity.class);
-            }
-            startActivity(intent);
-            finish();
-        }, 10000);
 
+        Intent intent = getIntent();
+        redStatement = intent.getParcelableExtra("red_statement");
+        yellowStatement = intent.getParcelableExtra("yellow_statement");
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+
+        new Handler().postDelayed(this::speakText, 2000);
+        new Handler().postDelayed(this::navigateToNextActivity, 10000);
     }
-    public void speakText(){
+
+    private void navigateToNextActivity() {
+        if (!hasNavigated) { // Ensure the activity transition happens only once
+            hasNavigated = true;
+            Random random = new Random();
+            Intent nextIntent;
+            if (random.nextBoolean()) {
+                nextIntent = new Intent(this, WvieChoiceRedActivity.class);
+                nextIntent.putExtra("red_statement", redStatement);
+                nextIntent.putExtra("yellow_statement", yellowStatement);
+            } else {
+                nextIntent = new Intent(this, WvieChoiceYellowActivity.class);
+                nextIntent.putExtra("yellow_statement", yellowStatement);
+                nextIntent.putExtra("red_statement", redStatement);
+            }
+            nextIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
+            startActivity(nextIntent);
+            finish();
+        }
+    }
+
+    public void speakText() {
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak(" Kies nu aan welke kant van mij je gaat staan", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Kies nu aan welke kant van mij je gaat staan", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
@@ -56,5 +78,12 @@ public class WvieMakeChoiceActivity extends AppCompatActivity {
                 Log.e("Speech", "Speech synthesis mislukt");
             }
         });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
     }
 }

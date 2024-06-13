@@ -9,14 +9,24 @@
 
     android:background="@drawable/green_background">
 
+    <!--GLOBAL LISTENING FEEDBACK BUTTON (TOP RIGHT)-->
+    <com.example.GlobalListeningFeedbackButton
+        android:id="@+id/listeningButton"
+        android:layout_width="120px"
+        android:layout_height="120px"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/mic_listening" />
+
 
     <TextView
         android:id="@+id/text_view_intensity_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/bottomMargin"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/topMargin"
         android:text="@string/make_choice"
         android:textColor="#5b7683"
         android:textSize="@dimen/game_title_text_size" />

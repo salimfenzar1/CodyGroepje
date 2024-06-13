@@ -66,4 +66,8 @@ dependencies {
     androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
     // Espresso
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+
+    // Mockito
+    testImplementation ("org.mockito:mockito-core:5.4.0")
+    androidTestImplementation ("org.mockito:mockito-android:5.4.0")
 } 

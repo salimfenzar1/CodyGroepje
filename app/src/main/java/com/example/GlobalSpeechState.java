@@ -24,4 +24,6 @@ public abstract class GlobalSpeechState extends Application{
     }
 
     public abstract void setGlobalListeningButton(GlobalListeningFeedbackButton button);
+
+//    public abstract void setGlobalListeningButton(GlobalListeningFeedbackButton button);
 }

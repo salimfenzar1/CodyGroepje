@@ -26,6 +26,9 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     private ImageButton yesButton;
     private ImageButton noButton;
     private ImageButton hearButton;
+    Random random = new Random();
+    int choice = random.nextInt(2) + 1;
+    Intent messageIntent = new Intent(this, LoExplanationActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +47,14 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
         noButton = findViewById(R.id.noButton);
         hearButton = findViewById(R.id.hearButton); // Initialize hearButton
 
-        Random random = new Random();
-        int choice = random.nextInt(2) + 1;
+
 
         if (choice == 1) {
             speakText("Is er iemand dichterbij komen staan?");
         } else {
             speakText("Is er iemand verder weg gaan staan?");
         }
-        Intent messageIntent = new Intent(this, LoExplanationActivity.class);
+
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,8 +114,22 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     public void onSpeechResult(String result) {
         switch (AnswerConverter.determineAnswer(result)) {
             case YES: // TODO: action if answer is yes
+                if(choice == 1){
+                    messageIntent.putExtra("userAgrees",true);
+                    startActivity(messageIntent);
+                } else {
+                    messageIntent.putExtra("userAgrees",false);
+                    startActivity(messageIntent);
+                }
                 break;
             case NO: // TODO: action if answer is no
+                if(choice == 1){
+                    messageIntent.putExtra("userAgrees",false);
+                    startActivity(messageIntent);
+                } else {
+                    messageIntent.putExtra("userAgrees",true);
+                    startActivity(messageIntent);
+                }
                 break;
             default: speechRecognitionManager.startListening(); break;
         }

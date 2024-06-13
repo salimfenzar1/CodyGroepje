@@ -15,6 +15,7 @@ public class GlobalListeningFeedbackButton extends Button {
         init();
     }
 
+
     private void init() {
         GlobalSpeechState app = (GlobalSpeechState) getContext().getApplicationContext();
         app.setGlobalListeningButton(this);

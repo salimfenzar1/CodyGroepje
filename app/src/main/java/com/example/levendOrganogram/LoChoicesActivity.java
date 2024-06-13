@@ -1,5 +1,6 @@
 package com.example.levendOrganogram;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,8 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     private ImageButton yesButton;
     private ImageButton noButton;
     private ImageButton hearButton;
+    private Boolean yes = true;
+    private Boolean no = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +54,23 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
         } else {
             speakText("Is er iemand verder weg gaan staan?");
         }
+        Intent noButtonIntent = new Intent(this, LoExplanationActivity.class);
+        noButtonIntent.putExtra("booleanNoKey",no);
+        Intent yesButtonIntent = new Intent(this, LoExplanationActivity.class);
+        yesButtonIntent.putExtra("booleanYesKey", yes);
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: action if answer is yes
+                startActivity(yesButtonIntent);
             }
         });
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: action if answer is no
+                startActivity(noButtonIntent);
             }
         });
         setButtonsClickable(false);

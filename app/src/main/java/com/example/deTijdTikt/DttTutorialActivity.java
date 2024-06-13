@@ -27,8 +27,9 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
     private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
-    private ArrayList<String> selectedIntensities;
     private ArrayList<Statement> filteredStatements;
+    private boolean isNextButtonClicked = false; // boolean variabele om de knopstatus bij te houden
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,11 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                performOutro();
+                if (!isNextButtonClicked) {
+                    isNextButtonClicked = true;
+                    next.setEnabled(false);
+                    performOutro();
+                }
             }
         });
 

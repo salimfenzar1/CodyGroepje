@@ -30,6 +30,7 @@ public class DttStartPassingActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +77,7 @@ public class DttStartPassingActivity extends AppCompatActivity {
     public void startTimer() {
         // Create a random duration between 5 and 10 seconds (5000 to 10000 milliseconds)
         Random random = new Random();
-        int randomDuration = 5000 + random.nextInt(5000);
+        int randomDuration = 7000 + random.nextInt(7000);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.jeopardy);
         mediaPlayer.start();

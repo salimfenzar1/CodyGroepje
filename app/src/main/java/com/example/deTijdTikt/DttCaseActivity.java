@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class DttCaseActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener  {
+public class DttCaseActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
 
     private ImageButton next;
     private SpeechHelper speechHelper;
@@ -43,7 +42,6 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dtt_case);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -109,6 +107,7 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
             Log.e("DttCaseActivity", "Image resource not found for: " + imageUrl);
         }
     }
+
     public void speakText() {
         speechHelper = new SpeechHelper(this);
 
@@ -158,6 +157,7 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
             }
         });
     }
+
     private void goToNextPage() {
         Random random = new Random();
         Intent nextIntent;
@@ -171,7 +171,6 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
         nextIntent.putExtra("isFirst", true);
         startActivity(nextIntent);
         finish();
-
     }
 
     private void setButtonsClickable(boolean clickable) {
@@ -192,17 +191,32 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
                 speakText();
             } else {
                 Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
-                speechRecognitionManager.startListening();
+                restartListening();
             }
         } else {
             Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
-            speechRecognitionManager.startListening();
+            restartListening();
         }
     }
 
+    private void restartListening() {
+        speechRecognitionManager.stopListening();
+        new Handler().postDelayed(() -> speechRecognitionManager.startListening(), 1000);
+    }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.destroy();
+        }
+        if (speechHelper != null) {
+            speechHelper.close();
+        }
     }
 }

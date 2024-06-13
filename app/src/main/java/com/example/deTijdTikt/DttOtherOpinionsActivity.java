@@ -29,6 +29,9 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
 
+    private boolean isNextButtonClicked = false; // boolean variabele om de knopstatus bij te houden
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +54,10 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goNextActivity();
+                if(!isNextButtonClicked){
+                    isNextButtonClicked = true;
+                    goNextActivity();
+                }
             }
         });
 

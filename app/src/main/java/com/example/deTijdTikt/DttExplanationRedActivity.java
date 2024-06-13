@@ -29,6 +29,8 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     private ArrayList<Statement> filteredStatements;
     private boolean isFirst = false;
     private boolean hasPassedToNextPerson = false;
+    private boolean isNextButtonClicked = false; // boolean variabele om de knopstatus bij te houden
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,10 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goNextActivity();
+                if(!isNextButtonClicked){
+                    isNextButtonClicked = true;
+                    goNextActivity();
+                }
             }
         });
 
@@ -119,17 +124,17 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
         speechRecognitionManager.destroy();
         if (isFirst) {
             Intent intent = new Intent(this, DttExplanationYellowActivity.class);
-            intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
+            intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
             intent.putExtra("hasPassedToNextPerson", hasPassedToNextPerson);
             startActivity(intent);
         } else {
             if (hasPassedToNextPerson) {
                 Intent intent = new Intent(this, DttOtherOpinionsActivity.class);
-                intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(this, DttPassToNextPersonActivity.class);
-                intent.putParcelableArrayListExtra("filtered_statements", intent.getParcelableArrayListExtra("filtered_statements"));
+                intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
             }
         }

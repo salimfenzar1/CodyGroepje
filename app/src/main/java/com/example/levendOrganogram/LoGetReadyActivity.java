@@ -155,7 +155,7 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
                 speechRecognitionManager.destroy();
                 goNextActivity();
             } else if (result.equalsIgnoreCase("nee")) {
-                new Handler().postDelayed(this::speakText, 3000);
+                new Handler().postDelayed(this::speakTextAskClarification, 3000);
             } else {
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);

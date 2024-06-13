@@ -84,7 +84,6 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
                 Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), LoChooseDistanceActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                intent.putExtra("statement", statement);
                 startActivity(intent);
                 finish(); // Close current activity to free up resources
             }
@@ -176,9 +175,10 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
     }
 
     private void goToNextPage() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), LoChooseDistanceActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-        intent.putExtra("red_statement", statement);
         startActivity(intent);
         finish(); // Close current activity to free up resources
     }

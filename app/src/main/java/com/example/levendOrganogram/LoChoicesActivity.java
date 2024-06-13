@@ -13,10 +13,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.AnswerConverter;
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class LoChoicesActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
@@ -29,6 +31,7 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     private Random random = new Random();
     private int choice;
     private Intent messageIntent;
+    private ArrayList<Statement> filteredStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +46,22 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
 
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+
+        // Ensure filteredStatements is not null
+        if (filteredStatements == null) {
+            filteredStatements = new ArrayList<>();
+        }
+
         yesButton = findViewById(R.id.yesButton);
         noButton = findViewById(R.id.noButton);
         hearButton = findViewById(R.id.hearButton);
 
         choice = random.nextInt(2) + 1;
+
         messageIntent = new Intent(this, LoExplanationActivity.class);
+        messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
 
         if (choice == 1) {
             speakText("Is er iemand dichterbij komen staan?");
@@ -104,6 +117,7 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
         } else {
             messageIntent.putExtra("userAgrees", !userAgrees);
         }
+        messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(messageIntent);
     }
 
@@ -113,18 +127,22 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
             case YES: // TODO: action if answer is yes
                 if(choice == 1){
                     messageIntent.putExtra("userAgrees",true);
+                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
                 } else {
                     messageIntent.putExtra("userAgrees",false);
+                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
                 }
                 break;
             case NO: // TODO: action if answer is no
                 if(choice == 1){
                     messageIntent.putExtra("userAgrees",false);
+                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
                 } else {
                     messageIntent.putExtra("userAgrees",true);
+                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
                 }
                 break;

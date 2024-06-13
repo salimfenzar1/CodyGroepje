@@ -49,7 +49,6 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
         if (filteredStatements == null) {
             filteredStatements = new ArrayList<>();
         }
-
         // Filter the statements to only include active ones
         List<Statement> activeStatements = filteredStatements.stream()
                 .filter(Statement::isActive)
@@ -176,8 +175,7 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
 
 
     private void goNextActivity() {
-        Log.d("WvieGetReadyActivity", "Received filtered statements: " + filteredStatements);
-
+        Log.d("LoGetReadyActivityStatements", "Received filtered statements: " + filteredStatements);
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), LoStatementActivity.class);

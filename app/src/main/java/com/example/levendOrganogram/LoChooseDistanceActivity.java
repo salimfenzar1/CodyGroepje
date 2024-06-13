@@ -13,14 +13,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+
+import java.util.ArrayList;
 
 public class LoChooseDistanceActivity extends AppCompatActivity {
 
     private SpeechHelper speechHelper;
     private ImageButton hearButton;
     private CountDownTimer countDownTimer;
+    private ArrayList<Statement> filteredStatements;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +40,16 @@ public class LoChooseDistanceActivity extends AppCompatActivity {
 
         hearButton = findViewById(R.id.hearButton);
 
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
+
         new Handler().postDelayed(this::speakText, 2000);
     }
 
     public void speakText() {
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Dit was de stelling. Als je het eens bent kom dan dichterbij staan. Als je het oneens bent, ga dan verder van mij af staan ", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Als je het eens bent kom dan dichterbij staan. Als je het oneens bent, ga dan verder van mij af staan ", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
@@ -76,6 +84,7 @@ public class LoChooseDistanceActivity extends AppCompatActivity {
 
     private void navigateToNextActivity() {
         Intent intent = new Intent(this, LoChoicesActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
         finish();
     }

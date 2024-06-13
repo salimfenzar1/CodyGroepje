@@ -14,10 +14,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 import com.example.watVindIkErger.WvieOtherOpinionsActivity;
+
+import java.util.ArrayList;
 
 public class LoExplanationActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
     private boolean userAgrees = false;
@@ -29,6 +32,8 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
     private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton next;
     private ImageButton hearButton;
+    private ArrayList<Statement> filteredStatements;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,9 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
 
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
         speechHelper = new SpeechHelper(this);
+
+        Intent intent = getIntent();
+        filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
         userAgrees = getIntent().getBooleanExtra("userAgrees", false);
 
@@ -82,8 +90,8 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
         speechHelper = new SpeechHelper(this);
         boolean value = hasSpokenSecondPart ? !userAgrees : userAgrees;
         String textToSpeak = value
-                ? "Waarom ben jij het eens met de stelling? Zeg: 'wij willen verder', als jullie verder willen"
-                : "Waarom ben jij het oneens met de stelling? Zeg: 'wij willen verder', als jullie verder willen";
+                ? "Waarom ben jij het eens met de stelling? Zeg: 'wij willen doorgaan', als jullie verder willen"
+                : "Waarom ben jij het oneens met de stelling? Zeg: 'wij willen doorgaan', als jullie verder willen";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
@@ -133,7 +141,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
     public void onSpeechResult(String result) {
         Intent intent = new Intent(getApplicationContext(), LoOtherOpinionsActivity.class);
         result = result.toLowerCase().trim();
-        if ((!hasSpokenSecondPart && result.contains("wij willen verder") && !hasSpokenThirdPart)) {
+        if ((!hasSpokenSecondPart && result.contains("wij willen doorgaan") && !hasSpokenThirdPart)) {
             speakTextSecondPart();
         } else if ((hasSpokenSecondPart && result.contains("nee") && !hasSpokenThirdPart)) {
             startActivity(intent);
@@ -146,7 +154,8 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
 
     private void navigateToNextActivity() {
         Toast.makeText(getApplicationContext(), "Navigating to the next activity", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoOtherOpinionsActivity.class);
+        intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
         finish(); // Close current activity to free up resources
     }

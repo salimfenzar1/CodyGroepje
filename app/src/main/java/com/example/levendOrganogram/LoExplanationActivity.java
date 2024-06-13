@@ -2,6 +2,7 @@ package com.example.levendOrganogram;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -40,6 +41,10 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
             return insets;
         });
 
+
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+        speechHelper = new SpeechHelper(this);
+
         userAgrees = getIntent().getBooleanExtra("userAgrees", false);
 
         next = findViewById(R.id.nextButton);
@@ -70,7 +75,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
         });
 
 
-
+        new Handler().postDelayed(this::speakText, 1000);
     }
 
     public void speakText() {
@@ -126,11 +131,16 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
 
     @Override
     public void onSpeechResult(String result) {
+        Intent intent = new Intent(getApplicationContext(), LoOtherOpinionsActivity.class);
         result = result.toLowerCase().trim();
-        if (!hasSpokenSecondPart && result.contains("wij willen verder")) {
+        if ((!hasSpokenSecondPart && result.contains("wij willen verder") && !hasSpokenThirdPart)) {
             speakTextSecondPart();
-        } else {
+        } else if ((hasSpokenSecondPart && result.contains("nee") && !hasSpokenThirdPart)) {
+            startActivity(intent);
+        } else if ((hasSpokenSecondPart && result.contains("ja") && !hasSpokenThirdPart)) {
             speakText();
+        } else if (hasSpokenThirdPart) {
+            startActivity(intent);
         }
     }
 

@@ -36,6 +36,13 @@ public class Statement implements Parcelable {
     }
 
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     protected Statement(Parcel in) {
         statementId = in.readInt();
         description = in.readString();

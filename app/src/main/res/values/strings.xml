@@ -10,4 +10,6 @@
     <string name="other_opinions">Mening andere</string>
     <string name="wvie_statement_yellow_title">Stelling geel</string>
     <string name="game_end">Einde casus</string>
+    <string name="overgooien">Overgooien</string>
+    <string name="pass_to_next_person">Gooi de ballen naar...</string>
 </resources>

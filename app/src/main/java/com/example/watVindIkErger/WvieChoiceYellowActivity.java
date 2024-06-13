@@ -137,6 +137,8 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
         }
     }
     private void goYellowActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
         intent.putExtra("selectedYes", true);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
@@ -146,6 +148,8 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
     }
 
     private void goRedActivity() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
         intent.putExtra("selectedYes", false);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);

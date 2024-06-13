@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    tools:context="com.example.deTijdTikt.DttPassToNextPersonActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_red">
+
+
+    <TextView
+        android:id="@+id/text_view_pass_again_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/bottomMargin"
+        android:text="@string/pass_to_next_person"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/game_title_text_size" />
+
+
+    <ImageView
+        android:id="@+id/image_view_pass_again"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="70dp"
+        app:srcCompat="@drawable/dtt_pass_to_next_person" />
+
+</RelativeLayout>

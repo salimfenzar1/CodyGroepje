@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    tools:context="com.example.deTijdTikt.DttStartPassingActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@drawable/background_red">
+
+
+    <TextView
+        android:id="@+id/text_view_pass_ball_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/bottomMargin"
+        android:layout_centerHorizontal="true"
+        android:text="@string/overgooien"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/game_title_text_size" />
+
+    <ImageView
+        android:id="@+id/image_view_pass_ball"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/dtt_picture" />
+
+</RelativeLayout>

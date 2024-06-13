@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,24 +52,45 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
 
         statementImageView = findViewById(R.id.image_view_foto_statement_red);
 
-        if (filteredStatements != null && !filteredStatements.isEmpty()) {
-            Collections.shuffle(filteredStatements);
-            redStatement = filteredStatements.remove(0);  // Get a random statement and remove it from the list
-            redStatement.isActive = false;  // Mark the statement as inactive
-            Log.d("WvieStatementRedActivity", "Selected red statement: " + redStatement.description);
-
-            ViewTreeObserver vto = statementImageView.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    int width = statementImageView.getWidth();
-                    int height = statementImageView.getHeight();
-                    int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
-                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
-                    statementImageView.setImageBitmap(bitmap);
+        if (filteredStatements != null) {
+            // Check if there are less than 2 active statements
+            long activeCount = filteredStatements.stream().filter(Statement::isActive).count();
+            if (activeCount < 2) {
+                // Reset all statements to active
+                for (Statement statement : filteredStatements) {
+                    statement.setActive(true);
                 }
-            });
+            }
+
+            // Filter active statements
+            ArrayList<Statement> activeStatements = new ArrayList<>();
+            for (Statement statement : filteredStatements) {
+                if (statement.isActive()) {
+                    activeStatements.add(statement);
+                }
+            }
+
+            if (!activeStatements.isEmpty()) {
+                Collections.shuffle(activeStatements);
+                redStatement = activeStatements.remove(0);  // Get a random active statement and remove it from the list
+                redStatement.setActive(false);  // Mark the statement as inactive
+                Log.d("WvieStatementRedActivity", "Selected red statement: " + redStatement.description);
+
+                // Load the image only after the layout has been laid out
+                statementImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        int width = statementImageView.getWidth();
+                        int height = statementImageView.getHeight();
+                        int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                        statementImageView.setImageBitmap(bitmap);
+                    }
+                });
+            } else {
+                Log.d("WvieStatementRedActivity", "No active statements available.");
+            }
         } else {
             Log.d("WvieStatementRedActivity", "No statements available.");
         }
@@ -80,6 +100,8 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                speechRecognitionManager.stopListening();
+                speechRecognitionManager.destroy();
                 Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 intent.putExtra("red_statement", redStatement);
@@ -172,6 +194,8 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     }
 
     private void goToNextPage() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         intent.putExtra("red_statement", redStatement);

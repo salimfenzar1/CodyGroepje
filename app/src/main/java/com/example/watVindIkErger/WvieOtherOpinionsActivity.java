@@ -86,6 +86,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
                 new Handler().postDelayed(() -> speakText(), 1000);
             }
         });
@@ -101,7 +102,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("Wij willen doorgaan")) {
+        if (result.equalsIgnoreCase("wij willen doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();

@@ -8,6 +8,17 @@
     android:background="@drawable/border_background_red"
     tools:context="com.example.watVindIkErger.WvieStatementRedActivity">
 
+    <!--GLOBAL LISTENING FEEDBACK BUTTON (TOP RIGHT)-->
+    <com.example.GlobalListeningFeedbackButton
+        android:id="@+id/listeningButton"
+        android:layout_width="120px"
+        android:layout_height="120px"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/mic_listening" />
+
     <TextView
         android:id="@+id/text_view_statement_title_red"
         android:layout_width="247dp"

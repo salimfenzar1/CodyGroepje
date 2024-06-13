@@ -58,7 +58,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement4);
 //
                 Statement statement5 = new Statement();
-                statement5.description = "Een cliënt die aan ernstige dementie lijdt raakt zoek en wordt uiteindelijk gevonden op de kamer van een andere cliënt. Na onderzoek werd vastgesteld dat mevrouw slachtoffer is geweest en seksueel misbuikt.";
+                statement5.description = "Een cliënt die aan ernstige dementie lijdt raakt zoek en wordt uiteindelijk gevonden op de kamer van een andere cliënt. Na onderzoek werd vastgesteld dat mevrouw slachtoffer is geweest en seksueel misbruikt.";
                 statement5.category = "Seksualiteit op de werkvloer";
                 statement5.imageUrl = String.valueOf(R.drawable.seksueel_misbruik_client_op_client);
                 statement5.intensityLevel = 3;
@@ -236,7 +236,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement26);
 //
                 Statement statement27 = new Statement();
-                statement27.description = "Tom krijgt op werk vaak last van hoofdpijn, die thuis leiden tot migraine aanvallen. Hij durft dit niet aan te geven omdat hij al veel dagen ziek thuis is gebleven. Wat zou jij doen in de situatie van Tom?";
+                statement27.description = "Tom krijgt op werk vaak last van hoofdpijn, die thuis leidt tot migraine aanvallen. Hij durft dit niet aan te geven omdat hij al veel dagen ziek thuis is gebleven. Wat zou jij doen in de situatie van Tom?";
                 statement27.category = "Werk-prive balans";
                 statement27.imageUrl = String.valueOf(R.drawable.tom_migraine);
                 statement27.intensityLevel = 2;

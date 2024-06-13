@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import androidx.activity.EdgeToEdge;
@@ -24,10 +26,10 @@ import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
+import com.example.deTijdTikt.DttIntensityActivity;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
 public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
-
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private final String[] permissions = {Manifest.permission.RECORD_AUDIO};
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        clearCache();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -74,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
+
+                Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
+               intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+                startActivity(intent);
             }
         });
         levend.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
 
         if (permissionToRecordAccepted) {
             speechRecognitionManager = new SpeechRecognitionManager(this, this);
-//            speakIntro();
         } else {
             Toast.makeText(this, "Permission to use microphone denied", Toast.LENGTH_SHORT).show();
             finish(); // Close the app if permission is denied
@@ -157,40 +163,68 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
             speechRecognitionManager.stopListening();
             speechRecognitionManager.destroy();
-            Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
+            Intent intent = new Intent(MainActivity.this, WvieSubjectsActivity.class);
             intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
             startActivity(intent);
-        } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
-            speakReplay();
+        }
+         else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+            Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+            startActivity(intent);
+        }
+         else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
+            speechHelper = new SpeechHelper(this);
+            speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
+                @Override
+                public void onSpeechComplete() {
+                    Log.d("Speech", "Speech synthesis voltooid");
+                    setButtonsClickable(true);  // Zet de knoppen klikbaar
+                    speechRecognitionManager.startListening();
+                    Log.d("speakreplay", "begint met luisteren");
+                }
+
+                @Override
+                public void onSpeechFailed() {
+                    Log.e("Speech", "Speech synthesis mislukt");
+                    setButtonsClickable(true);
+                }
+            });
         }
 
     }
-
-    public void speakReplay() {
-        speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);  // Zet de knoppen klikbaar
-                speechRecognitionManager.startListening();
-            }
-
-            @Override
-            public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);  // Zet de knoppen klikbaar zelfs als de spraaksynthese mislukt
-                speakReplay();
-            }
-        });
-    }
-
     @Override
     protected void onDestroy() {
         if (speechRecognitionManager != null) {
             speechRecognitionManager.destroy();
         }
         super.onDestroy();
+    }
+
+    private void clearCache() {
+        try {
+            File cacheDir = getCacheDir();
+            if (cacheDir != null && cacheDir.isDirectory()) {
+                Log.d("goed gedaan", "Cache succesfully removed");
+                deleteDir(cacheDir);
+            }
+        } catch (Exception e) {
+            Log.e("MainActivity", "Error clearing cache: " + e.getMessage());
+        }
+    }
+
+    private boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String child : children) {
+                boolean success = deleteDir(new File(dir, child));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
     }
 
     @Override

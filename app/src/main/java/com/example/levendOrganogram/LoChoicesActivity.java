@@ -110,15 +110,25 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     @Override
     public void onSpeechResult(String result) {
         switch (AnswerConverter.determineAnswer(result)) {
-            case YES:
-                handleButtonClick(true);
+            case YES: // TODO: action if answer is yes
+                if(choice == 1){
+                    messageIntent.putExtra("userAgrees",true);
+                    startActivity(messageIntent);
+                } else {
+                    messageIntent.putExtra("userAgrees",false);
+                    startActivity(messageIntent);
+                }
                 break;
-            case NO:
-                handleButtonClick(false);
+            case NO: // TODO: action if answer is no
+                if(choice == 1){
+                    messageIntent.putExtra("userAgrees",false);
+                    startActivity(messageIntent);
+                } else {
+                    messageIntent.putExtra("userAgrees",true);
+                    startActivity(messageIntent);
+                }
                 break;
-            default:
-                speechRecognitionManager.startListening();
-                break;
+            default: speechRecognitionManager.startListening(); break;
         }
     }
 

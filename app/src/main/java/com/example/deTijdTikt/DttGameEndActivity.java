@@ -115,14 +115,13 @@ public class DttGameEndActivity extends AppCompatActivity implements SpeechRecog
     public void speakTextPlayAgain() {
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("Oke, we gaan nog een ronde spelen! Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("We gaan nog een keer spelen. Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
                 replayGame();
             }
-
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");

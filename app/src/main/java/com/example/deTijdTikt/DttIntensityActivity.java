@@ -42,6 +42,10 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
     private int currentIntensityIndex = 0;
     private ArrayList<Statement> filteredStatements;
 
+    private ArrayList<Statement> allStatements;
+
+    private ArrayList<String> categories;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +55,19 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        categories = new ArrayList<>();
         selectedIntensities = new ArrayList<>();
-        filteredStatements = getIntent().getParcelableArrayListExtra("statements");
-        Log.d("DttIntensity", "Filtered statements: " + filteredStatements.size());
+        allStatements = getIntent().getParcelableArrayListExtra("statements");
 
-        for (Statement statement : filteredStatements) {
+        filteredStatements = new ArrayList<Statement>();
+        categories.add("Werk-prive balans");
+
+        for (Statement statement : allStatements) {
+            for(String category : categories){
+                if(statement.category.equals(category)){
+                    filteredStatements.add(statement);
+                }
+            }
             statement.category = "Werk-prive balans";
         }
 

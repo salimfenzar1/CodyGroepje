@@ -57,8 +57,6 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
 
         statementImageView = findViewById(R.id.image_view_foto_case);
 
-        statementImageView = findViewById(R.id.image_view_foto_case);
-
         if (filteredStatements != null && !filteredStatements.isEmpty()) {
             Collections.shuffle(filteredStatements);
             chosenCase = filteredStatements.remove(0);  // Get a random statement and remove it from the list

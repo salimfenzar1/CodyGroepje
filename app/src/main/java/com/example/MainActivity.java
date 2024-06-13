@@ -167,6 +167,12 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
             intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
             startActivity(intent);
+        } else if ("levend organogram".equalsIgnoreCase(result.trim())) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+            Intent intent = new Intent(getApplicationContext(), LoSubjectsActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+            startActivity(intent);
         } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
             speakReplay();
         }

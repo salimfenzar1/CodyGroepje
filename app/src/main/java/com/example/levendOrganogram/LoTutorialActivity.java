@@ -99,7 +99,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         speechRecognitionManager.stopListening();
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("We vormen een kring om mij heen. Ik lees steeds een stelling voor. Als jullie het eens zijn met de stelling kom jełeczbij mij staan. Ben je het oneens met de stelling ga je verder van mij af staan. Zodra iedereen staat bespreken we waarom jullie daarvoor hebben gekozen... Is alles nu wel duidelijk?", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("We vormen een kring om mij heen. Ik lees steeds een stelling voor. Als jullie het eens zijn met de stelling kom je dichterbij mij staan. Ben je het oneens met de stelling ga je verder van mij af staan. Zodra iedereen staat bespreken we waarom jullie daarvoor hebben gekozen... Is alles nu wel duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

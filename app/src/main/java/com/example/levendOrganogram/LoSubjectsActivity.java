@@ -65,7 +65,6 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
         themeDecease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt op overlijden gedrukt", Toast.LENGTH_SHORT).show();
                 filterAndNavigate("Overlijden");
             }
         });

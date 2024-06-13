@@ -82,6 +82,24 @@ public class GlobalListeningFeedbackButtonTest {
         assertEquals(View.GONE, button.getVisibility());
     }
 
+    @Test
+    public void testHideListeningButton() {
+        // Set up a button and attach it to the TestGlobalSpeechState
+        AttributeSet attrs = createAttributeSet();
+        GlobalListeningFeedbackButton button = new GlobalListeningFeedbackButton(testContext, attrs);
+        testAppContext.setGlobalListeningButton(button);
+
+        // Initially, ensure the button is visible
+        testAppContext.showListeningButton(true);
+        assertEquals(View.GONE, button.getVisibility());
+
+        // Call hideListeningButton() to hide the button
+        testAppContext.hideListeningButton();
+
+        // Verify that the button is now hidden
+        assertEquals(View.GONE, button.getVisibility());
+    }
+
 
     private AttributeSet createAttributeSet() {
         // Create an AttributeSet using a dummy XML resource

@@ -27,6 +27,7 @@ import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.codycactus.R;
 import com.example.deTijdTikt.DttIntensityActivity;
+import com.example.levendOrganogram.LoSubjectsActivity;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 
 public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             public void onClick(View v) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
+                Intent intent = new Intent(MainActivity.this, LoSubjectsActivity.class);
+                intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+                startActivity(intent);
             }
         });
         watVind.setOnClickListener(new View.OnClickListener() {
@@ -173,8 +177,13 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
             intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
             startActivity(intent);
-        }
-         else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
+        } else if ("levend organogram".equalsIgnoreCase(result.trim()) || "levend".equalsIgnoreCase(result.trim())) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+            Intent intent = new Intent(MainActivity.this, LoSubjectsActivity.class);
+            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+            startActivity(intent);
+        } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
             speechHelper = new SpeechHelper(this);
             speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
                 @Override

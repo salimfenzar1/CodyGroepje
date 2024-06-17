@@ -143,9 +143,10 @@ public class DttGameEndActivity extends AppCompatActivity implements SpeechRecog
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("ja")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("ja")) {
             speakTextPlayAgain();
-        } else if (result.equalsIgnoreCase("nee")) {
+        } else if (result.contains("nee")) {
             goHome();
         } else {
             speechRecognitionManager.startListening();

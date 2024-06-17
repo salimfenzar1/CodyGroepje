@@ -24,6 +24,9 @@ import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
 import com.example.watVindIkErger.WvieStatementYellowActivity;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,14 +70,27 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
                     statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     int width = statementImageView.getWidth();
                     int height = statementImageView.getHeight();
-                    int resId = getResources().getIdentifier(statement.imageUrl, "drawable", getPackageName());
-                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
-                    statementImageView.setImageBitmap(bitmap);
+
+                    if (statement.getImageUrl().startsWith("gs://") || statement.getImageUrl().startsWith("https://")) {
+                        // Load image from Firebase Storage
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(statement.getImageUrl());
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            Picasso.get().load(uri).resize(width, height).centerInside().into(statementImageView);
+                        }).addOnFailureListener(exception -> {
+                            Log.e("LoStatementActivity", "Failed to load image from Firebase Storage", exception);
+                        });
+                    } else {
+                        // Load image from drawable
+                        int resId = getResources().getIdentifier(statement.imageUrl, "drawable", getPackageName());
+                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                        statementImageView.setImageBitmap(bitmap);
+                    }
                 }
             });
         } else {
             Log.d("LoStatementActivity", "No statements available.");
         }
+
 
         next = findViewById(R.id.nextButton);
 

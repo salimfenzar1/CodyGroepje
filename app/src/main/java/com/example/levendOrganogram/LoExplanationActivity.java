@@ -153,7 +153,6 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
     }
 
     private void navigateToNextActivity() {
-        Toast.makeText(getApplicationContext(), "Navigating to the next activity", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), LoOtherOpinionsActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

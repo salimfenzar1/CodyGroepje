@@ -213,21 +213,24 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
     @Override
     public void onSpeechResult(String result) {
         Log.d("WvieIntensityActivity", "onSpeechResult: " + result);
-        if (result.equalsIgnoreCase("laagdrempelig")){
+        result = (result.trim().toLowerCase());
+        if (result.contains("laag")|| result.contains("drempelig")){
             toggleIntensitySelection(1);
             updateImageView("laagdrempelig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("matig")){
+        } else if (result.contains("matig")){
             toggleIntensitySelection(2);
             updateImageView("matig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("intens")){
+        } else if (result.contains("intens")){
             toggleIntensitySelection(3);
             updateImageView("intens");
             filterStatementsByIntensity();
             startNextActivity();
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
 

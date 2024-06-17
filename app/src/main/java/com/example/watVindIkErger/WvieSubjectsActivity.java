@@ -49,6 +49,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         if (allStatements == null) {
             allStatements = new ArrayList<>(); // Initialize to an empty list if null
         }
+        Log.d("statementcount", "number of statements " + allStatements.size());
 
         setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {

@@ -56,14 +56,6 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         statementImageView = findViewById(R.id.image_view_foto_statement_red);
 
         if (filteredStatements != null) {
-            // Check if there are less than 2 active statements
-            long activeCount = filteredStatements.stream().filter(Statement::isActive).count();
-            if (activeCount < 2) {
-                // Reset all statements to active
-                for (Statement statement : filteredStatements) {
-                    statement.setActive(true);
-                }
-            }
 
             // Filter active statements
             ArrayList<Statement> activeStatements = new ArrayList<>();

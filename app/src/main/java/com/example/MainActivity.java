@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -72,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
 
         // Initialize ViewModel
         statementViewModel = new ViewModelProvider(this).get(StatementViewModel.class);
-        Observer<List<Statement>> statementObserver = new Observer<List<Statement>>() {
+
+        statementViewModel.getAllStatements().observe(this, new Observer<List<Statement>>() {
             @Override
             public void onChanged(List<Statement> statements) {
                 allStatements = new ArrayList<>(statements);
@@ -82,11 +84,10 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                 // Remove observer after getting the initial data
                 statementViewModel.getAllStatements().removeObserver(this);
             }
-        };
-        statementViewModel.getAllStatements().observe(this, statementObserver);
+        });
 
-        // Populate local database if not already populated
-        DatabaseInitializer.populateDatabase(this);
+        // Clear and populate local database
+        new PopulateDatabaseTask().execute();
 
         tijdTikt.setOnClickListener(v -> navigateToActivity(DttIntensityActivity.class));
         levend.setOnClickListener(v -> navigateToActivity(LoSubjectsActivity.class));
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         speakIntro();
-        new FetchStatementsTask().execute();
     }
 
     private void navigateToActivity(Class<?> activityClass) {
@@ -217,67 +217,43 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         super.onPointerCaptureChanged(hasCapture);
     }
 
-    private class FetchStatementsTask extends AsyncTask<Void, Void, List<Statement>> {
+    private class PopulateDatabaseTask extends AsyncTask<Void, Void, Void> {
         @Override
-        protected List<Statement> doInBackground(Void... voids) {
-            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            FirebaseStorage storage = FirebaseStorage.getInstance();
+        protected Void doInBackground(Void... voids) {
+            // Populate with initial local data
+            DatabaseInitializer.populateDatabase(MainActivity.this);
 
-            List<Statement> firebaseStatements = new ArrayList<>();
-            firestore.collection("statements").get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    QuerySnapshot querySnapshot = task.getResult();
-                    if (querySnapshot != null) {
-                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                            Statement statement = document.toObject(Statement.class);
-                            if (statement != null) {
-                                Statement existingStatement = statementViewModel.getStatementByDescription(statement.description);
-                                if (existingStatement == null) {
-                                    firebaseStatements.add(statement);
-                                    Log.d("MainActivity", "Fetched Firebase statement: " + statement.description);
-                                    if (statement.getImageUrl() != null && !statement.getImageUrl().isEmpty()) {
-                                        String imageUrl = statement.getImageUrl();
-                                        Log.d("MainActivity", "Processing image URL: " + imageUrl); // Debug log
-                                        if (imageUrl.startsWith("gs://") || imageUrl.startsWith("https://")) {
-                                            StorageReference storageReference = storage.getReferenceFromUrl(imageUrl);
-                                            try {
-                                                File localFile = File.createTempFile("images", "jpg");
-                                                storageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                                                    statement.imageUrl = localFile.getAbsolutePath();
-                                                    statementViewModel.insert(statement); // Update statement with local image path
-                                                }).addOnFailureListener(exception -> {
-                                                    Log.e("MainActivity", "Failed to download image: " + exception.getMessage());
-                                                });
-                                            } catch (IOException e) {
-                                                Log.e("MainActivity", "Error creating temp file: " + e.getMessage());
-                                            }
-                                        } else {
-                                            Log.e("MainActivity", "Invalid image URL: " + imageUrl);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+            // Fetch and add Firebase statements
+            fetchStatementsFromFirebase();
 
-                        // Log the number of statements fetched from Firebase
-                        Log.d("MainActivity", "Number of Firebase statements fetched: " + firebaseStatements.size());
+            return null;
+        }
+    }
 
-                        // Insert all Firebase statements into the database
-                        for (Statement statement : firebaseStatements) {
+    private void fetchStatementsFromFirebase() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        firestore.collection("statements").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    List<Statement> firebaseStatements = new ArrayList<>();
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        Statement statement = document.toObject(Statement.class);
+                        if (statement != null) {
+                            firebaseStatements.add(statement);
+                            Log.d("MainActivity", "Fetched Firebase statement: " + statement.description);
+                            // Gebruik de originele URL zonder deze te wijzigen naar een lokaal pad
                             statementViewModel.insert(statement);
                         }
                     }
-                } else {
-                    Log.e("MainActivity", "Error getting documents: ", task.getException());
-                }
-            });
-            return firebaseStatements;
-        }
 
-        @Override
-        protected void onPostExecute(List<Statement> firebaseStatements) {
-            super.onPostExecute(firebaseStatements);
-            Log.d("MainActivity", "Current statements after Firebase fetch: " + firebaseStatements.size());
-        }
+                    // Log the number of statements fetched from Firebase
+                    Log.d("MainActivity", "Number of Firebase statements fetched: " + firebaseStatements.size() + "testing" + allStatements.size());
+                }
+            } else {
+                Log.e("MainActivity", "Error getting documents: ", task.getException());
+            }
+        });
     }
 }

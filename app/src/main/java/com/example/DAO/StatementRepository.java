@@ -73,6 +73,14 @@ public class StatementRepository {
         new InsertStatementAsyncTask(statementDAO).execute(statement);
     }
 
+    public void insertAll(List<Statement> statements) {
+        new InsertAllStatementsAsyncTask(statementDAO).execute(statements);
+    }
+
+    public void deleteAllStatements() {
+        new DeleteAllStatementsAsyncTask(statementDAO).execute();
+    }
+
     public void updateStatementStatus(int id, boolean isActive) {
         new UpdateStatementStatusAsyncTask(statementDAO, isActive).execute(id);
     }
@@ -104,6 +112,34 @@ public class StatementRepository {
         @Override
         protected Void doInBackground(Statement... statements) {
             statementDAO.insert(statements[0]);
+            return null;
+        }
+    }
+
+    private static class InsertAllStatementsAsyncTask extends AsyncTask<List<Statement>, Void, Void> {
+        private StatementDAO statementDAO;
+
+        private InsertAllStatementsAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @Override
+        protected Void doInBackground(List<Statement>... statements) {
+            statementDAO.insertAll(statements[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAllStatementsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private StatementDAO statementDAO;
+
+        private DeleteAllStatementsAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            statementDAO.deleteAllStatements();
             return null;
         }
     }

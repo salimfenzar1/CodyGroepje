@@ -48,16 +48,6 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
 
-
-        // Checking if filtered statements are received
-        if (filteredStatements.size() < 1) {
-            Log.d("WvieTutorialActivity", "Filtered statements count: " + filteredStatements.size());
-        } else {
-            Log.d("WvieTutorialActivity", "No filtered statements received.");
-        }
-
-
-
         next = findViewById(R.id.nextButton);
         hearButton = findViewById(R.id.hearButton);
 

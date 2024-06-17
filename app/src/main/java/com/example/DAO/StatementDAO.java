@@ -47,6 +47,12 @@ public interface StatementDAO {
     @Query("UPDATE statement SET isActive = :isActive WHERE statementId = :id")
     void updateStatementStatus(int id, boolean isActive);
 
+    @Query("DELETE FROM statement")
+    void deleteAllStatements();
+
+    @Insert
+    void insertAll(List<Statement> statements);
+
     @Query("UPDATE statement SET isActive = :isActive")
     void updateAllStatementsStatus(boolean isActive);
 

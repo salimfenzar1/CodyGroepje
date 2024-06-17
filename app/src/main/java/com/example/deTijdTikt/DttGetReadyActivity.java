@@ -31,6 +31,7 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private boolean clarificationAsked = false;
+    private final DttGetReadyActivity context = this;
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
@@ -47,7 +48,6 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
             return insets;
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
@@ -84,6 +84,8 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
 
     public void speakText() {
         speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Iemand pak de rode en iemand pak de gele bal van mij af. Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {
@@ -91,6 +93,7 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -98,13 +101,16 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakText();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
     public void speakTextAskClarification() {
         speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Is het duidelijk wat jullie moeten doen?", new SpeechHelper.SpeechCompleteListener() {
@@ -113,6 +119,7 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
                 clarificationAsked = true;
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -121,13 +128,17 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
                 clarificationAsked = true;
-                speakTextAskClarification();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
     public void speakTextClarification() {
         speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         DttGetReadyActivity currentActivity = this;
@@ -136,6 +147,7 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 new Handler().postDelayed(currentActivity::speakText, 5000);
             }
 
@@ -143,6 +155,7 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 new Handler().postDelayed(currentActivity::speakText, 5000);
             }
         });
@@ -162,7 +175,7 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
                 speechRecognitionManager.destroy();
                 goNextActivity();
             } else if (result.contains("nee")) {
-                new Handler().postDelayed(this::speakText, 3000);
+                new Handler().postDelayed(this::speakTextAskClarification, 1000);
             } else {
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);

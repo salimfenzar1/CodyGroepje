@@ -34,6 +34,7 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton hearButton;
+    private final DttCaseActivity context = this;
     private ImageView statementImageView;
     private ArrayList<Statement> filteredStatements;
     private Statement chosenCase;
@@ -94,7 +95,6 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
             }
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         new Handler().postDelayed(this::speakText, 2000);
     }
 
@@ -109,6 +109,9 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         speechHelper = new SpeechHelper(this);
 
         if (chosenCase != null) {
@@ -124,6 +127,7 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
                 public void onSpeechFailed() {
                     Log.e("Speech", "Speech synthesis mislukt");
                     setButtonsClickable(true);
+                    askIfClear();
                 }
             });
         } else {
@@ -144,15 +148,21 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     }
 
     public void askIfClear() {
+
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         askingForClarity = true;
         speechHelper.speak("Heeft iedereen de casus begrepen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });

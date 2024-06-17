@@ -25,6 +25,7 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private boolean someoneWantsToSpeak = false;
+    private final DttOtherOpinionsActivity context = this;
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
@@ -43,7 +44,6 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
             return insets;
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -82,6 +82,9 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Wat vinden de andere hiervan? Wanneer iedereen is uitgepraat, zeg dan: Wij willen doorgaan, om door te gaan!", new SpeechHelper.SpeechCompleteListener() {
@@ -89,6 +92,7 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -96,7 +100,8 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                new Handler().postDelayed(() -> speakText(), 1000);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

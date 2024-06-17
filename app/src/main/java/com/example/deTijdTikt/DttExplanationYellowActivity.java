@@ -28,6 +28,7 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
     private boolean isFirst = false;
+    private final DttExplanationYellowActivity context = this;
     private boolean hasPassedToNextPerson = false;
 
     private boolean isNextButtonClicked = false; // boolean variabele om de knopstatus bij te houden
@@ -45,7 +46,6 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
 
         isFirst = getIntent().getBooleanExtra("isFirst", false);
         hasPassedToNextPerson = getIntent().getBooleanExtra("hasPassedToNextPerson", false);
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -75,6 +75,9 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Kan de persoon met de gele bal de casus toelichten? Als je klaar bent met praten zeg dan: wij willen doorgaan!", new SpeechHelper.SpeechCompleteListener() {
@@ -82,6 +85,7 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -89,7 +93,8 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                new Handler().postDelayed(() -> speakText(), 1000);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

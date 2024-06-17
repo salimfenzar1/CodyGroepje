@@ -78,6 +78,7 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
         Intent intent = new Intent(getApplicationContext(), DttGameEndActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {

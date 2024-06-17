@@ -142,5 +142,6 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
                 startActivity(intent);
             }
         }
+        finish();
     }
 }

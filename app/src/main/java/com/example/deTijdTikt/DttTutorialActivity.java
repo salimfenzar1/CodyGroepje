@@ -150,6 +150,7 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
         Intent intent = new Intent(getApplicationContext(), DttGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

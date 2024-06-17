@@ -84,12 +84,14 @@ public class DttGameEndActivity extends AppCompatActivity implements SpeechRecog
     private void goHome() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void replayGame() {
         Intent intent = new Intent(getApplicationContext(), DttGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {

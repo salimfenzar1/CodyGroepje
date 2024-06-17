@@ -160,6 +160,7 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
         Intent intent = new Intent(this, DttTutorialActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {

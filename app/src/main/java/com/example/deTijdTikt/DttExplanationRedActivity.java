@@ -138,5 +138,6 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
                 startActivity(intent);
             }
         }
+        finish();
     }
 }

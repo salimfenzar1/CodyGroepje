@@ -1,5 +1,6 @@
 package com.example.deTijdTikt;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
+    private final DttTutorialActivity context = this;
     private boolean isNextButtonClicked = false; // boolean variabele om de knopstatus bij te houden
 
 
@@ -41,8 +43,6 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
@@ -76,6 +76,7 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
             @Override
             public void onClick(View v) {
                 speakText();
+
             }
         });
 
@@ -85,7 +86,10 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Welkom bij: De Tijd Tikt! Ik licht kort toe wat we gaan doen. Jullie mogen zo de ballen van mij afhalen en een cirkel vormen. De ballen gaan jullie overgooien terwijl de timer loopt. Wanneer deze afgaat, stoppen jullie met overgooien. Ik zal dan een casus toelichten. Daarna vraag ik om een reactie van de personen met de ballen. Tot slot vraag ik of jullie de bal naar iemand anders willen gooien... Is alles duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -93,6 +97,7 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 

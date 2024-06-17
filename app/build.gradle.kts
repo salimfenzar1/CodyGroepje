@@ -35,6 +35,7 @@ dependencies {
     implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
     implementation ("androidx.lifecycle:lifecycle-reactivestreams:2.5.1")
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.squareup.picasso:picasso:2.71828")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

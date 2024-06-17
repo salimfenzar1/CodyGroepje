@@ -22,6 +22,9 @@ import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,9 +92,21 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
                         statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         int width = statementImageView.getWidth();
                         int height = statementImageView.getHeight();
-                        int resId = getResources().getIdentifier(yellowStatement.getImageUrl(), "drawable", getPackageName());
-                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
-                        statementImageView.setImageBitmap(bitmap);
+
+                        if (yellowStatement.getImageUrl().startsWith("gs://") || yellowStatement.getImageUrl().startsWith("https://")) {
+                            // Load image from Firebase Storage
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(yellowStatement.getImageUrl());
+                            storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                                Picasso.get().load(uri).resize(width, height).centerInside().into(statementImageView);
+                            }).addOnFailureListener(exception -> {
+                                Log.e("WvieStatementYellowActivity", "Failed to load image from Firebase Storage", exception);
+                            });
+                        } else {
+                            // Load image from drawable
+                            int resId = getResources().getIdentifier(yellowStatement.getImageUrl(), "drawable", getPackageName());
+                            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
+                            statementImageView.setImageBitmap(bitmap);
+                        }
                     }
                 });
             } else {

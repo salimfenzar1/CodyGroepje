@@ -43,7 +43,7 @@ public class StatementViewModel extends AndroidViewModel {
         repository.updateAllStatementsStatus(isActive);
     }
 
-    public Statement getStatementByDescription(String description) {
+    public LiveData<Statement> getStatementByDescription(String description) {
         return repository.getStatementByDescription(description);
     }
 }

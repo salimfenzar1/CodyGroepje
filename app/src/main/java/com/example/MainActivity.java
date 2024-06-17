@@ -241,10 +241,13 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                         Statement statement = document.toObject(Statement.class);
                         if (statement != null) {
-                            firebaseStatements.add(statement);
-                            Log.d("MainActivity", "Fetched Firebase statement: " + statement.description);
-                            // Gebruik de originele URL zonder deze te wijzigen naar een lokaal pad
-                            statementViewModel.insert(statement);
+                            statementViewModel.getStatementByDescription(statement.description).observe(this, existingStatement -> {
+                            if (existingStatement == null) {
+                                firebaseStatements.add(statement);
+                                Log.d("MainActivity", "Fetched Firebase statement: " + statement.description);
+                                statementViewModel.insert(statement);
+                            }
+                        });
                         }
                     }
 

@@ -60,9 +60,13 @@ public class StatementRepository {
         return laagdrempeligAndIntensStatements;
     }
 
-    public Statement getStatementByDescription(String description) {
+    public LiveData<Statement> getStatementByDescription(String description) {
+        return statementDAO.getStatementByDescription(description);
+    }
+
+    public Statement getStatementByDescriptionSync(String description) {
         try {
-            return new GetStatementByDescriptionAsyncTask(statementDAO).execute(description).get();
+            return new GetStatementByDescriptionSyncAsyncTask(statementDAO).execute(description).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return null;
@@ -89,16 +93,16 @@ public class StatementRepository {
         new UpdateAllStatementsStatusAsyncTask(statementDAO, isActive).execute();
     }
 
-    private static class GetStatementByDescriptionAsyncTask extends AsyncTask<String, Void, Statement> {
+    private static class GetStatementByDescriptionSyncAsyncTask extends AsyncTask<String, Void, Statement> {
         private StatementDAO statementDAO;
 
-        private GetStatementByDescriptionAsyncTask(StatementDAO statementDAO) {
+        private GetStatementByDescriptionSyncAsyncTask(StatementDAO statementDAO) {
             this.statementDAO = statementDAO;
         }
 
         @Override
         protected Statement doInBackground(String... descriptions) {
-            return statementDAO.getStatementByDescription(descriptions[0]);
+            return statementDAO.getStatementByDescriptionSync(descriptions[0]);
         }
     }
 
@@ -123,8 +127,9 @@ public class StatementRepository {
             this.statementDAO = statementDAO;
         }
 
+        @SafeVarargs
         @Override
-        protected Void doInBackground(List<Statement>... statements) {
+        protected final Void doInBackground(List<Statement>... statements) {
             statementDAO.insertAll(statements[0]);
             return null;
         }

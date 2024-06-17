@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
+        if ("wat vind ik erger".equalsIgnoreCase(result.trim()) || "wat vind ik erg".equalsIgnoreCase(result.trim())) {
             navigateToActivity(WvieSubjectsActivity.class);
         } else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
             navigateToActivity(DttIntensityActivity.class);

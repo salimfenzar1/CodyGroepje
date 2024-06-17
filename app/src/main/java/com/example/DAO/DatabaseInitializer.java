@@ -123,13 +123,13 @@ public class DatabaseInitializer {
                 statement12.isActive = true;
                 statementDAO.insert(statement12);
 //
-             //   Statement statement13 = new Statement();
-          //      statement13.description = "Ik vind het lastig wanneer familie van een reeds overleden cliënt langs komt. Als ik hun verdriet zie weet ik niet wat ik tegen hen moet zeggen.";
-           //     statement13.category = "Overlijden";
-           //     statement13.imageUrl = String.valueOf(R.drawable.familie_overleden);
-           //     statement13.intensityLevel = 3;
-            //    statement13.isActive = true;
-            //    statementDAO.insert(statement13);
+                Statement statement13 = new Statement();
+                statement13.description = "Ik vind het lastig wanneer familie van een reeds overleden cliënt langs komt. Als ik hun verdriet zie weet ik niet wat ik tegen hen moet zeggen.";
+                statement13.category = "Overlijden";
+                statement13.imageUrl = String.valueOf(R.drawable.familie_overleden);
+                statement13.intensityLevel = 3;
+                statement13.isActive = true;
+                statementDAO.insert(statement13);
 //
                 Statement statement14 = new Statement();
                 statement14.description = "Na het overlijden van een cliënt heb ik wel eens te maken gehad met een stressreactie, zoals herbeleving, vermijdingsgedrag of verhoogde prikkelbaarheid.";
@@ -155,13 +155,13 @@ public class DatabaseInitializer {
                 statement16.isActive = true;
                 statementDAO.insert(statement16);
 //
-           //     Statement statement17 = new Statement();
-              //  statement17.description = "Wanneer een cliënt een dierbare verliest vind ik het lastig om hen hiermee te begeleiden.";
-             //   statement17.category = "Overlijden";
-             //   statement17.imageUrl = String.valueOf(R.drawable.client_dierbare_begeleiden);
-             //   statement17.intensityLevel = 3;
-            //    statement17.isActive = true;
-             //   statementDAO.insert(statement17);
+               Statement statement17 = new Statement();
+                statement17.description = "Wanneer een cliënt een dierbare verliest vind ik het lastig om hen hiermee te begeleiden.";
+                statement17.category = "Overlijden";
+                statement17.imageUrl = String.valueOf(R.drawable.client_dierbare_begeleiden);
+                statement17.intensityLevel = 3;
+               statement17.isActive = true;
+                statementDAO.insert(statement17);
 //
                 Statement statement18 = new Statement();
                 statement18.description = "Wanneer ik met collega's praat over het overlijden van een cliënt merk ik dat zij de dood als een onvermijdelijk onderdeel van het leven zien en hier minder moeite mee hebben. Ik voel me daardoor soms niet begrepen of gehoord in mijn eigen gevoelens.";

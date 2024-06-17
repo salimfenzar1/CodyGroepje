@@ -58,6 +58,7 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });

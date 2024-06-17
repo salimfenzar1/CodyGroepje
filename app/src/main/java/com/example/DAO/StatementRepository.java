@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.example.Model.Statement;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class StatementRepository {
     private StatementDAO statementDAO;
@@ -59,6 +60,15 @@ public class StatementRepository {
         return laagdrempeligAndIntensStatements;
     }
 
+    public Statement getStatementByDescription(String description) {
+        try {
+            return new GetStatementByDescriptionAsyncTask(statementDAO).execute(description).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void insert(Statement statement) {
         new InsertStatementAsyncTask(statementDAO).execute(statement);
     }
@@ -69,6 +79,19 @@ public class StatementRepository {
 
     public void updateAllStatementsStatus(boolean isActive) {
         new UpdateAllStatementsStatusAsyncTask(statementDAO, isActive).execute();
+    }
+
+    private static class GetStatementByDescriptionAsyncTask extends AsyncTask<String, Void, Statement> {
+        private StatementDAO statementDAO;
+
+        private GetStatementByDescriptionAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @Override
+        protected Statement doInBackground(String... descriptions) {
+            return statementDAO.getStatementByDescription(descriptions[0]);
+        }
     }
 
     private static class InsertStatementAsyncTask extends AsyncTask<Statement, Void, Void> {

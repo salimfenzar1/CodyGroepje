@@ -87,6 +87,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                     speechRecognitionManager.startListening();
                 }
             }
+
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
@@ -95,7 +96,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             }
         });
     }
-
 
     private void speakRetry() {
         speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
@@ -106,7 +106,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 speechRecognitionManager.startListening();
             }
 
-
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
@@ -115,7 +114,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             }
         });
     }
-
 
     private void setButtonsClickable(boolean clickable) {
         themeDecease.setEnabled(clickable);
@@ -153,7 +151,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);
     }
-
 
     @Override
     protected void onDestroy() {

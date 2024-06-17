@@ -243,6 +243,8 @@ public class DatabaseInitializer {
                 statement27.isActive = true;
                 statementDAO.insert(statement27);
 
+
+
                 // Mark the database as populated
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean(PREF_POPULATED, true);

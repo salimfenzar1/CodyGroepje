@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.Model.Statement;
 
-@Database(entities = {Statement.class}, version = 1)
+@Database(entities = {Statement.class}, version = 2)
 public abstract class StatementRoom extends RoomDatabase{
 
     private static StatementRoom instance;

@@ -39,6 +39,11 @@ public interface StatementDAO {
     @Query("SELECT * FROM statement WHERE isActive = 1")
     LiveData<List<Statement>> getActiveStatements();
 
+
+    @Query("SELECT * FROM statement WHERE description = :description LIMIT 1")
+    Statement getStatementByDescription(String description);
+
+
     @Query("UPDATE statement SET isActive = :isActive WHERE statementId = :id")
     void updateStatementStatus(int id, boolean isActive);
 

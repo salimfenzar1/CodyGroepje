@@ -67,6 +67,10 @@ public class StatementViewModel extends AndroidViewModel {
         repository.updateStatementStatus(id, isActive);
     }
 
+    public Statement getStatementByDescription(String description) {
+        return repository.getStatementByDescription(description);
+    }
+
     public void updateAllStatementsStatus(boolean isActive) {
         repository.updateAllStatementsStatus(isActive);
     }

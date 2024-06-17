@@ -21,6 +21,9 @@ public class Statement implements Parcelable {
     @ColumnInfo(name = "imageUrl")
     public String imageUrl;
 
+    @ColumnInfo(name = "pictureName")
+    public String pictureName;
+
     @ColumnInfo(name = "isActive")
     public boolean isActive;
 
@@ -35,10 +38,10 @@ public class Statement implements Parcelable {
         return isActive;
     }
 
-
     public String getImageUrl() {
         return imageUrl;
     }
+
     public void setActive(boolean active) {
         isActive = active;
     }
@@ -48,6 +51,7 @@ public class Statement implements Parcelable {
         description = in.readString();
         category = in.readString();
         imageUrl = in.readString();
+        pictureName = in.readString();
         isActive = in.readByte() != 0;
         intensityLevel = in.readInt();
     }
@@ -75,6 +79,7 @@ public class Statement implements Parcelable {
         dest.writeString(description);
         dest.writeString(category);
         dest.writeString(imageUrl);
+        dest.writeString(pictureName);
         dest.writeByte((byte) (isActive ? 1 : 0));
         dest.writeInt(intensityLevel);
     }

@@ -12,4 +12,5 @@
     <string name="game_end">Einde casus</string>
     <string name="overgooien">Overgooien</string>
     <string name="pass_to_next_person">Gooi de ballen naar...</string>
+    <string name="explanation">Toelichting</string>
 </resources>

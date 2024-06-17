@@ -60,6 +60,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 performOutro();
             }
         });
@@ -67,6 +68,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 repeatText();
             }
         });

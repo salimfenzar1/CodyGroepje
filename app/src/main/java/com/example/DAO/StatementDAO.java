@@ -2,6 +2,7 @@ package com.example.DAO;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -51,6 +52,9 @@ public interface StatementDAO {
 
     @Query("DELETE FROM statement")
     void deleteAllStatements();
+
+    @Delete
+    void delete(Statement statement);
 
     @Query("UPDATE statement SET isActive = :isActive WHERE statementId = :id")
     void updateStatementStatus(int id, boolean isActive);

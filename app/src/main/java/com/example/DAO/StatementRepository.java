@@ -76,7 +76,6 @@ public class StatementRepository {
     public void insert(Statement statement) {
         new InsertStatementAsyncTask(statementDAO).execute(statement);
     }
-
     public void insertAll(List<Statement> statements) {
         new InsertAllStatementsAsyncTask(statementDAO).execute(statements);
     }
@@ -87,6 +86,9 @@ public class StatementRepository {
 
     public void updateStatementStatus(int id, boolean isActive) {
         new UpdateStatementStatusAsyncTask(statementDAO, isActive).execute(id);
+    }
+    public void deleteStatement(Statement statement) {
+        new DeleteStatementAsyncTask(statementDAO).execute(statement);
     }
 
     public void updateAllStatementsStatus(boolean isActive) {
@@ -103,6 +105,19 @@ public class StatementRepository {
         @Override
         protected Statement doInBackground(String... descriptions) {
             return statementDAO.getStatementByDescriptionSync(descriptions[0]);
+        }
+    }
+    private static class DeleteStatementAsyncTask extends AsyncTask<Statement, Void, Void> {
+        private StatementDAO statementDAO;
+
+        private DeleteStatementAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Statement... statements) {
+            statementDAO.delete(statements[0]);
+            return null;
         }
     }
 

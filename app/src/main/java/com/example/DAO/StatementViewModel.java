@@ -46,4 +46,8 @@ public class StatementViewModel extends AndroidViewModel {
     public LiveData<Statement> getStatementByDescription(String description) {
         return repository.getStatementByDescription(description);
     }
+
+    public void delete(Statement localStatement) {
+        repository.deleteStatement(localStatement);
+    }
 }

@@ -24,8 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/bottomMargin"
+        android:layout_marginTop="@dimen/topMargin"
         android:text="Keuzes"
         android:textColor="#5b7683"
         android:textSize="@dimen/game_title_text_size" />

@@ -72,7 +72,6 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
         themeSexuality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt op seksualiteit op de werkvloer gedrukt", Toast.LENGTH_SHORT).show();
                 filterAndNavigate("Seksualiteit op de werkvloer");
             }
         });
@@ -139,7 +138,6 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
         } else {
             speakRetry();
-            Toast.makeText(this, "Ongeldige invoer, probeer opnieuw.", Toast.LENGTH_SHORT).show();
         }
     }
 

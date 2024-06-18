@@ -149,7 +149,6 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             repeatText();
         } else {
             // Handle the UNKNOWN case if necessary
-            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
             speechRecognitionManager.startListening();
         }
     }

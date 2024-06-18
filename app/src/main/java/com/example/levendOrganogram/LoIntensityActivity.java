@@ -107,7 +107,7 @@ public class LoIntensityActivity extends AppCompatActivity implements SpeechReco
                     filterStatementsByIntensity();
                     startNextActivity();
                 } else {
-                    Toast.makeText(LoIntensityActivity.this, "Selecteer minimaal één intensiteit", Toast.LENGTH_SHORT).show();
+                    Log.d("error", "Click one intensity");
                 }
             }
         });

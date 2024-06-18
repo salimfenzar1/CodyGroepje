@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                     speechRecognitionManager.startListening();
                     Log.d("speakreplay", "begint met luisteren");
                 }
-
                 @Override
                 public void onSpeechFailed() {
                     Log.e("Speech", "Speech synthesis mislukt");

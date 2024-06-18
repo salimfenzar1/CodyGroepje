@@ -97,7 +97,6 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), LoChooseDistanceActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
@@ -181,11 +180,9 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
                 askingForClarity = false;
                 speakText();
             } else {
-                Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
                 speechRecognitionManager.startListening();
             }
         } else {
-            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
             speechRecognitionManager.startListening();
         }
     }

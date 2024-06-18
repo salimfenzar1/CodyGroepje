@@ -216,6 +216,8 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             updateImageView("intens");
             filterStatementsByIntensity();
             startNextActivity();
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
 

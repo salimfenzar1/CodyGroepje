@@ -47,6 +47,8 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
         }
 
         next = findViewById(R.id.nextButton);
+        hearButton = findViewById(R.id.hearButton);
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,13 +56,15 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             }
         });
 
-        hearButton = findViewById(R.id.hearButton);
+
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
+
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
@@ -78,6 +82,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 
@@ -85,6 +90,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 new Handler().postDelayed(() -> speakText(), 1000);
+                setButtonsClickable(true);
             }
         });
     }

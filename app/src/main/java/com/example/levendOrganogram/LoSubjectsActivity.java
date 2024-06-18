@@ -164,6 +164,7 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
         Intent intent = new Intent(getApplicationContext(), LoIntensityActivity.class);
         intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);
+        finish();
     }
 
 

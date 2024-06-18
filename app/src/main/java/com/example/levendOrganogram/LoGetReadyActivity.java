@@ -187,6 +187,7 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
         Intent intent = new Intent(getApplicationContext(), LoStatementActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

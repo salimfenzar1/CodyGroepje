@@ -153,10 +153,12 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
             speakTextSecondPart();
         } else if ((hasSpokenSecondPart && result.contains("nee") && !hasSpokenThirdPart)) {
             startActivity(intent);
+            finish();
         } else if ((hasSpokenSecondPart && result.contains("ja") && !hasSpokenThirdPart)) {
             speakText();
         } else if (hasSpokenThirdPart) {
             startActivity(intent);
+            finish();
         }
     }
 

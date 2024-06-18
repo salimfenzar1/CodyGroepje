@@ -175,6 +175,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         Intent intent = new Intent(getApplicationContext(), LoGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

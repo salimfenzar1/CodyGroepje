@@ -83,12 +83,14 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
     private void goHome() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void replayGame() {
         Intent intent = new Intent(getApplicationContext(), LoGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {

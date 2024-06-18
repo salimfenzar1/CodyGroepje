@@ -126,6 +126,7 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
         }
         messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(messageIntent);
+        finish();
     }
 
     @Override
@@ -136,10 +137,12 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
                     messageIntent.putExtra("userAgrees",true);
                     messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
+                    finish();
                 } else {
                     messageIntent.putExtra("userAgrees",false);
                     messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
+                    finish();
                 }
                 break;
             case NO: // TODO: action if answer is no
@@ -147,10 +150,12 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
                     messageIntent.putExtra("userAgrees",false);
                     messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
+                    finish();
                 } else {
                     messageIntent.putExtra("userAgrees",true);
                     messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                     startActivity(messageIntent);
+                    finish();
                 }
                 break;
             default: speechRecognitionManager.startListening(); break;

@@ -148,6 +148,7 @@ public class LoIntensityActivity extends AppCompatActivity implements SpeechReco
         Intent intent = new Intent(this, LoTutorialActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {

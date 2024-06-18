@@ -69,6 +69,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
         Intent intent = new Intent(getApplicationContext(), LoGameEndActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {

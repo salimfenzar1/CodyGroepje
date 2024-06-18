@@ -16,13 +16,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.ImageUtils;
+import com.example.utils.ImageUtils;
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
+import com.example.services.SpeechHelper;
+import com.example.services.SpeechRecognitionManager;
 import com.example.codycactus.R;
-import com.example.watVindIkErger.WvieChoiceRedActivity;
-import com.example.watVindIkErger.WvieStatementYellowActivity;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -99,14 +100,26 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     }
 
     private void loadImage(String imageUrl, int width, int height) {
-        int resId = getResources().getIdentifier(imageUrl, "drawable", getPackageName());
-        if (resId != 0) {
-            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
-            statementImageView.setImageBitmap(bitmap);
+        if (imageUrl.startsWith("gs://") || imageUrl.startsWith("https://")) {
+            // Load image from Firebase Storage
+            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+            storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                Picasso.get().load(uri).resize(width, height).centerInside().into(statementImageView);
+            }).addOnFailureListener(exception -> {
+                Log.e("DttCaseActivity", "Failed to load image from Firebase Storage", exception);
+            });
         } else {
-            Log.e("DttCaseActivity", "Image resource not found for: " + imageUrl);
+            // Load image from drawable
+            int resId = getResources().getIdentifier(imageUrl, "drawable", getPackageName());
+            if (resId != 0) {
+                Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                statementImageView.setImageBitmap(bitmap);
+            } else {
+                Log.e("DttCaseActivity", "Image resource not found for: " + imageUrl);
+            }
         }
     }
+
 
     public void speakText() {
         speechRecognitionManager.stopListening();

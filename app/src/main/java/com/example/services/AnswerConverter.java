@@ -1,4 +1,4 @@
-package com.example;
+package com.example.services;
 
 public class AnswerConverter {
     public static Answers determineAnswer(String input) {

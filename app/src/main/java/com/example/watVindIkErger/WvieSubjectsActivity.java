@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -15,8 +14,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
+import com.example.services.SpeechHelper;
+import com.example.services.SpeechRecognitionManager;
 import com.example.codycactus.R;
 
 import java.util.ArrayList;
@@ -49,6 +48,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         if (allStatements == null) {
             allStatements = new ArrayList<>(); // Initialize to an empty list if null
         }
+        Log.d("statementcount", "number of statements " + allStatements.size());
 
         setButtonsClickable(false);
         hearButton.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +87,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                     speechRecognitionManager.startListening();
                 }
             }
+
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
@@ -95,7 +96,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             }
         });
     }
-
 
     private void speakRetry() {
         speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
@@ -106,7 +106,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 speechRecognitionManager.startListening();
             }
 
-
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
@@ -115,7 +114,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             }
         });
     }
-
 
     private void setButtonsClickable(boolean clickable) {
         themeDecease.setEnabled(clickable);
@@ -153,7 +151,6 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
         intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);
     }
-
 
     @Override
     protected void onDestroy() {

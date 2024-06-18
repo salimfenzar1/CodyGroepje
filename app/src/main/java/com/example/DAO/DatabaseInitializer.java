@@ -20,8 +20,11 @@ public class DatabaseInitializer {
 
         if (!isPopulated) {
             executor.execute(() -> {
+
                 StatementRoom db = StatementRoom.getInstance(context);
                 StatementDAO statementDAO = db.statementDAO();
+                statementDAO.deleteAllStatements();
+
 
                 // Seksualiteit op de werkvloer
                 // Insert initial statements
@@ -123,7 +126,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement12);
 //
                 Statement statement13 = new Statement();
-                statement13.description = "Ik vind het lastig wanneer familie van een, reeds overleden, cliënt langs komt. Als ik hun verdriet zie weet ik niet wat ik tegen hen moet zeggen.";
+                statement13.description = "Ik vind het lastig wanneer familie van een reeds overleden cliënt langs komt. Als ik hun verdriet zie weet ik niet wat ik tegen hen moet zeggen.";
                 statement13.category = "Overlijden";
                 statement13.imageUrl = String.valueOf(R.drawable.familie_overleden);
                 statement13.intensityLevel = 3;
@@ -154,12 +157,12 @@ public class DatabaseInitializer {
                 statement16.isActive = true;
                 statementDAO.insert(statement16);
 //
-                Statement statement17 = new Statement();
+               Statement statement17 = new Statement();
                 statement17.description = "Wanneer een cliënt een dierbare verliest vind ik het lastig om hen hiermee te begeleiden.";
                 statement17.category = "Overlijden";
                 statement17.imageUrl = String.valueOf(R.drawable.client_dierbare_begeleiden);
                 statement17.intensityLevel = 3;
-                statement17.isActive = true;
+               statement17.isActive = true;
                 statementDAO.insert(statement17);
 //
                 Statement statement18 = new Statement();
@@ -251,3 +254,4 @@ public class DatabaseInitializer {
         }
     }
 }
+

@@ -16,11 +16,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.ImageUtils;
+import com.example.utils.ImageUtils;
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
+import com.example.services.SpeechHelper;
+import com.example.services.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,14 +56,6 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         statementImageView = findViewById(R.id.image_view_foto_statement_red);
 
         if (filteredStatements != null) {
-            // Check if there are less than 2 active statements
-            long activeCount = filteredStatements.stream().filter(Statement::isActive).count();
-            if (activeCount < 2) {
-                // Reset all statements to active
-                for (Statement statement : filteredStatements) {
-                    statement.setActive(true);
-                }
-            }
 
             // Filter active statements
             ArrayList<Statement> activeStatements = new ArrayList<>();
@@ -83,9 +78,21 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
                         statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         int width = statementImageView.getWidth();
                         int height = statementImageView.getHeight();
-                        int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
-                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
-                        statementImageView.setImageBitmap(bitmap);
+
+                        if (redStatement.getImageUrl().startsWith("gs://") || redStatement.getImageUrl().startsWith("https://")) {
+                            // Load image from Firebase Storage
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(redStatement.getImageUrl());
+                            storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                                Picasso.get().load(uri).resize(width, height).centerInside().into(statementImageView);
+                            }).addOnFailureListener(exception -> {
+                                Log.e("WvieStatementRedActivity", "Failed to load image from Firebase Storage", exception);
+                            });
+                        } else {
+                            // Load image from drawable
+                            int resId = getResources().getIdentifier(redStatement.imageUrl, "drawable", getPackageName());
+                            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                            statementImageView.setImageBitmap(bitmap);
+                        }
                     }
                 });
             } else {
@@ -123,7 +130,6 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
         new Handler().postDelayed(this::speakText, 2000);
     }
-
     public void speakText() {
         speechHelper = new SpeechHelper(this);
 

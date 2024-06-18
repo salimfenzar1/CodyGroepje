@@ -9,7 +9,7 @@
     android:background="@drawable/background_red">
 
     <!--GLOBAL LISTENING FEEDBACK BUTTON (TOP RIGHT)-->
-    <com.example.GlobalListeningFeedbackButton
+    <com.example.components.GlobalListeningFeedbackButton
         android:id="@+id/listeningButton"
         android:layout_width="120px"
         android:layout_height="120px"

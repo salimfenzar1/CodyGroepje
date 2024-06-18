@@ -1,4 +1,4 @@
-package com.example;
+package com.example.services;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.speech.RecognizerIntent;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+
+import com.example.components.GlobalSpeechState;
 
 import java.util.ArrayList;
 import java.util.Locale;

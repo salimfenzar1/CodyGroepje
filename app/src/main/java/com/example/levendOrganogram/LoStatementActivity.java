@@ -1,6 +1,5 @@
 package com.example.levendOrganogram;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,12 +16,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.ImageUtils;
+import com.example.utils.ImageUtils;
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
+import com.example.services.SpeechHelper;
+import com.example.services.SpeechRecognitionManager;
 import com.example.codycactus.R;
-import com.example.watVindIkErger.WvieStatementYellowActivity;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,21 +67,33 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
                     statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     int width = statementImageView.getWidth();
                     int height = statementImageView.getHeight();
-                    int resId = getResources().getIdentifier(statement.imageUrl, "drawable", getPackageName());
-                    Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
-                    statementImageView.setImageBitmap(bitmap);
+
+                    if (statement.getImageUrl().startsWith("gs://") || statement.getImageUrl().startsWith("https://")) {
+                        // Load image from Firebase Storage
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(statement.getImageUrl());
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            Picasso.get().load(uri).resize(width, height).centerInside().into(statementImageView);
+                        }).addOnFailureListener(exception -> {
+                            Log.e("LoStatementActivity", "Failed to load image from Firebase Storage", exception);
+                        });
+                    } else {
+                        // Load image from drawable
+                        int resId = getResources().getIdentifier(statement.imageUrl, "drawable", getPackageName());
+                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width, height);
+                        statementImageView.setImageBitmap(bitmap);
+                    }
                 }
             });
         } else {
             Log.d("LoStatementActivity", "No statements available.");
         }
 
+
         next = findViewById(R.id.nextButton);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "je hebt op de volgende pagina gedrukt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), LoChooseDistanceActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 startActivity(intent);
@@ -165,11 +177,9 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
                 askingForClarity = false;
                 speakText();
             } else {
-                Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
                 speechRecognitionManager.startListening();
             }
         } else {
-            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
             speechRecognitionManager.startListening();
         }
     }

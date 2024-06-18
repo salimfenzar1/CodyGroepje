@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +16,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.ImageUtils;
+import com.example.utils.ImageUtils;
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
+import com.example.services.SpeechHelper;
+import com.example.services.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,19 +56,11 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
         redStatement = intent.getParcelableExtra("red_statement");
 
         Log.d("WvieStatementYellowActivity", "Filtered statements: " + filteredStatements);
-        Log.d("WvieStatementYellowActivity", "Red statement: " + redStatement);
+        Log.d("WvieStatementYellowActivity", "Red statement: " + redStatement.description);
 
         statementImageView = findViewById(R.id.image_view_foto_statement_yellow);
 
         if (filteredStatements != null) {
-            // Check if there are less than 2 active statements
-            long activeCount = filteredStatements.stream().filter(Statement::isActive).count();
-            if (activeCount < 2) {
-                for (Statement statement : filteredStatements) {
-                    statement.setActive(true);
-                }
-            }
-
             // Filter active statements
             ArrayList<Statement> activeStatements = new ArrayList<>();
             for (Statement statement : filteredStatements) {
@@ -89,9 +83,36 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
                         statementImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         int width = statementImageView.getWidth();
                         int height = statementImageView.getHeight();
-                        int resId = getResources().getIdentifier(yellowStatement.getImageUrl(), "drawable", getPackageName());
-                        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // scale down by half
-                        statementImageView.setImageBitmap(bitmap);
+
+                        if (yellowStatement.getImageUrl().startsWith("gs://") || yellowStatement.getImageUrl().startsWith("https://")) {
+                            // Laad afbeelding van Firebase Storage
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(yellowStatement.getImageUrl());
+                            storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                                Log.d("WvieStatementYellowActivity", "Loading image from URL: " + uri.toString());
+                                Picasso.get().load(uri).resize(width, height).centerInside().into(statementImageView, new com.squareup.picasso.Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Log.d("WvieStatementYellowActivity", "Image loaded successfully");
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        Log.e("WvieStatementYellowActivity", "Error loading image", e);
+                                    }
+                                });
+                            }).addOnFailureListener(exception -> {
+                                Log.e("WvieStatementYellowActivity", "Failed to get download URL from Firebase Storage", exception);
+                            });
+                        } else {
+                            // Laad afbeelding van drawable
+                            int resId = getResources().getIdentifier(yellowStatement.getImageUrl(), "drawable", getPackageName());
+                            if (resId != 0) {
+                                Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(getResources(), resId, width / 2, height / 2); // Schaal naar beneden met de helft
+                                statementImageView.setImageBitmap(bitmap);
+                            } else {
+                                Log.e("WvieStatementYellowActivity", "Drawable resource not found for: " + yellowStatement.getImageUrl());
+                            }
+                        }
                     }
                 });
             } else {

@@ -1,6 +1,5 @@
 package com.example.levendOrganogram;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,10 +15,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
+import com.example.services.SpeechHelper;
+import com.example.services.SpeechRecognitionManager;
 import com.example.codycactus.R;
-import com.example.watVindIkErger.WvieIntensityActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +69,6 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
         themeSexuality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Je hebt op seksualiteit op de werkvloer gedrukt", Toast.LENGTH_SHORT).show();
                 filterAndNavigate("Seksualiteit op de werkvloer");
             }
         });
@@ -139,7 +135,6 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
         } else {
             speakRetry();
-            Toast.makeText(this, "Ongeldige invoer, probeer opnieuw.", Toast.LENGTH_SHORT).show();
         }
     }
 

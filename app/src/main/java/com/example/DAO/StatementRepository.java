@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.example.Model.Statement;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class StatementRepository {
     private StatementDAO statementDAO;
@@ -59,16 +60,65 @@ public class StatementRepository {
         return laagdrempeligAndIntensStatements;
     }
 
+    public LiveData<Statement> getStatementByDescription(String description) {
+        return statementDAO.getStatementByDescription(description);
+    }
+
+    public Statement getStatementByDescriptionSync(String description) {
+        try {
+            return new GetStatementByDescriptionSyncAsyncTask(statementDAO).execute(description).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void insert(Statement statement) {
         new InsertStatementAsyncTask(statementDAO).execute(statement);
+    }
+    public void insertAll(List<Statement> statements) {
+        new InsertAllStatementsAsyncTask(statementDAO).execute(statements);
+    }
+
+    public void deleteAllStatements() {
+        new DeleteAllStatementsAsyncTask(statementDAO).execute();
     }
 
     public void updateStatementStatus(int id, boolean isActive) {
         new UpdateStatementStatusAsyncTask(statementDAO, isActive).execute(id);
     }
+    public void deleteStatement(Statement statement) {
+        new DeleteStatementAsyncTask(statementDAO).execute(statement);
+    }
 
     public void updateAllStatementsStatus(boolean isActive) {
         new UpdateAllStatementsStatusAsyncTask(statementDAO, isActive).execute();
+    }
+
+    private static class GetStatementByDescriptionSyncAsyncTask extends AsyncTask<String, Void, Statement> {
+        private StatementDAO statementDAO;
+
+        private GetStatementByDescriptionSyncAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @Override
+        protected Statement doInBackground(String... descriptions) {
+            return statementDAO.getStatementByDescriptionSync(descriptions[0]);
+        }
+    }
+    private static class DeleteStatementAsyncTask extends AsyncTask<Statement, Void, Void> {
+        private StatementDAO statementDAO;
+
+        private DeleteStatementAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Statement... statements) {
+            statementDAO.delete(statements[0]);
+            return null;
+        }
     }
 
     private static class InsertStatementAsyncTask extends AsyncTask<Statement, Void, Void> {
@@ -81,6 +131,35 @@ public class StatementRepository {
         @Override
         protected Void doInBackground(Statement... statements) {
             statementDAO.insert(statements[0]);
+            return null;
+        }
+    }
+
+    private static class InsertAllStatementsAsyncTask extends AsyncTask<List<Statement>, Void, Void> {
+        private StatementDAO statementDAO;
+
+        private InsertAllStatementsAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<Statement>... statements) {
+            statementDAO.insertAll(statements[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAllStatementsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private StatementDAO statementDAO;
+
+        private DeleteAllStatementsAsyncTask(StatementDAO statementDAO) {
+            this.statementDAO = statementDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            statementDAO.deleteAllStatements();
             return null;
         }
     }

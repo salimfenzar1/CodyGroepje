@@ -1,4 +1,4 @@
-package com.example;
+package com.example.services;
 
 import android.content.Context;
 import android.os.AsyncTask;

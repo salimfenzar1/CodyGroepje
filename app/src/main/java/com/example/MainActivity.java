@@ -3,15 +3,12 @@ package com.example;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,16 +16,27 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.DAO.DatabaseInitializer;
+import com.example.DAO.StatementDAO;
+import com.example.DAO.StatementDAO_Impl;
 import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
+import com.example.services.SpeechHelper;
 import com.example.codycactus.R;
 import com.example.deTijdTikt.DttIntensityActivity;
 import com.example.levendOrganogram.LoSubjectsActivity;
+import com.example.services.SpeechRecognitionManager;
 import com.example.watVindIkErger.WvieSubjectsActivity;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SpeechRecognitionManager.SpeechRecognitionListener {
 
@@ -41,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private StatementViewModel statementViewModel;
-    private List<Statement> allStatements;
+    private StatementDAO statementDAO;
+    private List<Statement> allStatements = new ArrayList<>(); // Initialize the list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,73 +70,55 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
 
         setButtonsClickable(false);
 
-        // Initialize the database if not already populated
-        DatabaseInitializer.populateDatabase(this);
-
         // Initialize ViewModel
         statementViewModel = new ViewModelProvider(this).get(StatementViewModel.class);
-        statementViewModel.getAllStatements().observe(this, statements -> {
-            allStatements = new ArrayList<>(statements);
-            // Ensure the resetAllStatements is called only after allStatements is initialized
-            resetAllStatements();
-        });
 
-
-        tijdTikt.setOnClickListener(new View.OnClickListener() {
+        statementViewModel.getAllStatements().observe(this, new Observer<List<Statement>>() {
             @Override
-            public void onClick(View v) {
-                speechRecognitionManager.stopListening();
-                speechRecognitionManager.destroy();
+            public void onChanged(List<Statement> statements) {
+                if (statements != null) {
+                    allStatements = new ArrayList<>(statements);
+                    Log.d("MainActivity", "Number of statements in local database: " + allStatements.size());
 
-                Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
-               intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
-                startActivity(intent);
-            }
-        });
-        levend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                speechRecognitionManager.stopListening();
-                speechRecognitionManager.destroy();
-                Intent intent = new Intent(MainActivity.this, LoSubjectsActivity.class);
-                intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
-                startActivity(intent);
-            }
-        });
-        watVind.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                speechRecognitionManager.stopListening();
-                speechRecognitionManager.destroy();
-                Intent intent = new Intent(getApplicationContext(), WvieSubjectsActivity.class);
-                intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
-                startActivity(intent);
+                    // Remove observer after getting the initial data
+                    statementViewModel.getAllStatements().removeObserver(this);
+                } else {
+                    Log.d("MainActivity", "Statements list is null");
+                }
             }
         });
 
-        setButtonsClickable(false);
+        DatabaseInitializer.populateDatabase(MainActivity.this);
+        new PopulateDatabaseTask().execute();
+        Log.d("Db", "Statements teogevoegd: " + allStatements.size());
+
+        tijdTikt.setOnClickListener(v -> navigateToActivity(DttIntensityActivity.class));
+        levend.setOnClickListener(v -> navigateToActivity(LoSubjectsActivity.class));
+        watVind.setOnClickListener(v -> navigateToActivity(WvieSubjectsActivity.class));
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         speakIntro();
     }
 
+    private void navigateToActivity(Class<?> activityClass) {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+        Intent intent = new Intent(MainActivity.this, activityClass);
+        intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
+        startActivity(intent);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean permissionToRecordAccepted = requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-        if (permissionToRecordAccepted) {
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             speechRecognitionManager = new SpeechRecognitionManager(this, this);
         } else {
             Toast.makeText(this, "Permission to use microphone denied", Toast.LENGTH_SHORT).show();
             finish(); // Close the app if permission is denied
         }
-    }
-
-    private void resetAllStatements() {
-        statementViewModel.updateAllStatementsStatus(true);
-//        Toast.makeText(MainActivity.this, "All statements have been reset to active", Toast.LENGTH_SHORT).show();
     }
 
     public void speakIntro() {
@@ -138,14 +129,15 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);  // Zet de knoppen klikbaar
                 Log.d("MainActivity", "Buttons should be clickable now.");
-                speechRecognitionManager.startListening();
+                if (speechRecognitionManager != null) {
+                    speechRecognitionManager.startListening();
+                }
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);  // Zet de knoppen klikbaar zelfs als de spraaksynthese mislukt
-                Log.d("MainActivity", "Buttons should be clickable now even after speech failure.");
                 speakIntro();
             }
         });
@@ -164,33 +156,22 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if ("wat vind ik erger".equalsIgnoreCase(result.trim())) {
-            speechRecognitionManager.stopListening();
-            speechRecognitionManager.destroy();
-            Intent intent = new Intent(MainActivity.this, WvieSubjectsActivity.class);
-            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
-            startActivity(intent);
-        }
-         else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
-            speechRecognitionManager.stopListening();
-            speechRecognitionManager.destroy();
-            Intent intent = new Intent(MainActivity.this, DttIntensityActivity.class);
-            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
-            startActivity(intent);
+        if ("wat vind ik erger".equalsIgnoreCase(result.trim()) || "wat vind ik erg".equalsIgnoreCase(result.trim())) {
+            navigateToActivity(WvieSubjectsActivity.class);
+        } else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
+            navigateToActivity(DttIntensityActivity.class);
         } else if ("levend organogram".equalsIgnoreCase(result.trim()) || "levend".equalsIgnoreCase(result.trim())) {
-            speechRecognitionManager.stopListening();
-            speechRecognitionManager.destroy();
-            Intent intent = new Intent(MainActivity.this, LoSubjectsActivity.class);
-            intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
-            startActivity(intent);
-        } else if(result.isEmpty() || !"wat vind ik erger".equalsIgnoreCase(result.trim())){
+            navigateToActivity(LoSubjectsActivity.class);
+        } else {
             speechHelper = new SpeechHelper(this);
             speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
                 @Override
                 public void onSpeechComplete() {
                     Log.d("Speech", "Speech synthesis voltooid");
                     setButtonsClickable(true);  // Zet de knoppen klikbaar
-                    speechRecognitionManager.startListening();
+                    if (speechRecognitionManager != null) {
+                        speechRecognitionManager.startListening();
+                    }
                     Log.d("speakreplay", "begint met luisteren");
                 }
 
@@ -201,8 +182,8 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                 }
             });
         }
-
     }
+
     @Override
     protected void onDestroy() {
         if (speechRecognitionManager != null) {
@@ -215,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         try {
             File cacheDir = getCacheDir();
             if (cacheDir != null && cacheDir.isDirectory()) {
-                Log.d("goed gedaan", "Cache succesfully removed");
+                Log.d("MainActivity", "Cache successfully removed");
                 deleteDir(cacheDir);
             }
         } catch (Exception e) {
@@ -239,5 +220,48 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+
+    private class PopulateDatabaseTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Populate with initial local data
+
+            // Fetch and add Firebase statements
+            fetchStatementsFromFirebase();
+
+
+            return null;
+        }
+    }
+
+    private void fetchStatementsFromFirebase() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        firestore.collection("statements").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    List<Statement> firebaseStatements = new ArrayList<>();
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        Statement statement = document.toObject(Statement.class);
+                        if (statement != null) {
+                            statementViewModel.getStatementByDescription(statement.description).observe(this, existingStatement -> {
+                                if (existingStatement == null) {
+                                    firebaseStatements.add(statement);
+                                    Log.d("Db", "Fetched Firebase statement: " + statement.description);
+                                    statementViewModel.insert(statement);
+                                }
+                            });
+                        }
+                    }
+
+                    // Log the number of statements fetched from Firebase
+                    Log.d("MainActivity", "Number of Firebase statements fetched: " + firebaseStatements.size() + " " + allStatements.size());
+                }
+            } else {
+                Log.e("MainActivity", "Error getting documents: ", task.getException());
+            }
+        });
     }
 }

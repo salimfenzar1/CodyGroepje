@@ -32,6 +32,7 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
     private ImageView themeDecease;
     private ImageView themeSexuality;
     private List<Statement> allStatements;
+    private final LoSubjectsActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,6 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             return insets;
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         hearButton = findViewById(R.id.hearButton);
         themeDecease = findViewById(R.id.image_view_family);
         themeSexuality = findViewById(R.id.image_seksualiteit);
@@ -81,33 +81,38 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                // Start listening immediately after speech synthesis completes
-                if (!speechRecognitionManager.isListening()) {
-                    speechRecognitionManager.startListening();
-                }
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakRetry();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
 
     private void speakRetry() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -116,7 +121,8 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakRetry();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

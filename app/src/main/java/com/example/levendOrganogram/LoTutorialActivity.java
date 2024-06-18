@@ -18,6 +18,7 @@ import com.example.Model.Statement;
 import com.example.SpeechHelper;
 import com.example.SpeechRecognitionManager;
 import com.example.codycactus.R;
+import com.example.deTijdTikt.DttOtherOpinionsActivity;
 import com.example.watVindIkErger.WvieGetReadyActivity;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     private ImageButton hearButton;
     private ArrayList<String> selectedIntensities;
     private ArrayList<Statement> filteredStatements;
+    private final LoTutorialActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,8 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
 
     public void speakText() {
         speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Welkom bij het spel levend organogram! Ik licht zo kort toe wat we gaan doen. We vormen zo een kring om mij heen. Ik lees steeds een stelling voor. Als jullie het eens zijn met de stelling kom je dichterbij mij staan. Ben je het oneens met de stelling ga je verder van mij af staan. Zodra iedereen staat bespreken we waarom jullie daarvoor hebben gekozen... Is alles duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -84,6 +88,8 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -91,12 +97,17 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
     public void repeatText() {
         speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("We vormen een kring om mij heen. Ik lees steeds een stelling voor. Als jullie het eens zijn met de stelling kom je dichterbij mij staan. Ben je het oneens met de stelling ga je verder van mij af staan. Zodra iedereen staat bespreken we waarom jullie daarvoor hebben gekozen... Is alles nu wel duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -104,6 +115,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -111,6 +123,8 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

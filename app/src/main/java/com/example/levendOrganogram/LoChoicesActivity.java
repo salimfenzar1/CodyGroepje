@@ -33,6 +33,8 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     private Intent messageIntent;
     private ArrayList<Statement> filteredStatements;
 
+    private final LoChoicesActivity context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +89,16 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     }
 
     private void speakText(String stelling) {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         speechHelper = new SpeechHelper(this);
         speechHelper.speak(stelling, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -100,6 +106,7 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });

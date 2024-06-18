@@ -37,6 +37,7 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
     private ArrayList<Statement> filteredStatements;
     private Statement statement;
     private boolean askingForClarity = false;
+    private final LoStatementActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,11 +100,13 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
             }
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         new Handler().postDelayed(this::speakText, 2000);
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         speechHelper = new SpeechHelper(this);
 
         if (statement != null) {
@@ -139,17 +142,21 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void askIfClear() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         askingForClarity = true;
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
-                speechRecognitionManager.startListening();
-            }
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();            }
         });
     }
 

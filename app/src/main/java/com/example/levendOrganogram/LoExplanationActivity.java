@@ -33,7 +33,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
-
+    private final LoExplanationActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,6 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
         });
 
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         speechHelper = new SpeechHelper(this);
 
         Intent intent = getIntent();
@@ -87,6 +86,8 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
         boolean value = hasSpokenSecondPart ? !userAgrees : userAgrees;
         String textToSpeak = value
@@ -99,6 +100,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
                 setButtonsClickable(true);
                 hasSpokenFirstPart = true;
                 hasSpokenThirdPart = hasSpokenSecondPart;
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
             @Override
@@ -107,6 +109,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
                 setButtonsClickable(true);
                 hasSpokenFirstPart = true;
                 hasSpokenThirdPart = hasSpokenSecondPart;
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
@@ -114,6 +117,9 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
 
 
     public void speakTextSecondPart() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         speechHelper = new SpeechHelper(this);
         String textToSpeak = userAgrees
                 ? "Is er iemand het oneens met de stelling?"
@@ -124,6 +130,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
                 hasSpokenSecondPart = true;
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
             @Override
@@ -131,6 +138,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
                 hasSpokenSecondPart = true;
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });

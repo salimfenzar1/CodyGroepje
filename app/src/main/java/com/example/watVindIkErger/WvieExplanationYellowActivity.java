@@ -100,8 +100,10 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         String textToSpeak = "Waarom vindt je de gele stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om door te gaan";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
@@ -134,8 +136,10 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
     }
 
     private void navigateToNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieOtherOpinionsActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

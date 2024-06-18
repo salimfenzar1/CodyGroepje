@@ -78,8 +78,10 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {
@@ -102,7 +104,10 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
     }
 
     public void speakTextAskClarification() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Is het duidelijk wat jullie moeten doen?", new SpeechHelper.SpeechCompleteListener() {
@@ -127,7 +132,10 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
     }
 
     public void speakTextClarification() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         WvieGetReadyActivity currentActivity = this;
@@ -165,12 +173,14 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
                 new Handler().postDelayed(this::speakText, 3000);
             } else {
                 speechRecognitionManager.stopListening();
+                speechRecognitionManager.destroy();
                 new Handler().postDelayed(this::speakText, 5000);
             }
         } else {
             if (result.contains("ja")) {
                 clarificationAsked = false;
                 speechRecognitionManager.stopListening();
+                speechRecognitionManager.destroy();
                 new Handler().postDelayed(this::speakText, 5000);
             } else if (result.contains("nee")) {
                 clarificationAsked = false;

@@ -75,8 +75,10 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
 
     public void speakText() {
         setButtonsClickable(false);
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Wat vinden de andere hiervan? Wanneer iedereen is uitgepraat, zeg dan: Wij willen doorgaan, om door te gaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override

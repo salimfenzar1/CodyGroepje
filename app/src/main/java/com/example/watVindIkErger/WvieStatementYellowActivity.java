@@ -126,8 +126,10 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     private void navigateToNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         if (!hasNavigated) { // Ensure the activity transition happens only once
             hasNavigated = true;
             Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
@@ -140,8 +142,10 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         if (yellowStatement != null) {
             speechHelper.speak("De stelling voor de kleur geel... " + yellowStatement.description, new SpeechHelper.SpeechCompleteListener() {
@@ -176,8 +180,10 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     public void askIfClear() {
+        if (speechRecognitionManager != null) {
         speechRecognitionManager.stopListening();
         speechRecognitionManager.destroy();
+    }
         askingForClarity = true;
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override

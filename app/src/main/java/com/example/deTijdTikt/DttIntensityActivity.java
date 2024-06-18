@@ -33,6 +33,7 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private ImageButton hearButton;
+    private final DttIntensityActivity context = this;
     private ImageButton next;
     private List<Integer> selectedIntensities;
     private boolean isInitialLowImage = true;
@@ -124,7 +125,6 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
             }
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         new Handler().postDelayed(this::speakText, 2000);
     }
@@ -160,15 +160,20 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
         Intent intent = new Intent(this, DttTutorialActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan! Als je een combinatie van de intensiteiten wilt kiezen, moet je dit handmatig op het scherm aanklikken.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -176,6 +181,8 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -212,21 +219,24 @@ public class DttIntensityActivity extends AppCompatActivity implements SpeechRec
     @Override
     public void onSpeechResult(String result) {
         Log.d("WvieIntensityActivity", "onSpeechResult: " + result);
-        if (result.equalsIgnoreCase("laagdrempelig")){
+        result = (result.trim().toLowerCase());
+        if (result.contains("laag")|| result.contains("drempelig")){
             toggleIntensitySelection(1);
             updateImageView("laagdrempelig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("matig")){
+        } else if (result.contains("matig")){
             toggleIntensitySelection(2);
             updateImageView("matig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("intens")){
+        } else if (result.contains("intens")){
             toggleIntensitySelection(3);
             updateImageView("intens");
             filterStatementsByIntensity();
             startNextActivity();
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
 

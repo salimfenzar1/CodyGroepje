@@ -27,6 +27,7 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
+    private final DttExplanationRedActivity context = this;
     private boolean isFirst = false;
     private boolean hasPassedToNextPerson = false;
     private boolean isNextButtonClicked = false; // boolean variabele om de knopstatus bij te houden
@@ -44,7 +45,6 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
 
         isFirst = getIntent().getBooleanExtra("isFirst", false);
         hasPassedToNextPerson = getIntent().getBooleanExtra("hasPassedToNextPerson", false);
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -74,6 +74,9 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Kan de persoon met de rode bal de casus toelichten? Als je klaar bent met praten zeg dan: wij willen doorgaan!", new SpeechHelper.SpeechCompleteListener() {
@@ -81,6 +84,7 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -88,7 +92,8 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                new Handler().postDelayed(() -> speakText(), 1000);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -101,7 +106,8 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result );
-        if (result.contains("Wij willen doorgaan")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("willen") || result.contains("doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();
@@ -138,5 +144,6 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
                 startActivity(intent);
             }
         }
+        finish();
     }
 }

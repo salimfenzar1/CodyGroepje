@@ -96,5 +96,6 @@ public class DttPassToNextPersonActivity extends AppCompatActivity {
         intent.putExtra("hasPassedToNextPerson", true);
         intent.putExtra("isFirst", true);
         startActivity(intent);
+        finish();
     }
 }

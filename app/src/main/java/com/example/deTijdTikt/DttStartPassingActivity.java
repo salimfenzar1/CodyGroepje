@@ -100,6 +100,7 @@ public class DttStartPassingActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), DttCaseActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

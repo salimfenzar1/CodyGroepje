@@ -137,11 +137,12 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
 @Override
     public void onSpeechResult(String result) {
         Log.d("WvieSubjectsActivity", "onSpeechResult: " + result);
-        if (result.equalsIgnoreCase("seksualiteit op de werkvloer")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("seksualiteit") || result.contains("werkvloer")) {
             filterAndNavigate("Seksualiteit op de werkvloer");
-        } else if (result.equalsIgnoreCase("overlijden")) {
+        } else if (result.contains("overlijden")) {
             filterAndNavigate("Overlijden");
-        } else if (result.equalsIgnoreCase("allebei")) {
+        } else if (result.contains("allebei") || result.contains("beide")) {
             filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
         } else {
             speakRetry();

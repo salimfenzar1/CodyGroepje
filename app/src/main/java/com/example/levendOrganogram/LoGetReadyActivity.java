@@ -154,23 +154,24 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
 
     @Override
     public void onSpeechResult(String result) {
+        result = (result.trim().toLowerCase());
         if (!clarificationAsked) {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
                 goNextActivity();
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 new Handler().postDelayed(this::speakTextAskClarification, 3000);
             } else {
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);
             }
         } else {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 clarificationAsked = false;
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 clarificationAsked = false;
                 speakTextClarification();
             } else {

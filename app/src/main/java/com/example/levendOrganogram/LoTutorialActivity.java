@@ -159,9 +159,10 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("ja")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("ja")) {
             performOutro();
-        } else if (result.equalsIgnoreCase("nee") || result.equalsIgnoreCase("misschien")) {
+        } else if (result.contains("nee") || result.contains("misschien")) {
             repeatText();
         } else {
             // Handle the UNKNOWN case if necessary

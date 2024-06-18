@@ -112,7 +112,8 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("Wij willen doorgaan")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("willen") || result.contains("doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();

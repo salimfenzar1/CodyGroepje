@@ -162,12 +162,12 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-
+        result = (result.trim().toLowerCase());
         if (askingForClarity) {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 askingForClarity = false;
                 goToNextPage();
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 askingForClarity = false;
                 speakText();
             } else {

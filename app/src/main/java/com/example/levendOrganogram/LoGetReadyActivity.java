@@ -76,8 +76,10 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {
@@ -100,8 +102,10 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakTextAskClarification() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Is het duidelijk wat jullie moeten doen?", new SpeechHelper.SpeechCompleteListener() {
@@ -125,8 +129,10 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakTextClarification() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         LoGetReadyActivity currentActivity = this;
@@ -182,8 +188,10 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
 
     private void goNextActivity() {
         Log.d("LoGetReadyActivityStatements", "Received filtered statements: " + filteredStatements);
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), LoStatementActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

@@ -80,8 +80,10 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
@@ -106,8 +108,10 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void repeatText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
 
         setButtonsClickable(false);
@@ -132,9 +136,10 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void performOutro() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
-
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Veel plezier met het spelen van Levend Organogram!", new SpeechHelper.SpeechCompleteListener() {
             @Override
@@ -171,8 +176,10 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
 
 
     private void goNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), LoGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

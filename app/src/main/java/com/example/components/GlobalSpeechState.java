@@ -1,4 +1,4 @@
-package com.example;
+package com.example.components;
 
 import android.app.Application;
 import android.view.View;

@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
-import com.example.SpeechRecognitionManager;
+import com.example.services.SpeechHelper;
+import com.example.services.SpeechRecognitionManager;
 import com.example.codycactus.R;
-import com.example.watVindIkErger.WvieGetReadyActivity;
 
 import java.util.ArrayList;
 
@@ -143,15 +141,18 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("ja")) {
+        String lowerCaseResult = result.toLowerCase();
+
+        if (lowerCaseResult.contains("ja")) {
             performOutro();
-        } else if (result.equalsIgnoreCase("nee") || result.equalsIgnoreCase("misschien")) {
+        } else if (lowerCaseResult.contains("nee") || lowerCaseResult.contains("misschien")) {
             repeatText();
         } else {
             // Handle the UNKNOWN case if necessary
             speechRecognitionManager.startListening();
         }
     }
+
 
 
     private void goNextActivity() {

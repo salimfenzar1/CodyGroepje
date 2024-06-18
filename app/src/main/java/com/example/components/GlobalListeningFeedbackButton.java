@@ -1,5 +1,5 @@
 // ListeningButton.java
-package com.example;
+package com.example.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

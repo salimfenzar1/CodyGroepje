@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
+import com.example.services.SpeechHelper;
 import com.example.codycactus.R;
 
 import java.util.ArrayList;

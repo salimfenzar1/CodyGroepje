@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -17,26 +16,23 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.DAO.DatabaseInitializer;
 import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
-import com.example.SpeechHelper;
+import com.example.services.SpeechHelper;
 import com.example.codycactus.R;
 import com.example.deTijdTikt.DttIntensityActivity;
 import com.example.levendOrganogram.LoSubjectsActivity;
+import com.example.services.SpeechRecognitionManager;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

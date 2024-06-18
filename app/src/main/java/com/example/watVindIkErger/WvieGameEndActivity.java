@@ -84,12 +84,14 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
     private void goHome() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void replayGame() {
         Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {
@@ -142,9 +144,10 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("ja")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("ja")) {
             speakTextPlayAgain();
-        } else if (result.equalsIgnoreCase("nee")) {
+        } else if (result.contains("nee")) {
             goHome();
         } else {
             speechRecognitionManager.startListening();

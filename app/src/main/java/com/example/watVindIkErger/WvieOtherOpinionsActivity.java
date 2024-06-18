@@ -69,7 +69,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     private void goNextActivity() {
         Intent intent = new Intent(getApplicationContext(), WvieGameEndActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-        startActivity(intent);
+        finish();
     }
 
     public void speakText() {
@@ -102,7 +102,8 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("wij willen doorgaan")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("willen") || result.contains("doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();

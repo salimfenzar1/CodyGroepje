@@ -145,6 +145,7 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
         intent.putExtra("yellow_statement", yellowStatement);
         intent.putExtra("red_statement", redStatement);
         startActivity(intent);
+        finish();
     }
 
     private void goRedActivity() {
@@ -156,6 +157,7 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
         intent.putExtra("yellow_statement", yellowStatement);
         intent.putExtra("red_statement", redStatement);
         startActivity(intent);
+        finish();
     }
 
     @Override

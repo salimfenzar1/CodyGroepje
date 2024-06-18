@@ -143,6 +143,7 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         intent.putExtra("yellow_statement", yellowStatement);
         intent.putExtra("red_statement", redStatement);
         startActivity(intent);
+        finish();
     }
 
     private void goRedActivity() {
@@ -154,6 +155,7 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         intent.putExtra("yellow_statement", yellowStatement);
         intent.putExtra("red_statement", redStatement);
         startActivity(intent);
+        finish();
     }
 
     @Override

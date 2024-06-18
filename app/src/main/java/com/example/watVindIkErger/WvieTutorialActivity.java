@@ -128,9 +128,10 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("ja")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("ja")) {
             performOutro();
-        } else if (result.equalsIgnoreCase("nee") || result.equalsIgnoreCase("misschien")) {
+        } else if (result.contains("nee") || result.contains("misschien")) {
             speakText();
         } else {
             speechRecognitionManager.startListening();
@@ -144,6 +145,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
         Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

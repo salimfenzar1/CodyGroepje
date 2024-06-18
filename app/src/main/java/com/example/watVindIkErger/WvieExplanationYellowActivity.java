@@ -34,7 +34,6 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
     private boolean selectedYes;
     private ArrayList<Statement> filteredStatements;
     private Statement yellowStatement;
-    private boolean listeningForContinuation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,14 +108,12 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                listeningForContinuation = true;
                 startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                listeningForContinuation = true;
                 startListening();
             }
         });
@@ -125,7 +122,8 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (listeningForContinuation && result.equalsIgnoreCase("Wij willen doorgaan")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("willen") || result.contains("doorgaan")) {
             navigateToNextActivity();
         } else {
             startListening();

@@ -34,7 +34,6 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
     private ArrayList<Statement> filteredStatements;
     private Statement redStatement;
     private ImageView image_view_red;
-    private boolean listeningForContinuation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,14 +107,12 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                listeningForContinuation = true;
                 startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                listeningForContinuation = true;
                 startListening();
             }
         });
@@ -124,7 +121,8 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("Wij willen doorgaan")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("willen") || result.contains("doorgaan")){
             navigateToNextActivity();
         } else {
             startListening();

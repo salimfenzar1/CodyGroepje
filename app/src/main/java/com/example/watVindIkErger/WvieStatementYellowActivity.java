@@ -134,6 +134,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
             intent.putExtra("red_statement", redStatement);
             intent.putExtra("yellow_statement", yellowStatement);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -189,12 +190,12 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-
+        result = (result.trim().toLowerCase());
         if (askingForClarity) {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 askingForClarity = false;
                 navigateToNextActivity();
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 askingForClarity = false;
                 speakText();
             } else {

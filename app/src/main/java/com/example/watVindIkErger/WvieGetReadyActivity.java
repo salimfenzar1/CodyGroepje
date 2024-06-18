@@ -150,23 +150,24 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
 
     @Override
     public void onSpeechResult(String result) {
+        result = (result.trim().toLowerCase());
         if (!clarificationAsked) {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
                 goNextActivity();
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 new Handler().postDelayed(this::speakText, 3000);
             } else {
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);
             }
         } else {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 clarificationAsked = false;
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 clarificationAsked = false;
                 speakTextClarification();
             } else {
@@ -183,6 +184,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
         Intent intent = new Intent(getApplicationContext(), WvieStatementRedActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

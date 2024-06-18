@@ -2,11 +2,19 @@ package com.example;
 
 public class AnswerConverter {
     public static Answers determineAnswer(String input) {
-        // Temporary method to replace when full user story needs to be done
-        // TODO: Implement proper method, including yes, no, maybe, and unknown
-        return isYes(input);
+
+        input = input.trim().toLowerCase();
+
+        if (input.contains("ja")) {
+            return Answers.YES;
+        } else if (input.contains("nee")) {
+            return Answers.NO;
+        } else {
+            return Answers.UNKNOWN;
+        }
     }
 
+    @Deprecated
     private static Answers isYes(String input) {
         switch (input.trim().toLowerCase()) {
             case "ja":

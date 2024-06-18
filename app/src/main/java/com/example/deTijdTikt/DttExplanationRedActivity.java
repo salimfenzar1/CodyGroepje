@@ -74,8 +74,10 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
@@ -126,8 +128,10 @@ public class DttExplanationRedActivity extends AppCompatActivity implements Spee
     }
 
     private void goNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         if (isFirst) {
             Intent intent = new Intent(this, DttExplanationYellowActivity.class);
             intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);

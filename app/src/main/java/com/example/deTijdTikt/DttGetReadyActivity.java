@@ -83,8 +83,10 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
@@ -108,8 +110,10 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void speakTextAskClarification() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
@@ -136,8 +140,10 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void speakTextClarification() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
@@ -196,8 +202,10 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
 
     private void goNextActivity() {
         Log.d("DttGetReady", "Received filtered statements: " + filteredStatements);
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), DttStartPassingActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

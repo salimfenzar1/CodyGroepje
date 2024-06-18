@@ -112,8 +112,10 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void performOutro() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Veel plezier met het spelen van de tijd tikt!", new SpeechHelper.SpeechCompleteListener() {
@@ -153,8 +155,10 @@ public class DttTutorialActivity extends AppCompatActivity implements SpeechReco
 
 
     private void goNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), DttGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

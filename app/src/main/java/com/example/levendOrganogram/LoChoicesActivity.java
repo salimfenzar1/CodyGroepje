@@ -85,6 +85,14 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
             }
         });
 
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonsClickable(false);
+                speakTextAgain();
+            }
+        });
+
         setButtonsClickable(false);
     }
 
@@ -112,6 +120,15 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
         });
     }
 
+    private void speakTextAgain() {
+        setButtonsClickable(false);
+        if (choice == 1) {
+            speakText("Is er iemand dichterbij komen staan?");
+        } else {
+            speakText("Is er iemand verder weg gaan staan?");
+        }
+    }
+
     private void setButtonsClickable(boolean clickable) {
         yesButton.setEnabled(clickable);
         noButton.setEnabled(clickable);
@@ -126,39 +143,32 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
         }
         messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(messageIntent);
-        finish();
     }
 
     @Override
     public void onSpeechResult(String result) {
         switch (AnswerConverter.determineAnswer(result)) {
-            case YES: // TODO: action if answer is yes
-                if(choice == 1){
-                    messageIntent.putExtra("userAgrees",true);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
-                    finish();
+            case YES:
+                if (choice == 1) {
+                    messageIntent.putExtra("userAgrees", true);
                 } else {
-                    messageIntent.putExtra("userAgrees",false);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
-                    finish();
+                    messageIntent.putExtra("userAgrees", false);
                 }
+                startActivity(messageIntent);
+                finish();
                 break;
-            case NO: // TODO: action if answer is no
-                if(choice == 1){
-                    messageIntent.putExtra("userAgrees",false);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
-                    finish();
+            case NO:
+                if (choice == 1) {
+                    messageIntent.putExtra("userAgrees", false);
                 } else {
-                    messageIntent.putExtra("userAgrees",true);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
-                    finish();
+                    messageIntent.putExtra("userAgrees", true);
                 }
+                startActivity(messageIntent);
+                finish();
                 break;
-            default: speechRecognitionManager.startListening(); break;
+            default:
+                speechRecognitionManager.startListening();
+                break;
         }
     }
 

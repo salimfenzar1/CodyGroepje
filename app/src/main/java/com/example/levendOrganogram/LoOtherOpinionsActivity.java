@@ -40,6 +40,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -47,6 +48,8 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
         }
 
         next = findViewById(R.id.nextButton);
+        hearButton = findViewById(R.id.hearButton);
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,13 +57,15 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             }
         });
 
-        hearButton = findViewById(R.id.hearButton);
+
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
+
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
@@ -83,6 +88,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 
@@ -91,6 +97,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
                 Log.e("Speech", "Speech synthesis mislukt");
                 speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
+                setButtonsClickable(true);
             }
         });
     }

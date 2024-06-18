@@ -62,6 +62,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 performOutro();
             }
         });
@@ -69,6 +70,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 repeatText();
             }
         });
@@ -163,7 +165,6 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             repeatText();
         } else {
             // Handle the UNKNOWN case if necessary
-            Toast.makeText(this, "Kun je dat alsjeblieft herhalen?", Toast.LENGTH_SHORT).show();
             speechRecognitionManager.startListening();
         }
     }

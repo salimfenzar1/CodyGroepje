@@ -20,6 +20,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.DAO.DatabaseInitializer;
+import com.example.DAO.StatementDAO;
+import com.example.DAO.StatementDAO_Impl;
 import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
 import com.example.services.SpeechHelper;
@@ -47,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     private SpeechHelper speechHelper;
     private SpeechRecognitionManager speechRecognitionManager;
     private StatementViewModel statementViewModel;
-    private List<Statement> allStatements;
+    private StatementDAO statementDAO;
+    private List<Statement> allStatements = new ArrayList<>(); // Initialize the list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +76,21 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         statementViewModel.getAllStatements().observe(this, new Observer<List<Statement>>() {
             @Override
             public void onChanged(List<Statement> statements) {
-                allStatements = new ArrayList<>(statements);
-                Log.d("MainActivity", "Number of statements in local database: " + allStatements.size());
-                resetAllStatements();
+                if (statements != null) {
+                    allStatements = new ArrayList<>(statements);
+                    Log.d("MainActivity", "Number of statements in local database: " + allStatements.size());
 
-                // Remove observer after getting the initial data
-                statementViewModel.getAllStatements().removeObserver(this);
+                    // Remove observer after getting the initial data
+                    statementViewModel.getAllStatements().removeObserver(this);
+                } else {
+                    Log.d("MainActivity", "Statements list is null");
+                }
             }
         });
 
-        // Clear and populate local database
+        DatabaseInitializer.populateDatabase(MainActivity.this);
         new PopulateDatabaseTask().execute();
+        Log.d("Db", "Statements teogevoegd: " + allStatements.size());
 
         tijdTikt.setOnClickListener(v -> navigateToActivity(DttIntensityActivity.class));
         levend.setOnClickListener(v -> navigateToActivity(LoSubjectsActivity.class));
@@ -94,8 +101,10 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     }
 
     private void navigateToActivity(Class<?> activityClass) {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(MainActivity.this, activityClass);
         intent.putParcelableArrayListExtra("statements", new ArrayList<>(allStatements));
         startActivity(intent);
@@ -112,10 +121,6 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         }
     }
 
-    private void resetAllStatements() {
-        statementViewModel.updateAllStatementsStatus(true);
-    }
-
     public void speakIntro() {
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Hoi, ik ben Cody! jullie kunnen samen met mij een spel spelen. Deze spellen zullen het mogelijk maken om moeilijke onderwerpen bespreekbaar te maken. Jullie kunnen kiezen tussen: De Tijd Tikt ,  levend organogram, en wat vind ik erger! Welk spel willen jullie spelen?", new SpeechHelper.SpeechCompleteListener() {
@@ -124,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);  // Zet de knoppen klikbaar
                 Log.d("MainActivity", "Buttons should be clickable now.");
-                speechRecognitionManager.startListening();
+                if (speechRecognitionManager != null) {
+                    speechRecognitionManager.startListening();
+                }
             }
 
             @Override
@@ -162,9 +169,12 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                 public void onSpeechComplete() {
                     Log.d("Speech", "Speech synthesis voltooid");
                     setButtonsClickable(true);  // Zet de knoppen klikbaar
-                    speechRecognitionManager.startListening();
+                    if (speechRecognitionManager != null) {
+                        speechRecognitionManager.startListening();
+                    }
                     Log.d("speakreplay", "begint met luisteren");
                 }
+
                 @Override
                 public void onSpeechFailed() {
                     Log.e("Speech", "Speech synthesis mislukt");
@@ -216,10 +226,10 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
         @Override
         protected Void doInBackground(Void... voids) {
             // Populate with initial local data
-            DatabaseInitializer.populateDatabase(MainActivity.this);
 
             // Fetch and add Firebase statements
             fetchStatementsFromFirebase();
+
 
             return null;
         }
@@ -237,17 +247,17 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                         Statement statement = document.toObject(Statement.class);
                         if (statement != null) {
                             statementViewModel.getStatementByDescription(statement.description).observe(this, existingStatement -> {
-                            if (existingStatement == null) {
-                                firebaseStatements.add(statement);
-                                Log.d("MainActivity", "Fetched Firebase statement: " + statement.description);
-                                statementViewModel.insert(statement);
-                            }
-                        });
+                                if (existingStatement == null) {
+                                    firebaseStatements.add(statement);
+                                    Log.d("Db", "Fetched Firebase statement: " + statement.description);
+                                    statementViewModel.insert(statement);
+                                }
+                            });
                         }
                     }
 
                     // Log the number of statements fetched from Firebase
-                    Log.d("MainActivity", "Number of Firebase statements fetched: " + firebaseStatements.size() + "testing" + allStatements.size());
+                    Log.d("MainActivity", "Number of Firebase statements fetched: " + firebaseStatements.size() + " " + allStatements.size());
                 }
             } else {
                 Log.e("MainActivity", "Error getting documents: ", task.getException());

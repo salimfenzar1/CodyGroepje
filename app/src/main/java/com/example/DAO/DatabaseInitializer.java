@@ -20,8 +20,10 @@ public class DatabaseInitializer {
 
         if (!isPopulated) {
             executor.execute(() -> {
+
                 StatementRoom db = StatementRoom.getInstance(context);
                 StatementDAO statementDAO = db.statementDAO();
+                statementDAO.deleteAllStatements();
 
 
                 // Seksualiteit op de werkvloer

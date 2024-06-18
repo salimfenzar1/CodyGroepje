@@ -36,6 +36,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     private boolean isInitialLowImage = true;
     private boolean isInitialMediumImage = true;
     private boolean isInitialHighImage = true;
+    private final WvieIntensityActivity context = this;
     private int[] intensities = {1, 2, 3};
     private int currentIntensityIndex = 0;
     private ArrayList<Statement> filteredStatements;
@@ -145,12 +146,15 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan! Als je een combinatie van de intensiteiten wilt kiezen, moet je dit handmatig op het scherm aanklikken.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -158,6 +162,8 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

@@ -30,7 +30,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
-
+    private final WvieGetReadyActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +79,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
 
     public void speakText() {
         speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {
@@ -86,6 +87,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -93,7 +95,8 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakText();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -108,6 +111,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
                 clarificationAsked = true;
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -116,7 +120,8 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
                 clarificationAsked = true;
-                speakTextAskClarification();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

@@ -29,7 +29,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
     private ImageView themeDecease;
     private ImageView themeSexuality;
     private List<Statement> allStatements;
-
+    private final WvieSubjectsActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +76,8 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei?", new SpeechHelper.SpeechCompleteListener() {
             @Override
@@ -83,26 +85,29 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
                 // Start listening immediately after speech synthesis completes
-                if (!speechRecognitionManager.isListening()) {
-                    speechRecognitionManager.startListening();
-                }
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakRetry();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
 
     private void speakRetry() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -111,7 +116,8 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakRetry();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

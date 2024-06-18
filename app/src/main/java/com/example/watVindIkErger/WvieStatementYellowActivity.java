@@ -37,6 +37,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     private Statement redStatement;
     private boolean hasNavigated = false; // To prevent double navigation
     private boolean askingForClarity = false;
+    private final WvieStatementYellowActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +140,8 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
         if (yellowStatement != null) {
             speechHelper.speak("De stelling voor de kleur geel... " + yellowStatement.description, new SpeechHelper.SpeechCompleteListener() {
@@ -173,15 +176,19 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     public void askIfClear() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         askingForClarity = true;
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });

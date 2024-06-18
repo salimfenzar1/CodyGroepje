@@ -36,7 +36,7 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
     private ArrayList<Statement> filteredStatements;
     private Statement yellowStatement;
     private Statement redStatement;
-
+    private final WvieChoiceYellowActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,12 +104,15 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
 
     public void speakText() {
         setButtonsClickable(false);
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Heeft er iemand voor geel gekozen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -117,6 +120,7 @@ public class WvieChoiceYellowActivity extends AppCompatActivity implements Speec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });

@@ -30,7 +30,7 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
     private ImageButton replay;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
-
+    private final WvieGameEndActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +95,8 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie nog een ronde spelen?", new SpeechHelper.SpeechCompleteListener() {
@@ -102,6 +104,7 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -109,12 +112,15 @@ public class WvieGameEndActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
     }
 
     public void speakTextPlayAgain() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("We gaan nog een keer spelen. Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {

@@ -34,7 +34,7 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
     private boolean selectedYes;
     private ArrayList<Statement> filteredStatements;
     private Statement yellowStatement;
-
+    private final WvieExplanationYellowActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +93,6 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
 
         // Initialize SpeechRecognitionManager
         speechRecognitionManager = new SpeechRecognitionManager(this, this);
-        startListening();
     }
 
     private void startListening() {
@@ -101,6 +100,8 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
         String textToSpeak = "Waarom vindt je de gele stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om door te gaan";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
@@ -108,13 +109,15 @@ public class WvieExplanationYellowActivity extends AppCompatActivity implements 
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                startListening();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                startListening();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

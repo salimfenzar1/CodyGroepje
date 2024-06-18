@@ -30,6 +30,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
     private ImageButton hearButton;
     private ArrayList<String> selectedIntensities;
     private ArrayList<Statement> filteredStatements;
+    private final WvieTutorialActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
 
     public void speakText() {
         speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Welkom bij het spel: Wat vind ik erger! Ik licht kort toe wat we gaan doen. Ik lees dadelijk twee stellingen voor, deze zijn gekoppeld aan een kleur. Mijn linker kant is geel en mijn rechter kant is rood. Vervolgens kiezen jullie welke van de twee stellingen je erger vindt en ga je aan deze kant van mij staan. Daarna zullen we discussiëren over waarom je deze stelling erger vindt... Is alles duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -89,6 +91,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -96,6 +99,8 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

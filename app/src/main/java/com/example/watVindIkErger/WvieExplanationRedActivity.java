@@ -34,6 +34,7 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
     private ArrayList<Statement> filteredStatements;
     private Statement redStatement;
     private ImageView image_view_red;
+    private final WvieExplanationRedActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,8 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
         String textToSpeak = "Waarom vindt je de rode stelling erger? Nadat iedereen is uitgepraat, kun je 'Wij willen doorgaan' zeggen om  door te gaan";
         speechHelper.speak(textToSpeak, new SpeechHelper.SpeechCompleteListener() {
@@ -107,13 +110,15 @@ public class WvieExplanationRedActivity extends AppCompatActivity implements Spe
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                startListening();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                startListening();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }

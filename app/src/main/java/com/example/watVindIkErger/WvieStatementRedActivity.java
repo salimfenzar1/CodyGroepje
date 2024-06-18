@@ -34,6 +34,7 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     private ArrayList<Statement> filteredStatements;
     private Statement redStatement;
     private boolean askingForClarity = false;
+    private final WvieStatementRedActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,8 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     }
 
     public void speakText() {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper = new SpeechHelper(this);
 
         if (redStatement != null) {
@@ -161,14 +164,18 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
 
     public void askIfClear() {
         askingForClarity = true;
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });

@@ -78,8 +78,10 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);

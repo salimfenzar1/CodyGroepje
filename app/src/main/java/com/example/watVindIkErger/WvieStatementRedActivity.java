@@ -101,8 +101,10 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                speechRecognitionManager.stopListening();
-                speechRecognitionManager.destroy();
+                if (speechRecognitionManager != null) {
+                    speechRecognitionManager.stopListening();
+                    speechRecognitionManager.destroy();
+                }
                 Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 intent.putExtra("red_statement", redStatement);
@@ -126,8 +128,10 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
 
         if (redStatement != null) {
@@ -164,8 +168,10 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
 
     public void askIfClear() {
         askingForClarity = true;
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
@@ -201,8 +207,10 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     }
 
     private void goToNextPage() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         intent.putExtra("red_statement", redStatement);

@@ -81,8 +81,10 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei?", new SpeechHelper.SpeechCompleteListener() {
@@ -105,8 +107,10 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
 
 
     private void speakRetry() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
@@ -159,8 +163,10 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             }
         }
 
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), LoIntensityActivity.class);
         intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);

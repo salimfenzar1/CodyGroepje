@@ -102,8 +102,10 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Heeft er iemand voor rood gekozen?", new SpeechHelper.SpeechCompleteListener() {
@@ -140,8 +142,10 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         }
     }
     private void goYellowActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
         intent.putExtra("selectedYes", false);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
@@ -152,8 +156,10 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
     }
 
     private void goRedActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
         intent.putExtra("selectedYes", true);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);

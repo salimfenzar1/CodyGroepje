@@ -94,9 +94,10 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
-
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie nog een ronde spelen?", new SpeechHelper.SpeechCompleteListener() {
@@ -119,8 +120,10 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
     }
 
     public void speakTextPlayAgain() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("We gaan nog een keer spelen. Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {

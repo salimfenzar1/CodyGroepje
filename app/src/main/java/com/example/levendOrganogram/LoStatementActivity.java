@@ -103,8 +103,10 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         speechHelper = new SpeechHelper(this);
 
@@ -141,8 +143,10 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void askIfClear() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         askingForClarity = true;
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -179,8 +183,10 @@ public class LoStatementActivity extends AppCompatActivity implements SpeechReco
     }
 
     private void goToNextPage() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), LoChooseDistanceActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);

@@ -86,8 +86,10 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         boolean value = hasSpokenSecondPart ? !userAgrees : userAgrees;
         String textToSpeak = value
@@ -117,8 +119,10 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
 
 
     public void speakTextSecondPart() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         speechHelper = new SpeechHelper(this);
         String textToSpeak = userAgrees

@@ -93,7 +93,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement8);
 
                 Statement statement9 = new Statement();
-                statement9.description = "Een cliënt maakt regelmatig ongepaste opmerkingen richting minderjarige/stagiaires/medewerkers.";
+                statement9.description = "Een cliënt maakt regelmatig ongepaste opmerkingen richting minderjarigen, stagiaires of medewerkers.";
                 statement9.category = "Seksualiteit op de werkvloer";
                 statement9.imageUrl = String.valueOf(R.drawable.wvie_ongepaste_opmerking_2);
                 statement9.intensityLevel = 2;
@@ -101,7 +101,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement9);
 //
                 Statement statement10 = new Statement();
-                statement10.description = "De afgelopen weken heb je herhaaldelijk geconstateerd dat een cliënt seksueel getinte foto's maakt, van zichzelf en jouw collega's.";
+                statement10.description = "De afgelopen weken heb je herhaaldelijk geconstateerd dat een cliënt seksueel getinte foto's maakt van zichzelf en jouw collega's.";
                 statement10.category = "Seksualiteit op de werkvloer";
                 statement10.imageUrl = String.valueOf(R.drawable.client_maakt_fotos);
                 statement10.intensityLevel = 3;
@@ -238,13 +238,13 @@ public class DatabaseInitializer {
                 statement26.isActive = true;
                 statementDAO.insert(statement26);
 //
-                Statement statement27 = new Statement();
-                statement27.description = "Tom krijgt op werk vaak last van hoofdpijn, die thuis leidt tot migraine aanvallen. Hij durft dit niet aan te geven omdat hij al veel dagen ziek thuis is gebleven. Wat zou jij doen in de situatie van Tom?";
-                statement27.category = "Werk-prive balans";
-                statement27.imageUrl = String.valueOf(R.drawable.tom_migraine);
-                statement27.intensityLevel = 2;
-                statement27.isActive = true;
-                statementDAO.insert(statement27);
+            //    Statement statement27 = new Statement();
+              //  statement27.description = "Tom krijgt op werk vaak last van hoofdpijn, die thuis leidt tot migraine aanvallen. Hij durft dit niet aan te geven omdat hij al veel dagen ziek thuis is gebleven. Wat zou jij doen in de situatie van Tom?";
+              //  statement27.category = "Werk-prive balans";
+             //   statement27.imageUrl = String.valueOf(R.drawable.tom_migraine);
+              //  statement27.intensityLevel = 2;
+              //  statement27.isActive = true;
+               // statementDAO.insert(statement27);
 
                 // Mark the database as populated
                 SharedPreferences.Editor editor = preferences.edit();

@@ -75,7 +75,7 @@ public class DttStartPassingActivity extends AppCompatActivity {
     public void startTimer() {
         // Create a random duration between 5 and 10 seconds (5000 to 10000 milliseconds)
         Random random = new Random();
-        int randomDuration = 7000 + random.nextInt(7000);
+        int randomDuration = 10000 + random.nextInt(10000);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.jeopardy);
         mediaPlayer.start();

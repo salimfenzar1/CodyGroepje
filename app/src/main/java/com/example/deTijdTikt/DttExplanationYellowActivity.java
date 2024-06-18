@@ -75,8 +75,10 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
@@ -128,8 +130,10 @@ public class DttExplanationYellowActivity extends AppCompatActivity implements S
     }
 
     private void goNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         if (isFirst) {
             Intent intent = new Intent(this, DttExplanationRedActivity.class);
             intent.putParcelableArrayListExtra("filtered_statements",filteredStatements);

@@ -45,13 +45,6 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
-        // Checking if filtered statements are received
-        if (filteredStatements.size() < 1) {
-            Log.d("LoTutorialActivity", "Filtered statements count: " + filteredStatements.size());
-        } else {
-            Log.d("LoTutorialActivity", "No filtered statements received.");
-        }
-
         next = findViewById(R.id.nextButton);
         hearButton = findViewById(R.id.hearButton);
 

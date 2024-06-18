@@ -67,7 +67,7 @@ public class DttPassToNextPersonActivity extends AppCompatActivity {
         int randomIndex = random.nextInt(optionsPassToNextPerson.length);
         String randomOption = optionsPassToNextPerson[randomIndex];
         DttPassToNextPersonActivity currentActivity = this;
-        speechHelper.speak("De personen die nu de ballen in hun hand hebben, gooi deze over naar " + randomOption, new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("De personen die nu de ballen in hun hand hebben, gooi deze over naar een persoon " + randomOption, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
@@ -82,6 +82,7 @@ public class DttPassToNextPersonActivity extends AppCompatActivity {
     }
 
     private void goNextActivity() {
+
         Random random = new Random();
         Intent intent;
         if (random.nextBoolean()){

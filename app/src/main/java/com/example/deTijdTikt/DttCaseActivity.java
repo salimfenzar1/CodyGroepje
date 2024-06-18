@@ -122,13 +122,15 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
 
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         speechHelper = new SpeechHelper(this);
 
         if (chosenCase != null) {
-            speechHelper.speak("De casus is:  " + chosenCase.description, new SpeechHelper.SpeechCompleteListener() {
+            speechHelper.speak( chosenCase.description, new SpeechHelper.SpeechCompleteListener() {
                 @Override
                 public void onSpeechComplete() {
                     Log.d("Speech", "Speech synthesis voltooid");
@@ -161,9 +163,10 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     }
 
     public void askIfClear() {
-
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         askingForClarity = true;
         speechHelper.speak("Heeft iedereen de casus begrepen?", new SpeechHelper.SpeechCompleteListener() {
@@ -223,7 +226,9 @@ public class DttCaseActivity extends AppCompatActivity implements SpeechRecognit
     }
 
     private void restartListening() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+        }
         new Handler().postDelayed(() -> speechRecognitionManager.startListening(), 1000);
     }
 

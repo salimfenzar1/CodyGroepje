@@ -161,7 +161,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     public void speakText() {
         speechHelper = new SpeechHelper(this);
         if (yellowStatement != null) {
-            speechHelper.speak("De stelling voor de kleur geel... " + yellowStatement.description, new SpeechHelper.SpeechCompleteListener() {
+            speechHelper.speak( yellowStatement.description, new SpeechHelper.SpeechCompleteListener() {
                 @Override
                 public void onSpeechComplete() {
                     Log.d("Speech", "Speech synthesis voltooid");

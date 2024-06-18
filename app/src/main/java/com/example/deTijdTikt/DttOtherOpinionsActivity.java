@@ -72,8 +72,10 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
     }
 
     private void goNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), DttGameEndActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
@@ -81,8 +83,10 @@ public class DttOtherOpinionsActivity extends AppCompatActivity implements Speec
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);

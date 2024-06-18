@@ -93,8 +93,10 @@ public class DttGameEndActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
@@ -118,12 +120,14 @@ public class DttGameEndActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakTextPlayAgain() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
 
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
-        speechHelper.speak("We gaan nog een keer spelen. Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Laten we nog een keer spelen. Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

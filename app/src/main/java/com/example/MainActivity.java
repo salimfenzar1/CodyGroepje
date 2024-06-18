@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
             navigateToActivity(WvieSubjectsActivity.class);
         } else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
             navigateToActivity(DttIntensityActivity.class);
-        } else if ("levend organogram".equalsIgnoreCase(result.trim()) || "levend".equalsIgnoreCase(result.trim())) {
+        } else if ("levend organogram".equalsIgnoreCase(result.trim()) || "levend orchanogram".equalsIgnoreCase(result.trim())) {
             navigateToActivity(LoSubjectsActivity.class);
         } else {
             speechHelper = new SpeechHelper(this);

@@ -28,6 +28,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
     private ImageButton hearButton;
     private ArrayList<String> selectedIntensities;
     private ArrayList<Statement> filteredStatements;
+    private final WvieTutorialActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,10 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Welkom bij het spel: Wat vind ik erger! Ik licht kort toe wat we gaan doen. Ik lees dadelijk twee stellingen voor, deze zijn gekoppeld aan een kleur. Mijn linker kant is geel en mijn rechter kant is rood. Vervolgens kiezen jullie welke van de twee stellingen je erger vindt en ga je aan deze kant van mij staan. Daarna zullen we discussiëren over waarom je deze stelling erger vindt... Is alles duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -77,6 +81,7 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -84,14 +89,17 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
     public void performOutro() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
-
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Veel plezier met het spelen van wat vind ik erger!", new SpeechHelper.SpeechCompleteListener() {
             @Override
@@ -116,9 +124,10 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("ja")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("ja")) {
             performOutro();
-        } else if (result.equalsIgnoreCase("nee") || result.equalsIgnoreCase("misschien")) {
+        } else if (result.contains("nee") || result.contains("misschien")) {
             speakText();
         } else {
             speechRecognitionManager.startListening();
@@ -127,11 +136,14 @@ public class WvieTutorialActivity extends AppCompatActivity implements SpeechRec
 
 
     private void goNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

@@ -81,6 +81,11 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Iemand pak de rode en iemand pak de gele bal van mij af. Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {

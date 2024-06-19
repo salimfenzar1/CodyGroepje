@@ -26,6 +26,7 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
+    private final WvieOtherOpinionsActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,17 +68,22 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     private void goNextActivity() {
         Intent intent = new Intent(getApplicationContext(), WvieGameEndActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-        startActivity(intent);
+        finish();
     }
 
     public void speakText() {
         setButtonsClickable(false);
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Wat vinden de andere hiervan? Wanneer iedereen is uitgepraat, zeg dan: Wij willen doorgaan, om door te gaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -85,7 +91,8 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                new Handler().postDelayed(() -> speakText(), 1000);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -100,7 +107,8 @@ public class WvieOtherOpinionsActivity extends AppCompatActivity implements Spee
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("wij willen doorgaan")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("willen") || result.contains("doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();

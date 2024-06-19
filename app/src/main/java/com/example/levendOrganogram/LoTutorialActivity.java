@@ -14,9 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.Model.Statement;
+import com.example.codycactus.R;
 import com.example.services.SpeechHelper;
 import com.example.services.SpeechRecognitionManager;
-import com.example.codycactus.R;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     private ImageButton hearButton;
     private ArrayList<String> selectedIntensities;
     private ArrayList<Statement> filteredStatements;
+    private final LoTutorialActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 performOutro();
             }
         });
@@ -58,6 +60,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 repeatText();
             }
         });
@@ -67,7 +70,11 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Welkom bij het spel levend organogram! Ik licht zo kort toe wat we gaan doen. We vormen zo een kring om mij heen. Ik lees steeds een stelling voor. Als jullie het eens zijn met de stelling kom je dichterbij mij staan. Ben je het oneens met de stelling ga je verder van mij af staan. Zodra iedereen staat bespreken we waarom jullie daarvoor hebben gekozen... Is alles duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -75,6 +82,8 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -82,12 +91,19 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
     public void repeatText() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("We vormen een kring om mij heen. Ik lees steeds een stelling voor. Als jullie het eens zijn met de stelling kom je dichterbij mij staan. Ben je het oneens met de stelling ga je verder van mij af staan. Zodra iedereen staat bespreken we waarom jullie daarvoor hebben gekozen... Is alles nu wel duidelijk?", new SpeechHelper.SpeechCompleteListener() {
@@ -95,6 +111,7 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -102,14 +119,17 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
     public void performOutro() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
-
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Veel plezier met het spelen van Levend Organogram!", new SpeechHelper.SpeechCompleteListener() {
             @Override
@@ -134,11 +154,10 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        String lowerCaseResult = result.toLowerCase();
-
-        if (lowerCaseResult.contains("ja")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("ja")) {
             performOutro();
-        } else if (lowerCaseResult.contains("nee") || lowerCaseResult.contains("misschien")) {
+        } else if (result.contains("nee") || result.contains("misschien")) {
             repeatText();
         } else {
             // Handle the UNKNOWN case if necessary
@@ -147,13 +166,15 @@ public class LoTutorialActivity extends AppCompatActivity implements SpeechRecog
     }
 
 
-
     private void goNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), LoGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

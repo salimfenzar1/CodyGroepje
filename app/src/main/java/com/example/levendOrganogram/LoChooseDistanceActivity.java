@@ -47,6 +47,8 @@ public class LoChooseDistanceActivity extends AppCompatActivity {
     }
 
     public void speakText() {
+
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Als je het eens bent kom dan dichterbij staan. Als je het oneens bent, ga dan verder van mij af staan ", new SpeechHelper.SpeechCompleteListener() {

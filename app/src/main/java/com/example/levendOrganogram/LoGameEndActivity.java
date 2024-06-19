@@ -29,6 +29,7 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
     private ImageButton replay;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
+    private final LoGameEndActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,7 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
+
 
         // Retrieve the filtered statements from the intent
         Intent intent = getIntent();
@@ -81,15 +82,21 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
     private void goHome() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void replayGame() {
         Intent intent = new Intent(getApplicationContext(), LoGetReadyActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie nog een ronde spelen?", new SpeechHelper.SpeechCompleteListener() {
@@ -97,6 +104,7 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -104,12 +112,17 @@ public class LoGameEndActivity extends AppCompatActivity implements SpeechRecogn
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
     }
 
     public void speakTextPlayAgain() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("We gaan nog een keer spelen. Iedereen ga weer klaarstaan.", new SpeechHelper.SpeechCompleteListener() {

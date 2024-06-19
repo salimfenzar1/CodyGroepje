@@ -33,6 +33,8 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     private Intent messageIntent;
     private ArrayList<Statement> filteredStatements;
 
+    private final LoChoicesActivity context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,16 +85,30 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
             }
         });
 
+        hearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonsClickable(false);
+                speakTextAgain();
+            }
+        });
+
         setButtonsClickable(false);
     }
 
     private void speakText(String stelling) {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+
         speechHelper = new SpeechHelper(this);
         speechHelper.speak(stelling, new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -100,9 +116,19 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
+    }
+
+    private void speakTextAgain() {
+        setButtonsClickable(false);
+        if (choice == 1) {
+            speakText("Is er iemand dichterbij komen staan?");
+        } else {
+            speakText("Is er iemand verder weg gaan staan?");
+        }
     }
 
     private void setButtonsClickable(boolean clickable) {
@@ -124,29 +150,27 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
     @Override
     public void onSpeechResult(String result) {
         switch (AnswerConverter.determineAnswer(result)) {
-            case YES: // TODO: action if answer is yes
-                if(choice == 1){
-                    messageIntent.putExtra("userAgrees",true);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
+            case YES:
+                if (choice == 1) {
+                    messageIntent.putExtra("userAgrees", true);
                 } else {
-                    messageIntent.putExtra("userAgrees",false);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
+                    messageIntent.putExtra("userAgrees", false);
                 }
+                startActivity(messageIntent);
+                finish();
                 break;
-            case NO: // TODO: action if answer is no
-                if(choice == 1){
-                    messageIntent.putExtra("userAgrees",false);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
+            case NO:
+                if (choice == 1) {
+                    messageIntent.putExtra("userAgrees", false);
                 } else {
-                    messageIntent.putExtra("userAgrees",true);
-                    messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
-                    startActivity(messageIntent);
+                    messageIntent.putExtra("userAgrees", true);
                 }
+                startActivity(messageIntent);
+                finish();
                 break;
-            default: speechRecognitionManager.startListening(); break;
+            default:
+                speechRecognitionManager.startListening();
+                break;
         }
     }
 

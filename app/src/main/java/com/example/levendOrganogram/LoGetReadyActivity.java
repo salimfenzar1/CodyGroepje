@@ -29,6 +29,7 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
+    private final LoGetReadyActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,6 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         Intent intent = getIntent();
         filteredStatements = intent.getParcelableArrayListExtra("filtered_statements");
 
@@ -74,7 +74,10 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Staat iedereen klaar?", new SpeechHelper.SpeechCompleteListener() {
@@ -82,6 +85,7 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -89,13 +93,17 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakText();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
     public void speakTextAskClarification() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Is het duidelijk wat jullie moeten doen?", new SpeechHelper.SpeechCompleteListener() {
@@ -104,6 +112,7 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
                 clarificationAsked = true;
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -112,13 +121,16 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
                 clarificationAsked = true;
-                speakTextAskClarification();
-            }
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();            }
         });
     }
 
     public void speakTextClarification() {
-        speechRecognitionManager.stopListening();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         LoGetReadyActivity currentActivity = this;
@@ -146,23 +158,24 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
 
     @Override
     public void onSpeechResult(String result) {
+        result = (result.trim().toLowerCase());
         if (!clarificationAsked) {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();
                 goNextActivity();
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 new Handler().postDelayed(this::speakTextAskClarification, 3000);
             } else {
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);
             }
         } else {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 clarificationAsked = false;
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 clarificationAsked = false;
                 speakTextClarification();
             } else {
@@ -174,11 +187,14 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
 
     private void goNextActivity() {
         Log.d("LoGetReadyActivityStatements", "Received filtered statements: " + filteredStatements);
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), LoStatementActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

@@ -37,6 +37,7 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     private ArrayList<Statement> filteredStatements;
     private Statement redStatement;
     private boolean askingForClarity = false;
+    private final WvieStatementRedActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +108,10 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                speechRecognitionManager.stopListening();
-                speechRecognitionManager.destroy();
+                if (speechRecognitionManager != null) {
+                    speechRecognitionManager.stopListening();
+                    speechRecognitionManager.destroy();
+                }
                 Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
                 intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
                 intent.putExtra("red_statement", redStatement);
@@ -131,6 +134,10 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
         new Handler().postDelayed(this::speakText, 2000);
     }
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
 
         if (redStatement != null) {
@@ -167,14 +174,20 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
 
     public void askIfClear() {
         askingForClarity = true;
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
@@ -183,12 +196,12 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-
+        result = (result.trim().toLowerCase());
         if (askingForClarity) {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 askingForClarity = false;
                 goToNextPage();
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 askingForClarity = false;
                 speakText();
             } else {
@@ -200,8 +213,10 @@ public class WvieStatementRedActivity extends AppCompatActivity implements Speec
     }
 
     private void goToNextPage() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieStatementYellowActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         intent.putExtra("red_statement", redStatement);

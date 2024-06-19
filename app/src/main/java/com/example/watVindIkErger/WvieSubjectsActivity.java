@@ -28,7 +28,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
     private ImageView themeDecease;
     private ImageView themeSexuality;
     private List<Statement> allStatements;
-
+    private final WvieSubjectsActivity context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +76,10 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei?", new SpeechHelper.SpeechCompleteListener() {
             @Override
@@ -83,26 +87,7 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
                 // Start listening immediately after speech synthesis completes
-                if (!speechRecognitionManager.isListening()) {
-                    speechRecognitionManager.startListening();
-                }
-            }
-
-            @Override
-            public void onSpeechFailed() {
-                Log.e("Speech", "Speech synthesis mislukt");
-                setButtonsClickable(true);
-                speakRetry();
-            }
-        });
-    }
-
-    private void speakRetry() {
-        speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
-            @Override
-            public void onSpeechComplete() {
-                Log.d("Speech", "Speech synthesis voltooid");
-                setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -110,7 +95,32 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakRetry();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
+            }
+        });
+    }
+
+    private void speakRetry() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+        speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
+            @Override
+            public void onSpeechComplete() {
+                Log.d("Speech", "Speech synthesis voltooid");
+                setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
+            }
+
+            @Override
+            public void onSpeechFailed() {
+                Log.e("Speech", "Speech synthesis mislukt");
+                setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -124,11 +134,12 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
     @Override
     public void onSpeechResult(String result) {
         Log.d("WvieSubjectsActivity", "onSpeechResult: " + result);
-        if (result.equalsIgnoreCase("seksualiteit op de werkvloer")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("seksualiteit") || result.contains("werkvloer")) {
             filterAndNavigate("Seksualiteit op de werkvloer");
-        } else if (result.equalsIgnoreCase("overlijden")) {
+        } else if (result.contains("overlijden")) {
             filterAndNavigate("Overlijden");
-        } else if (result.equalsIgnoreCase("allebei")) {
+        } else if (result.contains("allebei") || result.contains("beide")) {
             filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
         } else {
             speakRetry();
@@ -144,12 +155,14 @@ public class WvieSubjectsActivity extends AppCompatActivity implements SpeechRec
                 }
             }
         }
-
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieIntensityActivity.class);
         intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     @Override

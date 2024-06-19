@@ -35,6 +35,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     private boolean isInitialLowImage = true;
     private boolean isInitialMediumImage = true;
     private boolean isInitialHighImage = true;
+    private final WvieIntensityActivity context = this;
     private int[] intensities = {1, 2, 3};
     private int currentIntensityIndex = 0;
     private ArrayList<Statement> filteredStatements;
@@ -135,20 +136,28 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     }
 
     private void startNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(this, WvieTutorialActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan! Als je een combinatie van de intensiteiten wilt kiezen, moet je dit handmatig op het scherm aanklikken.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -156,6 +165,7 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
@@ -193,21 +203,24 @@ public class WvieIntensityActivity extends AppCompatActivity implements SpeechRe
     @Override
     public void onSpeechResult(String result) {
         Log.d("WvieIntensityActivity", "onSpeechResult: " + result);
-        if (result.equalsIgnoreCase("laagdrempelig")){
+        result = (result.trim().toLowerCase());
+        if (result.contains("laag") || result.contains("drempelig")){
             toggleIntensitySelection(1);
             updateImageView("laagdrempelig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("matig")){
+        } else if (result.contains("matig")){
             toggleIntensitySelection(2);
             updateImageView("matig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("intens")){
+        } else if (result.contains("intens")){
             toggleIntensitySelection(3);
             updateImageView("intens");
             filterStatementsByIntensity();
             startNextActivity();
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
 

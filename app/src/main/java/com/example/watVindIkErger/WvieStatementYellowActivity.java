@@ -39,6 +39,7 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     private Statement redStatement;
     private boolean hasNavigated = false; // To prevent double navigation
     private boolean askingForClarity = false;
+    private final WvieStatementYellowActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,8 +147,10 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     private void navigateToNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         if (!hasNavigated) { // Ensure the activity transition happens only once
             hasNavigated = true;
             Intent intent = new Intent(getApplicationContext(), WvieMakeChoiceActivity.class);
@@ -155,10 +158,15 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
             intent.putExtra("red_statement", redStatement);
             intent.putExtra("yellow_statement", yellowStatement);
             startActivity(intent);
+            finish();
         }
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper = new SpeechHelper(this);
         if (yellowStatement != null) {
             speechHelper.speak( yellowStatement.description, new SpeechHelper.SpeechCompleteListener() {
@@ -193,15 +201,21 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     }
 
     public void askIfClear() {
+        if (speechRecognitionManager != null) {
+        speechRecognitionManager.stopListening();
+        speechRecognitionManager.destroy();
+    }
         askingForClarity = true;
         speechHelper.speak("Is de stelling duidelijk?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
@@ -210,12 +224,12 @@ public class WvieStatementYellowActivity extends AppCompatActivity implements Sp
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-
+        result = (result.trim().toLowerCase());
         if (askingForClarity) {
-            if (result.equalsIgnoreCase("ja")) {
+            if (result.contains("ja")) {
                 askingForClarity = false;
                 navigateToNextActivity();
-            } else if (result.equalsIgnoreCase("nee")) {
+            } else if (result.contains("nee")) {
                 askingForClarity = false;
                 speakText();
             } else {

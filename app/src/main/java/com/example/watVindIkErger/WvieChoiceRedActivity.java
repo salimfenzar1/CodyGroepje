@@ -35,6 +35,7 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
     private ArrayList<Statement> filteredStatements;
     private Statement redStatement;
     private Statement yellowStatement;
+    private final WvieChoiceRedActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,10 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Heeft er iemand voor rood gekozen?", new SpeechHelper.SpeechCompleteListener() {
@@ -107,6 +112,7 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -114,6 +120,7 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
         });
@@ -134,25 +141,31 @@ public class WvieChoiceRedActivity extends AppCompatActivity implements SpeechRe
         }
     }
     private void goYellowActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieExplanationYellowActivity.class);
         intent.putExtra("selectedYes", false);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         intent.putExtra("yellow_statement", yellowStatement);
         intent.putExtra("red_statement", redStatement);
         startActivity(intent);
+        finish();
     }
 
     private void goRedActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), WvieExplanationRedActivity.class);
         intent.putExtra("selectedYes", true);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         intent.putExtra("yellow_statement", yellowStatement);
         intent.putExtra("red_statement", redStatement);
         startActivity(intent);
+        finish();
     }
 
     @Override

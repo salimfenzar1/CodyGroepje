@@ -29,6 +29,7 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
     private ImageView themeDecease;
     private ImageView themeSexuality;
     private List<Statement> allStatements;
+    private final LoSubjectsActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             return insets;
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
         hearButton = findViewById(R.id.hearButton);
         themeDecease = findViewById(R.id.image_view_family);
         themeSexuality = findViewById(R.id.image_seksualiteit);
@@ -55,6 +55,7 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
@@ -77,33 +78,42 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Willen jullie stellingen over het onderwerp: seksualiteit op de werkvloer, overlijden, of allebei?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
-                // Start listening immediately after speech synthesis completes
-                if (!speechRecognitionManager.isListening()) {
-                    speechRecognitionManager.startListening();
-                }
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakRetry();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
 
 
     private void speakRetry() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper.speak("Sorry dat verstond ik niet, zou je dat kunnen herhalen?", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -112,7 +122,8 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
-                speakRetry();
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -127,11 +138,12 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
 @Override
     public void onSpeechResult(String result) {
         Log.d("WvieSubjectsActivity", "onSpeechResult: " + result);
-        if (result.equalsIgnoreCase("seksualiteit op de werkvloer")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("seksualiteit") || result.contains("werkvloer")) {
             filterAndNavigate("Seksualiteit op de werkvloer");
-        } else if (result.equalsIgnoreCase("overlijden")) {
+        } else if (result.contains("overlijden")) {
             filterAndNavigate("Overlijden");
-        } else if (result.equalsIgnoreCase("allebei")) {
+        } else if (result.contains("allebei") || result.contains("beide")) {
             filterAndNavigate("Seksualiteit op de werkvloer", "Overlijden");
         } else {
             speakRetry();
@@ -148,11 +160,14 @@ public class LoSubjectsActivity extends AppCompatActivity implements SpeechRecog
             }
         }
 
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(getApplicationContext(), LoIntensityActivity.class);
         intent.putParcelableArrayListExtra("statements", (ArrayList<Statement>) filteredStatements);
         startActivity(intent);
+        finish();
     }
 
 

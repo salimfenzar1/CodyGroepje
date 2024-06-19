@@ -27,6 +27,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
     private ImageButton next;
     private ImageButton hearButton;
     private ArrayList<Statement> filteredStatements;
+    private final LoOtherOpinionsActivity context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
         }
 
         next = findViewById(R.id.nextButton);
+        hearButton = findViewById(R.id.hearButton);
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,13 +56,15 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             }
         });
 
-        hearButton = findViewById(R.id.hearButton);
+
         hearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonsClickable(false);
                 speakText();
             }
         });
+
         setButtonsClickable(false);
         new Handler().postDelayed(this::speakText, 2000);
     }
@@ -68,22 +73,32 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
         Intent intent = new Intent(getApplicationContext(), LoGameEndActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
+
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Wat vinden de andere hiervan? Wanneer iedereen is uitgepraat, zeg dan: Wij willen doorgaan, om door te gaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                setButtonsClickable(true);
                 speechRecognitionManager.startListening();
             }
 
             @Override
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
-                new Handler().postDelayed(() -> speakText(), 1000);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
+                setButtonsClickable(true);
             }
         });
     }
@@ -98,7 +113,8 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if (result.equalsIgnoreCase("Wij willen doorgaan")) {
+        result = (result.trim().toLowerCase());
+        if (result.contains("willen") || result.contains("doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();

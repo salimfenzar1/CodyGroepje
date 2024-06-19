@@ -39,6 +39,7 @@ public class LoIntensityActivity extends AppCompatActivity implements SpeechReco
     private int[] intensities = {1, 2, 3};
     private int currentIntensityIndex = 0;
     private ArrayList<Statement> filteredStatements;
+    private final LoIntensityActivity context = this;
 
 
     @Override
@@ -109,7 +110,6 @@ public class LoIntensityActivity extends AppCompatActivity implements SpeechReco
             }
         });
 
-        speechRecognitionManager = new SpeechRecognitionManager(this, this);
 
         new Handler().postDelayed(this::speakText, 2000);
     }
@@ -140,20 +140,28 @@ public class LoIntensityActivity extends AppCompatActivity implements SpeechReco
     }
 
     private void startNextActivity() {
-        speechRecognitionManager.stopListening();
-        speechRecognitionManager.destroy();
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         Intent intent = new Intent(this, LoTutorialActivity.class);
         intent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(intent);
+        finish();
     }
 
     public void speakText() {
         speechHelper = new SpeechHelper(this);
+        if (speechRecognitionManager != null) {
+            speechRecognitionManager.stopListening();
+            speechRecognitionManager.destroy();
+        }
         speechHelper.speak("In welke mate van intensiteit willen jullie de stellingen? Je kan kiezen tussen laagdrempelig, matig, intens of een combinatie hiervan! Als je een combinatie van de intensiteiten wilt kiezen, moet je dit handmatig op het scherm aanklikken.", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
                 speechRecognitionManager.startListening();
             }
 
@@ -161,6 +169,8 @@ public class LoIntensityActivity extends AppCompatActivity implements SpeechReco
             public void onSpeechFailed() {
                 Log.e("Speech", "Speech synthesis mislukt");
                 setButtonsClickable(true);
+                speechRecognitionManager = new SpeechRecognitionManager(context, context);
+                speechRecognitionManager.startListening();
             }
         });
     }
@@ -197,21 +207,24 @@ public class LoIntensityActivity extends AppCompatActivity implements SpeechReco
     @Override
     public void onSpeechResult(String result) {
         Log.d("LoIntensityActivity", "onSpeechResult: " + result);
-        if (result.equalsIgnoreCase("laagdrempelig")){
+        result = (result.trim().toLowerCase());
+        if (result.contains("laag") || result.contains("drempelig")){
             toggleIntensitySelection(1);
             updateImageView("laagdrempelig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("matig")){
+        } else if (result.contains("matig")){
             toggleIntensitySelection(2);
             updateImageView("matig");
             filterStatementsByIntensity();
             startNextActivity();
-        } else if (result.equalsIgnoreCase("intens")){
+        } else if (result.contains("intens")){
             toggleIntensitySelection(3);
             updateImageView("intens");
             filterStatementsByIntensity();
             startNextActivity();
+        } else {
+            speechRecognitionManager.startListening();
         }
     }
 

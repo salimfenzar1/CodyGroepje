@@ -151,7 +151,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
     public void onSpeechResult(String result) {
         Intent intent = new Intent(getApplicationContext(), LoOtherOpinionsActivity.class);
         result = result.toLowerCase().trim();
-        if ((!hasSpokenSecondPart && result.contains("wij willen doorgaan") && !hasSpokenThirdPart)) {
+        if ((!hasSpokenSecondPart && result.contains("doorgaan") && !hasSpokenThirdPart)) {
             speakTextSecondPart();
         } else if ((hasSpokenSecondPart && result.contains("nee") && !hasSpokenThirdPart)) {
             startActivity(intent);

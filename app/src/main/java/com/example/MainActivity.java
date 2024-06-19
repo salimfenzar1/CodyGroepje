@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
                     if (speechRecognitionManager != null) {
                         speechRecognitionManager.startListening();
                     }
-                    Log.d("speakreplay", "begint met luisteren");
+                    Log.d("speakreplay",    "begint met luisteren");
                 }
 
                 @Override

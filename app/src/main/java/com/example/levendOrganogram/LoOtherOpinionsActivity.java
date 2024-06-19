@@ -114,7 +114,7 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
         result = (result.trim().toLowerCase());
-        if (result.contains("willen") || result.contains("doorgaan")) {
+        if (result.contains("doorgaan")) {
             goNextActivity();
         } else {
             speechRecognitionManager.startListening();

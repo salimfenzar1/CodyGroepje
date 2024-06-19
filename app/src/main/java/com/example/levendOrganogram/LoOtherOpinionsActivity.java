@@ -82,7 +82,6 @@ public class LoOtherOpinionsActivity extends AppCompatActivity implements Speech
             speechRecognitionManager.destroy();
         }
 
-        setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         speechHelper.speak("Wat vinden de andere hiervan? Wanneer iedereen is uitgepraat, zeg dan: Wij willen doorgaan, om door te gaan!", new SpeechHelper.SpeechCompleteListener() {
             @Override

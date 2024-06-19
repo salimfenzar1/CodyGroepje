@@ -168,7 +168,7 @@ public class WvieGetReadyActivity extends AppCompatActivity implements SpeechRec
                 speechRecognitionManager.destroy();
                 goNextActivity();
             } else if (result.contains("nee")) {
-                new Handler().postDelayed(this::speakText, 3000);
+                speakTextAskClarification();
             } else {
                 speechRecognitionManager.stopListening();
                 speechRecognitionManager.destroy();

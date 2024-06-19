@@ -199,7 +199,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement21);
 
                 Statement statement22 = new Statement();
-                statement22.description = "Vera werkt sinds kort in de zorg. Zij heeft een goede band opgebouwd met één van de cliënten. Deze cliënt is onlangs komen te overlijden. Vera heeft hier enorm veel moeite mee en voelt zich op werk erg somber. De rest van haar collega's lijken hier minder moeite mee te hebben. Hoe zou jij omgaan met deze rouw/somberheid als je in de schoenen van Vera zou staan? Welke tips zou je haar geven?";
+                statement22.description = "Vera werkt sinds kort in de zorg. Zij heeft een goede band opgebouwd met één van de cliënten. Deze cliënt is onlangs komen te overlijden. Vera heeft hier enorm veel moeite mee en voelt zich op werk erg somber. De rest van haar collega's lijken hier minder moeite mee te hebben. Hoe zou jij omgaan met deze somberheid als je in de schoenen van Vera zou staan? Welke tips zou je haar geven?";
                 statement22.category = "Werk-prive balans";
                 statement22.imageUrl = String.valueOf(R.drawable.vera);
                 statement22.intensityLevel = 3;
@@ -223,7 +223,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement24);
 
                 Statement statement25 = new Statement();
-                statement25.description = "Isa heeft last van extreme menstrue klachten, ze is hier meerdere keren voor naar de huisarts geweest maar ze kunnen haar niet goed helpen. Op haar eerste twee menstruatie dagen kan ze wegens krampen en rugpijn haar werk niet goed uitvoeren. Collega's hebben meerdere keren opmerkingen gemaakt dat ze zich niet moet aanstellen. Hoe zou jou zorgorganisatie hier mee om moeten gaan?";
+                statement25.description = "Isa heeft last van extreme menstruatie klachten, ze is hier meerdere keren voor naar de huisarts geweest maar ze kunnen haar niet goed helpen. Op haar eerste twee menstruatie dagen kan ze wegens krampen en rugpijn haar werk niet goed uitvoeren. Collega's hebben meerdere keren opmerkingen gemaakt dat ze zich niet moet aanstellen. Hoe zou jou zorgorganisatie hier mee om moeten gaan?";
                 statement25.category = "Werk-prive balans";
                 statement25.imageUrl = String.valueOf(R.drawable.isa);
                 statement25.intensityLevel = 3;

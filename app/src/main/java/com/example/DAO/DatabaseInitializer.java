@@ -223,7 +223,7 @@ public class DatabaseInitializer {
                 statementDAO.insert(statement24);
 
                 Statement statement25 = new Statement();
-                statement25.description = "Isa heeft last van extreme menstruele klachten, ze is hier meerdere keren voor naar de huisarts geweest maar ze kunnen haar niet goed helpen. Op haar eerste twee menstruatie dagen kan ze wegens krampen en rugpijn haar werk niet goed uitvoeren. Collega's hebben meerdere keren opmerkingen gemaakt dat ze zich niet moet aanstellen. Hoe zou jou zorgorganisatie hier mee om moeten gaan?";
+                statement25.description = "Isa heeft last van extreme menstruatie klachten, ze is hier meerdere keren voor naar de huisarts geweest maar ze kunnen haar niet goed helpen. Op haar eerste twee menstruatie dagen kan ze wegens krampen en rugpijn haar werk niet goed uitvoeren. Collega's hebben meerdere keren opmerkingen gemaakt dat ze zich niet moet aanstellen. Hoe zou jou zorgorganisatie hier mee om moeten gaan?";
                 statement25.category = "Werk-prive balans";
                 statement25.imageUrl = String.valueOf(R.drawable.isa);
                 statement25.intensityLevel = 3;

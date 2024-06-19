@@ -179,7 +179,7 @@ public class DttGetReadyActivity extends AppCompatActivity implements SpeechReco
                 speechRecognitionManager.destroy();
                 goNextActivity();
             } else if (result.contains("nee")) {
-                new Handler().postDelayed(this::speakTextAskClarification, 1000);
+                speakTextAskClarification();
             } else {
                 speechRecognitionManager.stopListening();
                 new Handler().postDelayed(this::speakText, 5000);

@@ -89,7 +89,7 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
             speechRecognitionManager.destroy();
         }
         speechHelper = new SpeechHelper(this);
-        boolean value = hasSpokenSecondPart ? !userAgrees : userAgrees;
+        boolean value = hasSpokenSecondPart != userAgrees;
         String textToSpeak = value
                 ? "Waarom ben jij het eens met de stelling? Zeg: 'wij willen doorgaan', als jullie verder willen"
                 : "Waarom ben jij het oneens met de stelling? Zeg: 'wij willen doorgaan', als jullie verder willen";
@@ -149,17 +149,16 @@ public class LoExplanationActivity extends AppCompatActivity implements SpeechRe
 
     @Override
     public void onSpeechResult(String result) {
-        Intent intent = new Intent(getApplicationContext(), LoOtherOpinionsActivity.class);
         result = result.toLowerCase().trim();
         if ((!hasSpokenSecondPart && result.contains("doorgaan") && !hasSpokenThirdPart)) {
             speakTextSecondPart();
         } else if ((hasSpokenSecondPart && result.contains("nee") && !hasSpokenThirdPart)) {
-            startActivity(intent);
+            navigateToNextActivity();
             finish();
         } else if ((hasSpokenSecondPart && result.contains("ja") && !hasSpokenThirdPart)) {
             speakText();
         } else if (hasSpokenThirdPart) {
-            startActivity(intent);
+            navigateToNextActivity();
             finish();
         }
     }

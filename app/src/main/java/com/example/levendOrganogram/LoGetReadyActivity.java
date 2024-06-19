@@ -134,7 +134,7 @@ public class LoGetReadyActivity extends AppCompatActivity implements SpeechRecog
         setButtonsClickable(false);
         speechHelper = new SpeechHelper(this);
         LoGetReadyActivity currentActivity = this;
-        speechHelper.speak("Ga in het midden voor mij staan en zorg dat er links en rechts plaats is", new SpeechHelper.SpeechCompleteListener() {
+        speechHelper.speak("Ga in een kring om mij heen staan", new SpeechHelper.SpeechCompleteListener() {
             @Override
             public void onSpeechComplete() {
                 Log.d("Speech", "Speech synthesis voltooid");

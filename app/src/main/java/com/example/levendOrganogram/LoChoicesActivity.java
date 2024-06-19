@@ -143,7 +143,6 @@ public class LoChoicesActivity extends AppCompatActivity implements SpeechRecogn
         } else {
             messageIntent.putExtra("userAgrees", !userAgrees);
         }
-        messageIntent.putParcelableArrayListExtra("filtered_statements", filteredStatements);
         startActivity(messageIntent);
     }
 

@@ -21,14 +21,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.DAO.DatabaseInitializer;
 import com.example.DAO.StatementDAO;
-import com.example.DAO.StatementDAO_Impl;
 import com.example.DAO.StatementViewModel;
 import com.example.Model.Statement;
-import com.example.services.SpeechHelper;
 import com.example.codycactus.R;
-import com.example.deTijdTikt.DttIntensityActivity;
 import com.example.levendOrganogram.LoSubjectsActivity;
+import com.example.services.SpeechHelper;
 import com.example.services.SpeechRecognitionManager;
+import com.example.deTijdTikt.DttIntensityActivity;
 import com.example.watVindIkErger.WvieSubjectsActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -156,11 +155,12 @@ public class MainActivity extends AppCompatActivity implements SpeechRecognition
     @Override
     public void onSpeechResult(String result) {
         Log.i("SpeechRecognizer", "Recognized speech: " + result);
-        if ("wat vind ik erger".equalsIgnoreCase(result.trim()) || "wat vind ik erg".equalsIgnoreCase(result.trim())) {
+        result = result.trim().toLowerCase();
+        if (result.contains("vind") && result.contains("erger")) {
             navigateToActivity(WvieSubjectsActivity.class);
-        } else if ("de tijd tikt".equalsIgnoreCase(result.trim())) {
+        } else if (result.contains("tijd") && result.contains("tikt")) {
             navigateToActivity(DttIntensityActivity.class);
-        } else if ("levend organogram".equalsIgnoreCase(result.trim()) || "levend orchanogram".equalsIgnoreCase(result.trim())) {
+        } else if (result.contains("levend") || result.contains("gram")) {
             navigateToActivity(LoSubjectsActivity.class);
         } else {
             speechHelper = new SpeechHelper(this);
